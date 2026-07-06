@@ -278,10 +278,19 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-post-card h3{ margin: .5rem 0; font-size: 1.15rem; }
 .nz-post-card__meta{ color: var(--nz-gray); font-size: .85rem; }
 
-.nz-single-post{ max-width: 760px; margin: 0 auto; }
+.nz-single-post{ max-width: 860px; margin: 0 auto; }
+.nz-single-post > h1{ font-size: clamp(2rem, 4.2vw, 3.2rem); margin-bottom: .6rem; }
 .nz-single-post .nz-post-thumb{ border-radius: var(--nz-radius); margin-bottom: 2rem; overflow:hidden; }
-.nz-single-post__content h2{ margin-top: 1.6em; }
+.nz-single-post__content{ font-size: 1.12rem; line-height: 1.75; }
+.nz-single-post__content p{ margin-bottom: 1.5em; }
+.nz-single-post__content h2{ margin-top: 1.8em; }
+.nz-single-post__content h3{ margin-top: 1.4em; }
 .nz-single-post__content img{ border-radius: var(--nz-radius-sm); }
+.nz-single-post__content ul, .nz-single-post__content ol{ margin: 0 0 1.5em; padding-left: 1.3em; }
+.nz-single-post__content ul{ list-style: disc; }
+.nz-single-post__content ol{ list-style: decimal; }
+.nz-single-post__content li{ margin-bottom: .5em; }
+.nz-single-post__content blockquote{ border-left: 4px solid var(--nz-lime); margin: 2em 0; padding: .5em 0 .5em 1.5em; font-size: 1.2rem; font-weight: 500; }
 .nz-single-post__content a{ color: var(--nz-pink); text-decoration: underline; text-underline-offset: 3px; }
 .nz-author-box{ display:flex; gap:1.2rem; align-items:flex-start; background: var(--nz-offwhite); border-radius: var(--nz-radius); padding: 1.5rem; margin-top: 3rem; }
 .nz-author-box img{ width:64px; height:64px; border-radius:50%; object-fit:cover; }
