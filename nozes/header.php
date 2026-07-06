@@ -38,7 +38,7 @@
 		</nav>
 
 		<div class="nz-header__actions">
-			<a class="nz-btn nz-btn--primary" href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer">
+			<a class="nz-btn nz-btn--yellow-lime" href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php echo nozes_icon( 'whatsapp' ); ?>
 				<span><?php esc_html_e( 'Falar no WhatsApp', 'nozes' ); ?></span>
 			</a>

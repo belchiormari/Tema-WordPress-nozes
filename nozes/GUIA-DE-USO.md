@@ -30,6 +30,15 @@ Vá em **Aparência → Personalizar → Configurações da Nozes**:
 
 Em **Aparência → Logotipo do Site** você troca a logo pelo arquivo oficial quando quiser (já vai um placeholder com a marca enviada).
 
+### E-mails automáticos (login de cliente, redefinição de senha, novo usuário)
+
+Por padrão, o WordPress envia esses e-mails como remetente genérico "WordPress". O tema já muda isso para aparecer como **remetente "Nozes"**, usando o e-mail que você configurar no campo **"E-mail de contato"** (Personalizar → Contato e Endereço) — tanto o cadastro de um cliente novo quanto os e-mails de redefinição de senha usam esse mesmo endereço.
+
+Duas coisas importantes:
+
+1. Use ali um e-mail real que existe no seu domínio (ex: `contato@somosnozes.com.br`), não um e-mail genérico — isso evita que a mensagem seja rejeitada ou marcada como spam.
+2. Trocar só o "remetente" ajuda, mas a forma mais confiável de garantir que os e-mails cheguem (e não caiam em spam) é instalar um plugin de SMTP gratuito, como o **WP Mail SMTP**, e configurá-lo com uma conta de e-mail do seu domínio na Hostinger (a própria Hostinger tem um guia de "SMTP" no painel de e-mails). Isso autentica o envio (SPF/DKIM) em vez de depender do envio padrão do servidor.
+
 ## 4. Editando o conteúdo no dia a dia
 
 Você escolheu o **Elementor** como editor visual. Fluxo recomendado:

@@ -39,6 +39,11 @@ get_header();
 				<label for="nozes_password"><?php esc_html_e( 'Senha', 'nozes' ); ?></label>
 				<input type="password" id="nozes_password" name="nozes_password" autocomplete="current-password" required>
 
+				<label class="nz-show-password">
+					<input type="checkbox" id="nozes_show_password" data-nz-toggle-password="nozes_password">
+					<?php esc_html_e( 'Mostrar senha', 'nozes' ); ?>
+				</label>
+
 				<?php wp_nonce_field( 'nozes_client_login', 'nozes_client_login_nonce' ); ?>
 				<button type="submit" class="nz-btn nz-btn--primary"><?php esc_html_e( 'Entrar', 'nozes' ); ?></button>
 

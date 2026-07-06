@@ -123,3 +123,21 @@ function nozes_excerpt_more( $more ) {
 	return '…';
 }
 add_filter( 'excerpt_more', 'nozes_excerpt_more' );
+
+/**
+ * Faz os e-mails automáticos do WordPress (novo usuário, redefinição de senha
+ * da Área do Cliente, etc.) chegarem como remetente "Nozes" em vez de
+ * "WordPress" genérico. Para garantir a entrega (não cair em spam), configure
+ * também um plugin de SMTP (ex: WP Mail SMTP) usando este mesmo e-mail —
+ * veja o GUIA-DE-USO.md.
+ */
+function nozes_mail_from( $original_email ) {
+	$custom_email = get_theme_mod( 'nozes_email', '' );
+	return $custom_email ? $custom_email : $original_email;
+}
+add_filter( 'wp_mail_from', 'nozes_mail_from' );
+
+function nozes_mail_from_name( $original_name ) {
+	return get_bloginfo( 'name' );
+}
+add_filter( 'wp_mail_from_name', 'nozes_mail_from_name' );

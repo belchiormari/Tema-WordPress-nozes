@@ -157,6 +157,8 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-btn--primary:hover{ background: #e0005a; }
 .nz-btn--lime{ background: var(--nz-lime); color: var(--nz-black); }
 .nz-btn--lime:hover{ background: var(--nz-yellow-lime); }
+.nz-btn--yellow-lime{ background: var(--nz-yellow-lime); color: var(--nz-black); }
+.nz-btn--yellow-lime:hover{ background: var(--nz-lime); }
 .nz-btn--outline{ background: transparent; border-color: currentColor; }
 .nz-btn--outline:hover{ background: currentColor; }
 .nz-section--black .nz-btn--outline:hover{ color: var(--nz-black); }
@@ -342,6 +344,8 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   margin-bottom: 1.2rem; font-family: inherit; font-size: 1rem;
 }
 .nz-client-login button{ width:100%; }
+.nz-show-password{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:-.6rem 0 1.2rem; cursor:pointer; }
+.nz-show-password input{ width:auto; margin:0; }
 .nz-client-error{ background:#fff0f5; border:1px solid var(--nz-pink); color:#b30050; padding: .9rem 1.1rem; border-radius: var(--nz-radius-sm); margin-bottom:1.2rem; font-size:.92rem; }
 .nz-report{ border:1px solid var(--nz-gray-light); border-radius: var(--nz-radius); margin-bottom: 1rem; overflow:hidden; }
 .nz-report__head{ display:flex; align-items:center; justify-content:space-between; padding: 1.3rem 1.6rem; cursor:pointer; background:#fff; }

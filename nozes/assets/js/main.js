@@ -19,6 +19,17 @@
 		});
 	}
 
+	// "Mostrar senha" no login da Área do Cliente
+	document.querySelectorAll('[data-nz-toggle-password]').forEach(function (checkbox) {
+		var target = document.getElementById(checkbox.getAttribute('data-nz-toggle-password'));
+		if (!target) {
+			return;
+		}
+		checkbox.addEventListener('change', function () {
+			target.type = checkbox.checked ? 'text' : 'password';
+		});
+	});
+
 	// Acordeão de relatórios na Área do Cliente
 	document.querySelectorAll('[data-nz-toggle-report]').forEach(function (head) {
 		head.addEventListener('click', function () {
