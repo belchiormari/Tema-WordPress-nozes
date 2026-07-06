@@ -67,8 +67,14 @@ add_action( 'after_setup_theme', 'nozes_content_width', 0 );
  * Estilos e scripts do site.
  */
 function nozes_assets() {
-	wp_enqueue_style( 'nozes-style', get_stylesheet_uri(), array(), NOZES_VERSION );
-	wp_enqueue_script( 'nozes-main', NOZES_URI . '/assets/js/main.js', array(), NOZES_VERSION, true );
+	// Usa a data de modificação dos arquivos como versão: assim, toda vez que o
+	// CSS/JS do tema é atualizado, o navegador e o cache do servidor buscam a
+	// versão nova automaticamente, em vez de continuar servindo a versão antiga.
+	$style_version  = file_exists( get_stylesheet_directory() . '/style.css' ) ? filemtime( get_stylesheet_directory() . '/style.css' ) : NOZES_VERSION;
+	$script_version = file_exists( get_stylesheet_directory() . '/assets/js/main.js' ) ? filemtime( get_stylesheet_directory() . '/assets/js/main.js' ) : NOZES_VERSION;
+
+	wp_enqueue_style( 'nozes-style', get_stylesheet_uri(), array(), $style_version );
+	wp_enqueue_script( 'nozes-main', NOZES_URI . '/assets/js/main.js', array(), $script_version, true );
 
 	wp_localize_script( 'nozes-main', 'nozesData', array(
 		'whatsappUrl' => nozes_get_whatsapp_link(),
