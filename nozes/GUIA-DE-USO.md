@@ -70,11 +70,20 @@ Fonte: **Poppins** (já vem instalada localmente no tema, pesos 400/500/600/700/
 Sempre que eu montar uma página especial para você (uma landing page de campanha, por exemplo), o processo é:
 
 1. Crie uma página nova em **Páginas → Adicionar nova**.
-2. No painel direito, em **Atributos da página → Modelo**, escolha **"Página HTML Livre"**.
+2. No painel direito, em **Atributos da página → Modelo**, escolha um dos dois modelos abaixo.
 3. Troque o editor de blocos para o modo **Código** (os três pontinhos no canto superior direito → "Editor de código") ou adicione um bloco **HTML personalizado**.
-4. Cole o HTML completo que eu te enviar e publique.
+4. Cole o HTML que eu te enviar e publique.
 
-Esse modelo mostra o conteúdo em largura total, mas mantém o cabeçalho e rodapé do site (menu e marca continuam presentes). Se um dia você quiser uma página **totalmente em branco** (sem menu/rodapé do tema), me avise — é só pedir esse tipo de página que eu preparo.
+### Qual modelo escolher?
+
+Existem **dois** modelos para páginas prontas — a diferença é se você quer manter ou não o menu e o rodapé do site:
+
+| Modelo | Quando usar | Cabeçalho/Rodapé do tema |
+|---|---|---|
+| **Página HTML Livre** | O HTML é só o "miolo" da página e você quer manter o menu e o rodapé da Nozes em volta. | Sim (menu + rodapé + botão de WhatsApp) |
+| **Página em Branco (HTML completo)** | O HTML já traz o próprio topo, rodapé, estilos — uma página completa e independente. Ocupa a tela inteira. | Não (nada do tema aparece) |
+
+Resumindo: se eu te mandar um **HTML completo** (que já tem cabeçalho e rodapé próprios), use **"Página em Branco (HTML completo)"**. Se for só um bloco de conteúdo para encaixar no site, use **"Página HTML Livre"**.
 
 ## 6. Área do Cliente (relatórios mensais)
 
