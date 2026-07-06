@@ -1,0 +1,383 @@
+/*
+Theme Name: Nozes
+Theme URI: https://www.somosnozes.com.br
+Author: Nozes
+Author URI: https://www.somosnozes.com.br
+Description: Tema institucional da Nozes — assessoria em decisões de negócio e valorização de marca. Construído para ser editado pelo editor nativo do WordPress ou pelo Elementor, com SEO e GEO (otimização para buscadores de IA) nativos, área de clientes com login individual e páginas HTML livres.
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 7.4
+Tested up to: 6.6
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: nozes
+Tags: custom-colors, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, block-styles, wide-blocks
+*/
+
+/* ==========================================================================
+   0. RESET
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--nz-white);
+  color: var(--nz-black);
+  font-family: var(--nz-font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; margin: 0; padding: 0; }
+button { font-family: inherit; cursor: pointer; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--nz-font-heading); font-weight: 700; line-height: 1.15; margin: 0 0 .5em; letter-spacing: -0.01em; }
+p { margin: 0 0 1.2em; }
+figure { margin: 0; }
+.skip-link { position: absolute; left: -9999px; top: 0; background: var(--nz-black); color: #fff; padding: 12px 20px; z-index: 10000; }
+.skip-link:focus { left: 10px; top: 10px; }
+
+/* ==========================================================================
+   1. DESIGN TOKENS — Paleta oficial Nozes
+   ========================================================================== */
+:root{
+  /* Base */
+  --nz-black: #1d1d1f;
+  --nz-white: #ffffff;
+  --nz-offwhite: #f6f6f2;
+  --nz-gray: #6e6e73;
+  --nz-gray-light: #e3e3e0;
+
+  /* Acentos primários */
+  --nz-pink: #ff0066;
+  --nz-lime: #abf705;
+  --nz-yellow-lime: #d8ff01;
+
+  /* Acentos secundários */
+  --nz-blue: #1fbdc6;
+  --nz-yellow: #ffd100;
+
+  /* Acentos terciários */
+  --nz-coral: #ff6b6b;
+  --nz-purple: #7b4fe0;
+
+  /* Tipografia */
+  --nz-font-heading: "Poppins", sans-serif;
+  --nz-font-body: "Poppins", sans-serif;
+
+  /* Layout */
+  --nz-container: 1200px;
+  --nz-radius: 18px;
+  --nz-radius-sm: 10px;
+  --nz-gap: clamp(1.5rem, 4vw, 3rem);
+  --nz-section-pad: clamp(3.5rem, 8vw, 7rem);
+}
+
+/* ==========================================================================
+   2. TIPOGRAFIA — Poppins hospedada localmente
+   ========================================================================== */
+@font-face{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/poppins-400.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/poppins-500.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/poppins-600.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/poppins-700.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('assets/fonts/poppins-800.woff2') format('woff2');
+}
+
+h1{ font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 800; }
+h2{ font-size: clamp(1.9rem, 3.4vw, 2.8rem); font-weight: 700; }
+h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
+.u-eyebrow{
+  display: inline-flex; align-items: center; gap: .5em;
+  font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--nz-pink); margin-bottom: 1em;
+}
+.u-eyebrow::before{ content:""; width: 22px; height: 3px; background: var(--nz-lime); border-radius: 2px; display:inline-block; }
+.u-lede{ font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--nz-gray); max-width: 46em; }
+
+/* ==========================================================================
+   3. LAYOUT / CONTAINER
+   ========================================================================== */
+.nz-container{ max-width: var(--nz-container); margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+.nz-section{ padding-block: var(--nz-section-pad); }
+.nz-section--tight{ padding-block: clamp(2rem, 5vw, 3.5rem); }
+.nz-section--black{ background: var(--nz-black); color: var(--nz-white); }
+.nz-section--black .u-lede{ color: #c9c9cf; }
+.nz-section--offwhite{ background: var(--nz-offwhite); }
+.nz-grid{ display: grid; gap: var(--nz-gap); }
+.nz-grid--2{ grid-template-columns: repeat(2, 1fr); }
+.nz-grid--3{ grid-template-columns: repeat(3, 1fr); }
+.nz-grid--4{ grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px){
+  .nz-grid--2, .nz-grid--3, .nz-grid--4{ grid-template-columns: 1fr; }
+}
+.u-center{ text-align: center; margin-inline: auto; }
+.u-max-content{ max-width: 720px; }
+
+/* ==========================================================================
+   4. BOTÕES
+   ========================================================================== */
+.nz-btn{
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  padding: .95em 1.8em; border-radius: 999px; font-weight: 600; font-size: 1rem;
+  border: 2px solid transparent; transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
+  white-space: nowrap;
+}
+.nz-btn:hover{ transform: translateY(-2px); }
+.nz-btn--primary{ background: var(--nz-pink); color: #fff; }
+.nz-btn--primary:hover{ background: #e0005a; }
+.nz-btn--lime{ background: var(--nz-lime); color: var(--nz-black); }
+.nz-btn--lime:hover{ background: var(--nz-yellow-lime); }
+.nz-btn--outline{ background: transparent; border-color: currentColor; }
+.nz-btn--outline:hover{ background: currentColor; }
+.nz-section--black .nz-btn--outline:hover{ color: var(--nz-black); }
+.nz-btn--outline:hover{ color: var(--nz-black); }
+.nz-btn svg{ width: 1.15em; height: 1.15em; flex-shrink: 0; }
+
+/* ==========================================================================
+   5. HEADER
+   ========================================================================== */
+.nz-header{
+  position: sticky; top: 0; z-index: 999;
+  background: var(--nz-black); color: var(--nz-white);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.nz-header__bar{ display: flex; align-items: center; justify-content: space-between; padding-block: .9rem; gap: 1.5rem; }
+.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
+.nz-logo img{ height: 40px; width: auto; }
+.nz-nav{ display: flex; align-items: center; gap: 2.1rem; }
+.nz-nav__list{ display: contents; }
+.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; }
+.nz-nav a::after{
+  content:""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px;
+  background: var(--nz-lime); transition: width .2s ease;
+}
+.nz-nav a:hover::after, .nz-nav a.current-menu-item::after{ width: 100%; }
+.nz-header__actions{ display: flex; align-items: center; gap: 1rem; }
+.nz-burger{ display: none; background: none; border: 0; color: #fff; padding: .5rem; }
+.nz-burger svg{ width: 26px; height: 26px; }
+
+@media (max-width: 880px){
+  .nz-nav{
+    position: fixed; inset: 0 0 0 auto; width: min(80vw, 340px); height: 100vh;
+    background: var(--nz-black); flex-direction: column; align-items: flex-start;
+    padding: 6rem 2rem 2rem; gap: 1.75rem; transform: translateX(100%);
+    transition: transform .3s ease; box-shadow: -10px 0 30px rgba(0,0,0,.35);
+  }
+  .nz-nav.is-open{ transform: translateX(0); }
+  .nz-nav a{ font-size: 1.1rem; }
+  .nz-burger{ display: inline-flex; }
+  .nz-header__actions .nz-btn span{ display: none; }
+}
+
+/* ==========================================================================
+   6. HERO
+   ========================================================================== */
+.nz-hero{ background: var(--nz-black); color: #fff; position: relative; overflow: hidden; padding-block: clamp(4rem, 10vw, 8rem); }
+.nz-hero__scribble{ position: absolute; pointer-events: none; opacity: .9; }
+.nz-hero__scribble--1{ top: -40px; right: -60px; width: 340px; }
+.nz-hero__scribble--2{ bottom: -60px; left: -80px; width: 280px; opacity: .5; }
+.nz-hero__content{ position: relative; z-index: 2; max-width: 760px; }
+.nz-hero mark{ background: none; color: var(--nz-lime); }
+.nz-hero__actions{ display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+
+/* ==========================================================================
+   7. CARDS DE SERVIÇO
+   ========================================================================== */
+.nz-service{
+  background: #fff; border-radius: var(--nz-radius); padding: 2.1rem;
+  border: 1px solid var(--nz-gray-light); position: relative; overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.nz-service:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(29,29,31,.08); }
+.nz-service::before{ content:""; position:absolute; top:0; left:0; right:0; height: 6px; background: var(--accent, var(--nz-pink)); }
+.nz-service__icon{ width: 52px; height: 52px; border-radius: 14px; display:flex; align-items:center; justify-content:center; background: var(--accent, var(--nz-pink)); color:#fff; margin-bottom: 1.1rem; }
+.nz-service__icon svg{ width: 26px; height: 26px; }
+.nz-service h3{ margin-bottom: .5rem; }
+.nz-service p{ color: var(--nz-gray); margin-bottom: 0; }
+
+.nz-service--featured{
+  background: var(--nz-black); color: #fff; border-color: transparent;
+  grid-column: span 2;
+}
+.nz-service--featured p{ color: #d7d7dc; }
+.nz-service--featured .nz-service__icon{ background: var(--nz-lime); color: var(--nz-black); }
+.nz-service--featured .nz-badge{ margin-bottom: 1rem; }
+@media (max-width: 900px){ .nz-service--featured{ grid-column: span 1; } }
+
+.nz-badge{
+  display: inline-flex; align-items: center; gap: .4em; background: var(--nz-lime); color: var(--nz-black);
+  font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: .35em .9em; border-radius: 999px;
+}
+
+/* ==========================================================================
+   8. SOBRE / FOTO
+   ========================================================================== */
+.nz-about{ display:flex; align-items:center; gap: var(--nz-gap); }
+.nz-about__media{ flex: 0 0 42%; position: relative; }
+.nz-about__media img{
+  border-radius: var(--nz-radius); filter: grayscale(1) contrast(1.05);
+  transition: filter .4s ease;
+}
+.nz-about__media:hover img{ filter: grayscale(.15) contrast(1.05); }
+.nz-about__content{ flex: 1; }
+@media (max-width: 900px){ .nz-about{ flex-direction: column; } .nz-about__media{ flex-basis: auto; width: 100%; } }
+
+.u-grayscale{ filter: grayscale(1) contrast(1.05); transition: filter .4s ease; }
+.u-grayscale:hover{ filter: grayscale(.15) contrast(1.05); }
+
+/* ==========================================================================
+   9. DEPOIMENTOS
+   ========================================================================== */
+.nz-quote{ background: rgba(255,255,255,.05); border-radius: var(--nz-radius); padding: 2rem; border: 1px solid rgba(255,255,255,.1); }
+.nz-quote p{ font-size: 1.1rem; color: #fff; }
+.nz-quote cite{ font-style: normal; font-weight: 600; color: var(--nz-lime); display:block; margin-top: 1rem; }
+
+/* ==========================================================================
+   10. BLOG
+   ========================================================================== */
+.nz-post-card{ background:#fff; border-radius: var(--nz-radius); overflow:hidden; border:1px solid var(--nz-gray-light); }
+.nz-post-card__media{ aspect-ratio: 16/10; overflow:hidden; background: var(--nz-gray-light); }
+.nz-post-card__media img{ width:100%; height:100%; object-fit:cover; }
+.nz-post-card__body{ padding: 1.5rem; }
+.nz-post-card__cat{ color: var(--nz-pink); font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; }
+.nz-post-card h3{ margin: .5rem 0; font-size: 1.15rem; }
+.nz-post-card__meta{ color: var(--nz-gray); font-size: .85rem; }
+
+.nz-single-post{ max-width: 760px; margin: 0 auto; }
+.nz-single-post .nz-post-thumb{ border-radius: var(--nz-radius); margin-bottom: 2rem; overflow:hidden; }
+.nz-single-post__content h2{ margin-top: 1.6em; }
+.nz-single-post__content img{ border-radius: var(--nz-radius-sm); }
+.nz-single-post__content a{ color: var(--nz-pink); text-decoration: underline; text-underline-offset: 3px; }
+.nz-author-box{ display:flex; gap:1.2rem; align-items:flex-start; background: var(--nz-offwhite); border-radius: var(--nz-radius); padding: 1.5rem; margin-top: 3rem; }
+.nz-author-box img{ width:64px; height:64px; border-radius:50%; object-fit:cover; }
+
+/* ==========================================================================
+   11. FAQ
+   ========================================================================== */
+.nz-faq{ border-top: 1px solid var(--nz-gray-light); }
+.nz-faq details{ padding: 1.3rem 0; border-bottom: 1px solid var(--nz-gray-light); }
+.nz-faq summary{ font-weight: 600; cursor: pointer; list-style: none; display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+.nz-faq summary::-webkit-details-marker{ display:none; }
+.nz-faq summary::after{ content:"+"; font-size:1.4rem; color: var(--nz-pink); flex-shrink:0; transition: transform .2s ease; }
+.nz-faq details[open] summary::after{ content:"–"; }
+.nz-faq p{ margin-top: 1rem; color: var(--nz-gray); }
+
+/* ==========================================================================
+   12. CTA FINAL
+   ========================================================================== */
+.nz-cta{ text-align:center; }
+.nz-cta h2{ max-width: 16ch; margin-inline:auto; }
+
+/* ==========================================================================
+   13. FOOTER
+   ========================================================================== */
+.nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
+.nz-footer__grid{ display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+.nz-footer h4{ color:#fff; font-size: .95rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1.2rem; }
+.nz-footer ul li{ margin-bottom: .7rem; }
+.nz-footer a:hover{ color: var(--nz-lime); }
+.nz-footer__bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; padding-top: 1.6rem; font-size:.85rem; color:#9a9aa0; }
+.nz-social{ display:flex; gap: .8rem; }
+.nz-social a{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; }
+.nz-social a:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
+@media (max-width: 900px){ .nz-footer__grid{ grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px){ .nz-footer__grid{ grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   14. WHATSAPP FLUTUANTE
+   ========================================================================== */
+.nz-whatsapp-float{
+  position: fixed; right: 22px; bottom: 22px; z-index: 9999;
+  width: 62px; height: 62px; border-radius: 50%; background: var(--nz-lime); color: var(--nz-black);
+  display:flex; align-items:center; justify-content:center; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  animation: nz-pulse 2.4s infinite;
+}
+.nz-whatsapp-float svg{ width:30px; height:30px; }
+.nz-whatsapp-float:hover{ background: var(--nz-pink); color:#fff; }
+@keyframes nz-pulse{
+  0%{ box-shadow: 0 0 0 0 rgba(171,247,5,.5), 0 10px 30px rgba(0,0,0,.25); }
+  70%{ box-shadow: 0 0 0 14px rgba(171,247,5,0), 0 10px 30px rgba(0,0,0,.25); }
+  100%{ box-shadow: 0 0 0 0 rgba(171,247,5,0), 0 10px 30px rgba(0,0,0,.25); }
+}
+
+/* ==========================================================================
+   15. ÁREA DO CLIENTE
+   ========================================================================== */
+.nz-client{ max-width: 880px; margin: 0 auto; }
+.nz-client-login{ max-width: 420px; margin: 0 auto; background:#fff; border:1px solid var(--nz-gray-light); border-radius: var(--nz-radius); padding: 2.5rem; }
+.nz-client-login label{ display:block; font-weight:600; margin-bottom:.4rem; font-size:.9rem; }
+.nz-client-login input[type="text"], .nz-client-login input[type="password"]{
+  width:100%; padding: .8em 1em; border-radius: var(--nz-radius-sm); border:1px solid var(--nz-gray-light);
+  margin-bottom: 1.2rem; font-family: inherit; font-size: 1rem;
+}
+.nz-client-login button{ width:100%; }
+.nz-client-error{ background:#fff0f5; border:1px solid var(--nz-pink); color:#b30050; padding: .9rem 1.1rem; border-radius: var(--nz-radius-sm); margin-bottom:1.2rem; font-size:.92rem; }
+.nz-report{ border:1px solid var(--nz-gray-light); border-radius: var(--nz-radius); margin-bottom: 1rem; overflow:hidden; }
+.nz-report__head{ display:flex; align-items:center; justify-content:space-between; padding: 1.3rem 1.6rem; cursor:pointer; background:#fff; }
+.nz-report__head h3{ margin:0; font-size:1.05rem; }
+.nz-report__date{ color: var(--nz-gray); font-size:.85rem; font-weight:500; }
+.nz-report__body{ padding: 1.6rem; border-top:1px solid var(--nz-gray-light); background: var(--nz-offwhite); }
+.nz-client-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
+.nz-client-topbar .nz-btn{ font-size:.9rem; padding:.7em 1.4em; }
+
+/* ==========================================================================
+   16. PÁGINA HTML LIVRE
+   ========================================================================== */
+.nz-html-livre{ width:100%; }
+.nz-html-livre .nz-container{ padding:0; max-width:none; }
+
+/* ==========================================================================
+   17. BREADCRUMBS / UTILS
+   ========================================================================== */
+.nz-breadcrumbs{ font-size:.85rem; color: var(--nz-gray); margin-bottom: 1.5rem; }
+.nz-breadcrumbs a{ color: var(--nz-gray); text-decoration: underline; text-underline-offset: 2px; }
+.nz-breadcrumbs a:hover{ color: var(--nz-pink); }
+.u-mt-0{ margin-top:0; }
+.u-visually-hidden{ position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* ==========================================================================
+   18. 404 / BUSCA
+   ========================================================================== */
+.nz-404{ text-align:center; padding-block: 6rem; }
+.nz-404 .u-eyebrow{ justify-content:center; }
+.nz-search-form{ display:flex; gap:.6rem; max-width:480px; margin: 0 auto 3rem; }
+.nz-search-form input{ flex:1; padding:.9em 1.2em; border-radius:999px; border:1px solid var(--nz-gray-light); font-family:inherit; }
+
+/* ==========================================================================
+   19. WordPress core / Elementor compat
+   ========================================================================== */
+.alignwide{ max-width: 1400px; margin-left:auto; margin-right:auto; }
+.alignfull{ width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
+.wp-block-image{ margin-bottom:1.5rem; }
+.elementor-page .nz-container{ max-width:none; padding:0; }
