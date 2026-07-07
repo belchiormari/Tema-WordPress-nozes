@@ -12,11 +12,13 @@
 				<img src="<?php echo esc_url( NOZES_URI . '/assets/img/logo-wordmark.png' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="height:34px;width:auto;margin-bottom:1.2rem;" />
 				<p><?php echo esc_html( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) ); ?></p>
 				<div class="nz-social">
-					<?php if ( get_theme_mod( 'nozes_social_instagram' ) ) : ?>
-						<a href="<?php echo esc_url( get_theme_mod( 'nozes_social_instagram' ) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+					<?php $nz_instagram = get_theme_mod( 'nozes_social_instagram' ); ?>
+					<?php if ( $nz_instagram ) : ?>
+						<a href="<?php echo esc_url( $nz_instagram ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><?php echo nozes_icon( 'instagram' ); ?></a>
 					<?php endif; ?>
+					<a href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><?php echo nozes_icon( 'whatsapp' ); ?></a>
 					<?php if ( get_theme_mod( 'nozes_social_linkedin' ) ) : ?>
-						<a href="<?php echo esc_url( get_theme_mod( 'nozes_social_linkedin' ) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+						<a href="<?php echo esc_url( get_theme_mod( 'nozes_social_linkedin' ) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><?php echo nozes_icon( 'linkedin' ); ?></a>
 					<?php endif; ?>
 				</div>
 			</div>

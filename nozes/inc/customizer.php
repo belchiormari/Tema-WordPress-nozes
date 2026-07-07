@@ -86,20 +86,46 @@ function nozes_customize_register( $wp_customize ) {
 	) );
 
 	$socials = array(
-		'nozes_social_instagram' => 'Instagram (URL completa)',
-		'nozes_social_linkedin'  => 'LinkedIn (URL completa)',
+		'nozes_social_instagram' => array( 'Instagram (URL completa)', 'https://www.instagram.com/somosnozes/' ),
+		'nozes_social_linkedin'  => array( 'LinkedIn (URL completa)', '' ),
 	);
-	foreach ( $socials as $key => $label ) {
+	foreach ( $socials as $key => $data ) {
 		$wp_customize->add_setting( $key, array(
-			'default'           => '',
+			'default'           => $data[1],
 			'sanitize_callback' => 'esc_url_raw',
 		) );
 		$wp_customize->add_control( $key, array(
-			'label'   => __( $label, 'nozes' ),
+			'label'   => __( $data[0], 'nozes' ),
 			'section' => 'nozes_social',
 			'type'    => 'url',
 		) );
 	}
+
+	/* -- Seção: Blog (chamada no fim de cada artigo) -- */
+	$wp_customize->add_section( 'nozes_blog', array(
+		'title' => __( 'Blog', 'nozes' ),
+		'panel' => 'nozes_options',
+	) );
+
+	$wp_customize->add_setting( 'nozes_blog_cta_title', array(
+		'default'           => 'Esse assunto apareceu na sua empresa?',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'nozes_blog_cta_title', array(
+		'label'       => __( 'Título da chamada no fim dos artigos', 'nozes' ),
+		'section'     => 'nozes_blog',
+		'type'        => 'text',
+	) );
+
+	$wp_customize->add_setting( 'nozes_blog_cta_text', array(
+		'default'           => 'Se quiser destrinchar isso pro seu negócio, me escreve. A primeira conversa é sem compromisso.',
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'nozes_blog_cta_text', array(
+		'label'       => __( 'Texto da chamada no fim dos artigos', 'nozes' ),
+		'section'     => 'nozes_blog',
+		'type'        => 'textarea',
+	) );
 
 	/* -- Seção: SEO / GEO -- */
 	$wp_customize->add_section( 'nozes_seo', array(
