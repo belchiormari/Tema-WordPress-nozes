@@ -295,6 +295,108 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-author-box{ display:flex; gap:1.2rem; align-items:flex-start; background: var(--nz-offwhite); border-radius: var(--nz-radius); padding: 1.5rem; margin-top: 3rem; }
 .nz-author-box img{ width:64px; height:64px; border-radius:50%; object-fit:cover; }
 
+/* -- Cabeçalho da página do Blog (fundo claro) -- */
+.nz-blog-hero{
+  position: relative; overflow: hidden;
+  background: var(--nz-offwhite);
+  border-bottom: 1px solid var(--nz-gray-light);
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+.nz-blog-hero::after{
+  content:""; position:absolute; top:-35%; right:-8%; width:520px; height:520px; max-width:60vw;
+  background: radial-gradient(circle, rgba(171,247,5,.22), transparent 70%);
+  pointer-events:none;
+}
+.nz-blog-hero .nz-container{ position: relative; z-index: 1; }
+.nz-blog-hero__title{ font-size: clamp(2.4rem, 6vw, 4.6rem); max-width: 18ch; margin-bottom: .4rem; }
+.nz-blog-hero__lede{ margin-top: 1.2rem; }
+
+/* -- Fim do artigo: card do autor (fundo claro) -- */
+.nz-author-card{
+  margin-top: 3.5rem;
+  background: var(--nz-offwhite);
+  border: 1px solid var(--nz-gray-light);
+  border-radius: var(--nz-radius);
+  padding: clamp(1.5rem, 3vw, 2.2rem);
+}
+.nz-author-card__eyebrow{
+  display:inline-block; font-size:.78rem; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color: var(--nz-pink); margin-bottom: 1.1rem;
+}
+.nz-author-card__inner{ display:flex; gap:1.4rem; align-items:center; }
+.nz-author-card__avatar{ width:84px; height:84px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+.nz-author-card__name{ display:block; font-size:1.25rem; font-weight:700; margin-bottom:.25rem; }
+.nz-author-card__bio{ color: var(--nz-gray); margin:0; }
+@media (max-width:560px){ .nz-author-card__inner{ flex-direction:column; align-items:flex-start; } }
+
+/* -- Fim do artigo: chamada para o WhatsApp (card escuro sobre fundo claro) -- */
+.nz-post-cta{
+  position: relative; overflow: hidden;
+  margin-top: 2rem;
+  background: var(--nz-black); color:#fff;
+  border-radius: var(--nz-radius);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
+}
+.nz-post-cta__glow{
+  position:absolute; top:-40%; right:-10%; width:460px; height:460px; max-width:70vw;
+  background: radial-gradient(circle, rgba(171,247,5,.30), transparent 68%);
+  pointer-events:none;
+}
+.nz-post-cta__inner{ position: relative; z-index:1; max-width: 620px; margin-inline:auto; }
+.nz-post-cta__title{ color:#fff; font-size: clamp(1.9rem, 4vw, 3rem); margin-bottom: 1rem; }
+.nz-post-cta__text{ color:#c9c9cf; font-size: clamp(1.05rem, 1.6vw, 1.2rem); margin-bottom: 2rem; }
+.nz-post-cta__btn{ font-size: 1.05rem; padding: 1em 2em; }
+
+/* -- Fim do artigo: navegação entre artigos -- */
+.nz-post-nav{
+  display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
+  margin-top: 3rem; padding-top: 2rem; border-top:1px solid var(--nz-gray-light);
+}
+.nz-post-nav__link{ max-width: 48%; }
+.nz-post-nav__link--next{ margin-left:auto; text-align:right; }
+.nz-post-nav__dir{ display:block; color: var(--nz-pink); font-weight:700; font-size:.85rem; margin-bottom:.25rem; }
+.nz-post-nav__title{ display:block; font-weight:600; color: var(--nz-black); }
+.nz-post-nav__link:hover .nz-post-nav__title{ color: var(--nz-pink); }
+@media (max-width:560px){
+  .nz-post-nav{ flex-direction:column; }
+  .nz-post-nav__link, .nz-post-nav__link--next{ max-width:100%; text-align:left; margin-left:0; }
+}
+
+/* -- Comentários (fundo claro) -- */
+.nz-post-comments{ margin-top: 3.5rem; padding-top: 2.5rem; border-top:1px solid var(--nz-gray-light); }
+.nz-comments h2, .nz-comments .comment-reply-title{ font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin-bottom: 1.2rem; }
+.nz-comments .comment-list{ margin: 0 0 2.5rem; }
+.nz-comments .comment-list li{ margin-bottom: 1.4rem; list-style:none; }
+.nz-comments .comment-list .children{ margin: 1.4rem 0 0 1.5rem; padding:0; }
+.nz-comments .comment-body{ background: var(--nz-offwhite); border:1px solid var(--nz-gray-light); border-radius: var(--nz-radius); padding: 1.3rem 1.5rem; }
+.nz-comments .comment-author{ display:flex; align-items:center; gap:.7rem; }
+.nz-comments .comment-author img{ border-radius:50%; }
+.nz-comments .comment-author .fn{ font-weight:700; font-style:normal; }
+.nz-comments .comment-meta{ font-size:.82rem; margin-bottom:.6rem; }
+.nz-comments .comment-meta a{ color: var(--nz-gray); }
+.nz-comments .comment-form{ display:grid; gap:1rem; }
+.nz-comments .comment-notes, .nz-comments .logged-in-as{ color: var(--nz-gray); font-size:.9rem; }
+.nz-comments .comment-form label{ font-weight:600; font-size:.9rem; display:block; margin-bottom:.35rem; }
+.nz-comments textarea,
+.nz-comments input[type="text"],
+.nz-comments input[type="email"],
+.nz-comments input[type="url"]{
+  width:100%; padding:.85em 1.1em; border-radius: var(--nz-radius-sm);
+  border:1px solid var(--nz-gray-light); background:#fff; font-family:inherit; font-size:1rem;
+}
+.nz-comments textarea{ min-height: 160px; resize: vertical; }
+.nz-comments textarea:focus,
+.nz-comments input:focus{ outline:2px solid var(--nz-lime); outline-offset:1px; border-color: transparent; }
+.nz-comments .form-submit .submit{
+  display:inline-flex; align-items:center; justify-content:center;
+  background: var(--nz-lime); color: var(--nz-black); border:0;
+  padding:.9em 2em; border-radius:999px; font-weight:600; font-size:1rem; cursor:pointer;
+  transition: transform .18s ease, background .18s ease;
+}
+.nz-comments .form-submit .submit:hover{ background: var(--nz-yellow-lime); transform: translateY(-2px); }
+.nz-comments a{ color: var(--nz-pink); }
+
 /* ==========================================================================
    11. FAQ
    ========================================================================== */
@@ -322,7 +424,8 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-footer a:hover{ color: var(--nz-lime); }
 .nz-footer__bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; padding-top: 1.6rem; font-size:.85rem; color:#9a9aa0; }
 .nz-social{ display:flex; gap: .8rem; }
-.nz-social a{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; }
+.nz-social a{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; color:#d7d7dc; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+.nz-social a svg{ width:18px; height:18px; }
 .nz-social a:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
 @media (max-width: 900px){ .nz-footer__grid{ grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px){ .nz-footer__grid{ grid-template-columns: 1fr; } }

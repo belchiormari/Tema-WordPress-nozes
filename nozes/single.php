@@ -44,18 +44,64 @@ get_header();
 		) );
 		?>
 
-		<div class="nz-author-box">
-			<?php echo get_avatar( get_the_author_meta( 'ID' ), 64 ); ?>
-			<div>
-				<strong><?php the_author(); ?></strong>
-				<?php if ( get_the_author_meta( 'description' ) ) : ?>
-					<p><?php the_author_meta( 'description' ); ?></p>
-				<?php endif; ?>
+		<div class="nz-author-card">
+			<span class="nz-author-card__eyebrow"><?php esc_html_e( 'Escrito por', 'nozes' ); ?></span>
+			<div class="nz-author-card__inner">
+				<?php echo get_avatar( get_the_author_meta( 'ID' ), 128, '', '', array( 'class' => 'nz-author-card__avatar' ) ); ?>
+				<div class="nz-author-card__body">
+					<strong class="nz-author-card__name"><?php the_author(); ?></strong>
+					<?php if ( get_the_author_meta( 'description' ) ) : ?>
+						<p class="nz-author-card__bio"><?php echo esc_html( get_the_author_meta( 'description' ) ); ?></p>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 
+		<?php
+		$nz_cta_title = get_theme_mod( 'nozes_blog_cta_title', 'Esse assunto apareceu na sua empresa?' );
+		$nz_cta_text  = get_theme_mod( 'nozes_blog_cta_text', 'Se quiser destrinchar isso pro seu negócio, me escreve. A primeira conversa é sem compromisso.' );
+		?>
+		<?php if ( $nz_cta_title || $nz_cta_text ) : ?>
+			<aside class="nz-post-cta">
+				<div class="nz-post-cta__glow" aria-hidden="true"></div>
+				<div class="nz-post-cta__inner">
+					<?php if ( $nz_cta_title ) : ?>
+						<h2 class="nz-post-cta__title"><?php echo esc_html( $nz_cta_title ); ?></h2>
+					<?php endif; ?>
+					<?php if ( $nz_cta_text ) : ?>
+						<p class="nz-post-cta__text"><?php echo esc_html( $nz_cta_text ); ?></p>
+					<?php endif; ?>
+					<a class="nz-btn nz-btn--lime nz-post-cta__btn" href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer">
+						<?php echo nozes_icon( 'whatsapp' ); ?>
+						<span><?php esc_html_e( 'Chamar no WhatsApp', 'nozes' ); ?></span>
+					</a>
+				</div>
+			</aside>
+		<?php endif; ?>
+
+		<?php
+		$nz_prev = get_previous_post();
+		$nz_next = get_next_post();
+		?>
+		<?php if ( $nz_prev || $nz_next ) : ?>
+			<nav class="nz-post-nav" aria-label="<?php esc_attr_e( 'Navegação entre artigos', 'nozes' ); ?>">
+				<?php if ( $nz_prev ) : ?>
+					<a class="nz-post-nav__link nz-post-nav__link--prev" href="<?php echo esc_url( get_permalink( $nz_prev ) ); ?>">
+						<span class="nz-post-nav__dir">&larr; <?php esc_html_e( 'Anterior', 'nozes' ); ?></span>
+						<span class="nz-post-nav__title"><?php echo esc_html( get_the_title( $nz_prev ) ); ?></span>
+					</a>
+				<?php endif; ?>
+				<?php if ( $nz_next ) : ?>
+					<a class="nz-post-nav__link nz-post-nav__link--next" href="<?php echo esc_url( get_permalink( $nz_next ) ); ?>">
+						<span class="nz-post-nav__dir"><?php esc_html_e( 'Próximo', 'nozes' ); ?> &rarr;</span>
+						<span class="nz-post-nav__title"><?php echo esc_html( get_the_title( $nz_next ) ); ?></span>
+					</a>
+				<?php endif; ?>
+			</nav>
+		<?php endif; ?>
+
 		<?php if ( comments_open() || get_comments_number() ) : ?>
-			<div style="margin-top:3rem;">
+			<div class="nz-post-comments">
 				<?php comments_template(); ?>
 			</div>
 		<?php endif; ?>
