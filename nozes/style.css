@@ -392,18 +392,30 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-author-card__bio{ color: var(--nz-gray); margin:0; }
 @media (max-width:560px){ .nz-author-card__inner{ flex-direction:column; align-items:flex-start; } }
 
-/* -- Chamada final do artigo: faixa full-width no fundo escuro do site,
+/* -- Chamada final do artigo: faixa full-width com gradiente animado da marca,
       depois dos comentários -- */
 .nz-cta-final{
   position: relative; overflow: hidden;
-  background: var(--nz-black); color:#fff;
+  background: linear-gradient(135deg, var(--nz-pink) 0%, var(--nz-black) 50%, var(--nz-lime) 100%);
+  background-size: 400% 400%;
+  animation: nz-cta-gradient 15s ease infinite;
+  color:#fff;
   padding-block: clamp(3.5rem, 8vw, 6rem);
   text-align: center;
 }
+/* Véu escuro por cima do gradiente para manter o texto e o botão legíveis
+   mesmo quando a animação passa pelas cores mais claras (verde limão). */
 .nz-cta-final__glow{
-  position:absolute; top:-45%; right:6%; width:520px; height:520px; max-width:72vw;
-  background: radial-gradient(circle, rgba(171,247,5,.28), transparent 68%);
-  pointer-events:none;
+  position:absolute; inset:0; pointer-events:none;
+  background: radial-gradient(ellipse at center, rgba(15,15,16,.62) 0%, rgba(15,15,16,.38) 60%, rgba(15,15,16,.55) 100%);
+}
+@keyframes nz-cta-gradient{
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce){
+  .nz-cta-final{ animation: none; background-position: 50% 50%; }
 }
 .nz-cta-final__inner{ position: relative; z-index:1; max-width: 640px; margin-inline:auto; }
 .nz-cta-final__title{ color:#fff; font-size: clamp(1.9rem, 4vw, 3rem); margin-bottom: 1rem; }
