@@ -87,6 +87,21 @@ function nozes_assets() {
 add_action( 'wp_enqueue_scripts', 'nozes_assets' );
 
 /**
+ * Mostra 9 posts por página no Blog (home de posts e arquivos) — múltiplo de 3,
+ * para a grade de 3 colunas fechar sempre certinho, sem "sobrar" um card na
+ * última linha.
+ */
+function nozes_blog_posts_per_page( $query ) {
+	if ( is_admin() || ! $query->is_main_query() ) {
+		return;
+	}
+	if ( $query->is_home() || $query->is_category() || $query->is_tag() || $query->is_date() || $query->is_author() ) {
+		$query->set( 'posts_per_page', 9 );
+	}
+}
+add_action( 'pre_get_posts', 'nozes_blog_posts_per_page' );
+
+/**
  * Áreas de widget (usadas apenas se alguma página optar por sidebar).
  */
 function nozes_widgets_init() {

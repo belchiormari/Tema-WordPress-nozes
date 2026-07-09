@@ -43,7 +43,11 @@ get_header();
 			'after'  => '</nav>',
 		) );
 		?>
+	</div>
+</article>
 
+<section class="nz-section nz-post-outro">
+	<div class="nz-container nz-single-post">
 		<div class="nz-author-card">
 			<span class="nz-author-card__eyebrow"><?php esc_html_e( 'Escrito por', 'nozes' ); ?></span>
 			<div class="nz-author-card__inner">
@@ -106,7 +110,7 @@ get_header();
 			</div>
 		<?php endif; ?>
 	</div>
-</article>
+</section>
 <?php endwhile; ?>
 
 <?php get_footer(); ?>

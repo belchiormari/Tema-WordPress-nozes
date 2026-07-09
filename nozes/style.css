@@ -270,7 +270,9 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 /* ==========================================================================
    10. BLOG
    ========================================================================== */
-.nz-post-card{ background:#fff; border-radius: var(--nz-radius); overflow:hidden; border:1px solid var(--nz-gray-light); }
+.nz-post-card{ background:#fff; border-radius: var(--nz-radius); overflow:hidden; border:1px solid var(--nz-gray-light); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.nz-post-card:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(29,29,31,.12); border-color: var(--nz-lime); }
+.nz-post-card:hover h3{ color: var(--nz-pink); }
 .nz-post-card__media{ aspect-ratio: 16/10; overflow:hidden; background: var(--nz-gray-light); }
 .nz-post-card__media img{ width:100%; height:100%; object-fit:cover; }
 .nz-post-card__body{ padding: 1.5rem; }
@@ -397,6 +399,40 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-comments .form-submit .submit:hover{ background: var(--nz-yellow-lime); transform: translateY(-2px); }
 .nz-comments a{ color: var(--nz-pink); }
 
+/* -- Fim do artigo em fundo escuro (autor, chamada, navegação e comentários) -- */
+.nz-post-outro{ background: #161618; color: #fff; }
+.nz-post-outro .nz-author-card{
+  margin-top: 0;
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.08);
+}
+.nz-post-outro .nz-author-card__eyebrow{ color: var(--nz-lime); }
+.nz-post-outro .nz-author-card__name{ color: #fff; }
+.nz-post-outro .nz-author-card__bio{ color: #c9c9cf; }
+.nz-post-outro .nz-post-cta{ background: var(--nz-black); border: 1px solid rgba(255,255,255,.06); }
+.nz-post-outro .nz-post-nav{ border-top-color: rgba(255,255,255,.12); }
+.nz-post-outro .nz-post-nav__dir{ color: var(--nz-lime); }
+.nz-post-outro .nz-post-nav__title{ color: #fff; }
+.nz-post-outro .nz-post-nav__link:hover .nz-post-nav__title{ color: var(--nz-lime); }
+.nz-post-outro .nz-post-comments{ border-top-color: rgba(255,255,255,.12); }
+.nz-post-outro .nz-comments h2,
+.nz-post-outro .nz-comments .comment-reply-title{ color: #fff; }
+.nz-post-outro .nz-comments .comment-body{ background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.08); }
+.nz-post-outro .nz-comments .comment-author .fn{ color: #fff; }
+.nz-post-outro .nz-comments .comment-notes,
+.nz-post-outro .nz-comments .logged-in-as,
+.nz-post-outro .nz-comments .comment-meta a{ color: #9a9aa0; }
+.nz-post-outro .nz-comments .comment-form label{ color: #fff; }
+.nz-post-outro .nz-comments textarea,
+.nz-post-outro .nz-comments input[type="text"],
+.nz-post-outro .nz-comments input[type="email"],
+.nz-post-outro .nz-comments input[type="url"]{
+  background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.14); color: #fff;
+}
+.nz-post-outro .nz-comments textarea::placeholder,
+.nz-post-outro .nz-comments input::placeholder{ color: #8a8a90; }
+.nz-post-outro .nz-comments a{ color: var(--nz-lime); }
+
 /* ==========================================================================
    11. FAQ
    ========================================================================== */
@@ -418,7 +454,9 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
    13. FOOTER
    ========================================================================== */
 .nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
-.nz-footer__grid{ display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+.nz-footer__grid{ display:grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+.nz-footer__contact{ margin-top: 1.4rem; display:flex; flex-direction:column; gap:.35rem; }
+.nz-footer__contact strong{ color:#fff; font-weight:700; }
 .nz-footer h4{ color:#fff; font-size: .95rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1.2rem; }
 .nz-footer ul li{ margin-bottom: .7rem; }
 .nz-footer a:hover{ color: var(--nz-lime); }
