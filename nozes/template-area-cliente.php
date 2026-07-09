@@ -4,6 +4,9 @@
  *
  * Página protegida por login: cada cliente só vê os próprios relatórios
  * mensais (cadastrados pela Nozes como o tipo de conteúdo "Relatório").
+ *
+ * Cada relatório é aberto em página própria (?relatorio=ID), sempre com
+ * verificação de permissão, então um cliente nunca acessa o de outro.
  */
 
 $nozes_login_error = null;
@@ -15,10 +18,16 @@ if ( ! is_user_logged_in() && ! empty( $_POST['nozes_client_login_nonce'] ) ) {
 }
 
 get_header();
+
+// Qual relatório abrir em página própria (se houver).
+$nozes_report_id     = isset( $_GET['relatorio'] ) ? absint( $_GET['relatorio'] ) : 0;
+$nozes_single_report = $nozes_report_id ? get_post( $nozes_report_id ) : null;
+$nozes_can_view      = is_user_logged_in() && $nozes_single_report && nozes_user_can_view_report( get_current_user_id(), $nozes_single_report );
+$nozes_wide_class    = ( $nozes_report_id && $nozes_can_view ) ? ' nz-client--wide' : '';
 ?>
 
 <section class="nz-section">
-	<div class="nz-container nz-client">
+	<div class="nz-container nz-client<?php echo esc_attr( $nozes_wide_class ); ?>">
 
 		<?php if ( ! is_user_logged_in() ) : ?>
 
@@ -52,6 +61,35 @@ get_header();
 				</p>
 			</form>
 
+		<?php elseif ( $nozes_report_id && $nozes_can_view ) : ?>
+
+			<?php /* Página própria de um relatório */ ?>
+			<div class="nz-client-topbar">
+				<div>
+					<span class="u-eyebrow"><?php esc_html_e( 'Relatório', 'nozes' ); ?></span>
+					<h1 style="margin-bottom:.3rem;"><?php echo esc_html( get_the_title( $nozes_single_report ) ); ?></h1>
+					<span class="nz-report__date"><?php echo esc_html( get_the_date( '', $nozes_single_report ) ); ?></span>
+				</div>
+				<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos relatórios', 'nozes' ); ?></a>
+			</div>
+
+			<div class="nz-report-full">
+				<?php echo apply_filters( 'the_content', $nozes_single_report->post_content ); ?>
+			</div>
+
+		<?php elseif ( $nozes_report_id && ! $nozes_can_view ) : ?>
+
+			<?php /* Pediu um relatório que não é dele (ou não existe) */ ?>
+			<div class="nz-client-topbar">
+				<div>
+					<span class="u-eyebrow"><?php esc_html_e( 'Área do Cliente', 'nozes' ); ?></span>
+					<h1 style="margin-bottom:0;"><?php esc_html_e( 'Relatório indisponível', 'nozes' ); ?></h1>
+				</div>
+				<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Sair', 'nozes' ); ?></a>
+			</div>
+			<div class="nz-client-error"><?php esc_html_e( 'Este relatório não foi encontrado ou não está disponível para o seu usuário.', 'nozes' ); ?></div>
+			<p><a href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos meus relatórios', 'nozes' ); ?></a></p>
+
 		<?php else : ?>
 
 			<?php $current_user = wp_get_current_user(); ?>
@@ -77,17 +115,18 @@ get_header();
 			<?php if ( empty( $reports ) ) : ?>
 				<p><?php esc_html_e( 'Ainda não há relatórios publicados para o seu usuário. Assim que a Nozes publicar, eles aparecem aqui.', 'nozes' ); ?></p>
 			<?php else : ?>
-				<?php foreach ( $reports as $report ) : ?>
-					<div class="nz-report">
-						<div class="nz-report__head" data-nz-toggle-report>
-							<h3><?php echo esc_html( get_the_title( $report ) ); ?></h3>
-							<span class="nz-report__date"><?php echo esc_html( get_the_date( '', $report ) ); ?></span>
-						</div>
-						<div class="nz-report__body" hidden>
-							<?php echo apply_filters( 'the_content', $report->post_content ); ?>
-						</div>
-					</div>
-				<?php endforeach; ?>
+				<p class="nz-client-hint"><?php esc_html_e( 'Clique em um relatório para abri-lo em uma nova aba.', 'nozes' ); ?></p>
+				<div class="nz-report-list">
+					<?php foreach ( $reports as $report ) : ?>
+						<a class="nz-report nz-report--link" href="<?php echo esc_url( add_query_arg( 'relatorio', $report->ID, get_permalink() ) ); ?>" target="_blank" rel="noopener">
+							<div class="nz-report__head">
+								<h3><?php echo esc_html( get_the_title( $report ) ); ?></h3>
+								<span class="nz-report__date"><?php echo esc_html( get_the_date( '', $report ) ); ?></span>
+							</div>
+							<span class="nz-report__open"><?php esc_html_e( 'Abrir relatório', 'nozes' ); ?> &rarr;</span>
+						</a>
+					<?php endforeach; ?>
+				</div>
 			<?php endif; ?>
 
 		<?php endif; ?>

@@ -187,6 +187,34 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   background: var(--nz-lime); transition: width .2s ease;
 }
 .nz-nav a:hover::after, .nz-nav a.current-menu-item::after{ width: 100%; }
+
+/* Submenus (dropdown no desktop) */
+.nz-nav .menu-item-has-children{ position: relative; }
+.nz-nav .menu-item-has-children > a{ display: inline-flex; align-items: center; gap: .4em; }
+.nz-nav .menu-item-has-children > a::before{
+  content: ""; order: 1; width: .5em; height: .5em;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px); transition: transform .2s ease;
+}
+.nz-nav .menu-item-has-children:hover > a::before,
+.nz-nav .menu-item-has-children:focus-within > a::before{ transform: rotate(225deg) translateY(2px); }
+/* ponte invisível para o mouse não "perder" o submenu no caminho */
+.nz-nav .menu-item-has-children::after{ content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 16px; }
+.nz-nav .sub-menu{
+  position: absolute; top: calc(100% + 14px); left: 0; z-index: 1000;
+  min-width: 230px; display: flex; flex-direction: column; gap: .15rem;
+  background: var(--nz-black); border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--nz-radius-sm); padding: .55rem;
+  box-shadow: 0 22px 44px rgba(0,0,0,.4);
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+}
+.nz-nav .menu-item-has-children:hover > .sub-menu,
+.nz-nav .menu-item-has-children:focus-within > .sub-menu{ opacity: 1; visibility: visible; transform: translateY(0); }
+.nz-nav .sub-menu a{ padding: .55rem .8rem; border-radius: 8px; font-size: .95rem; white-space: nowrap; width: 100%; }
+.nz-nav .sub-menu a::after{ display: none; }
+.nz-nav .sub-menu a:hover{ background: rgba(255,255,255,.08); color: var(--nz-lime); }
+
 .nz-header__actions{ display: flex; align-items: center; gap: 1rem; }
 .nz-burger{ display: none; background: none; border: 0; color: #fff; padding: .5rem; }
 .nz-burger svg{ width: 26px; height: 26px; }
@@ -202,6 +230,16 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   .nz-nav a{ font-size: 1.1rem; }
   .nz-burger{ display: inline-flex; }
   .nz-header__actions .nz-btn span{ display: none; }
+
+  /* No celular os submenus aparecem recuados abaixo do item (sem dropdown) */
+  .nz-nav .menu-item-has-children{ position: static; }
+  .nz-nav .menu-item-has-children::after{ display: none; }
+  .nz-nav .sub-menu{
+    position: static; opacity: 1; visibility: visible; transform: none;
+    background: transparent; border: 0; box-shadow: none;
+    min-width: 0; padding: .5rem 0 .3rem 1rem; gap: .5rem;
+  }
+  .nz-nav .sub-menu a{ font-size: 1rem; }
 }
 
 /* ==========================================================================
@@ -557,6 +595,26 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-report__head h3{ margin:0; font-size:1.05rem; }
 .nz-report__date{ color: var(--nz-gray); font-size:.85rem; font-weight:500; }
 .nz-report__body{ padding: 1.6rem; border-top:1px solid var(--nz-gray-light); background: var(--nz-offwhite); }
+
+/* Lista de relatórios como botões que abrem em página própria */
+.nz-client--wide{ max-width: 1100px; }
+.nz-client-hint{ color: var(--nz-gray); font-size: .9rem; margin-bottom: 1.2rem; }
+.nz-report-list{ display: flex; flex-direction: column; gap: 1rem; }
+.nz-report-list .nz-report{ margin-bottom: 0; }
+.nz-report--link{ display: block; background:#fff; text-decoration:none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.nz-report--link:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(255,0,102,.12); border-color: var(--nz-pink); }
+.nz-report--link:hover .nz-report__head h3{ color: var(--nz-pink); }
+.nz-report__open{ display:block; padding: 0 1.6rem 1.1rem; color: var(--nz-pink); font-weight:600; font-size:.9rem; }
+
+/* Relatório aberto em página própria */
+.nz-report-full{ font-size: 1.05rem; line-height: 1.7; }
+.nz-report-full > *:first-child{ margin-top: 0; }
+.nz-report-full img{ border-radius: var(--nz-radius-sm); }
+.nz-report-full h2{ margin-top: 1.6em; }
+.nz-report-full h3{ margin-top: 1.3em; }
+.nz-report-full table{ width: 100%; border-collapse: collapse; margin: 1.5em 0; font-size: .95rem; display: block; overflow-x: auto; }
+.nz-report-full th, .nz-report-full td{ border: 1px solid var(--nz-gray-light); padding: .6em .8em; text-align: left; vertical-align: top; }
+.nz-report-full th{ background: var(--nz-offwhite); font-weight: 600; }
 .nz-client-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
 .nz-client-topbar .nz-btn{ font-size:.9rem; padding:.7em 1.4em; }
 

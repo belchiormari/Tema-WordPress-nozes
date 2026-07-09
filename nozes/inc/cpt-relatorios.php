@@ -122,6 +122,25 @@ function nozes_process_client_login() {
 }
 
 /**
+ * Verifica se um usuário pode ver um relatório específico.
+ * Administradores veem todos; o cliente só vê os relatórios em que é o "Autor".
+ * Usado ao abrir um relatório em página própria (?relatorio=ID), para impedir
+ * que um cliente troque o número no link e tente ver o relatório de outro.
+ */
+function nozes_user_can_view_report( $user_id, $report ) {
+	if ( ! $report instanceof WP_Post ) {
+		return false;
+	}
+	if ( 'relatorio' !== $report->post_type || 'publish' !== $report->post_status ) {
+		return false;
+	}
+	if ( user_can( $user_id, 'manage_options' ) ) {
+		return true;
+	}
+	return (int) $report->post_author === (int) $user_id;
+}
+
+/**
  * Busca os relatórios do cliente logado (ou de todos, se for administrador).
  */
 function nozes_get_client_reports( $user_id ) {
