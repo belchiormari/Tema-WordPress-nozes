@@ -43,12 +43,9 @@ get_header();
 			'after'  => '</nav>',
 		) );
 		?>
-	</div>
-</article>
 
-<section class="nz-section nz-post-outro">
-	<div class="nz-container nz-single-post">
-		<div class="nz-author-card">
+		<div class="nz-post-outro">
+			<div class="nz-author-card">
 			<span class="nz-author-card__eyebrow"><?php esc_html_e( 'Escrito por', 'nozes' ); ?></span>
 			<div class="nz-author-card__inner">
 				<?php echo get_avatar( get_the_author_meta( 'ID' ), 128, '', '', array( 'class' => 'nz-author-card__avatar' ) ); ?>
@@ -104,13 +101,14 @@ get_header();
 			</nav>
 		<?php endif; ?>
 
-		<?php if ( comments_open() || get_comments_number() ) : ?>
-			<div class="nz-post-comments">
-				<?php comments_template(); ?>
-			</div>
-		<?php endif; ?>
+			<?php if ( comments_open() || get_comments_number() ) : ?>
+				<div class="nz-post-comments">
+					<?php comments_template(); ?>
+				</div>
+			<?php endif; ?>
+		</div>
 	</div>
-</section>
+</article>
 <?php endwhile; ?>
 
 <?php get_footer(); ?>

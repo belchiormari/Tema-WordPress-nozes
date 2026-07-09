@@ -48,6 +48,7 @@ figure { margin: 0; }
   --nz-black: #1d1d1f;
   --nz-white: #ffffff;
   --nz-offwhite: #f6f6f2;
+  --nz-blog-bg: #f5f5f5;
   --nz-gray: #6e6e73;
   --nz-gray-light: #e3e3e0;
 
@@ -294,13 +295,72 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-single-post__content li{ margin-bottom: .5em; }
 .nz-single-post__content blockquote{ border-left: 4px solid var(--nz-lime); margin: 2em 0; padding: .5em 0 .5em 1.5em; font-size: 1.2rem; font-weight: 500; }
 .nz-single-post__content a{ color: var(--nz-pink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Legendas de imagem: menores e em itálico */
+.nz-single-post__content figcaption,
+.nz-single-post__content .wp-caption-text,
+.nz-single-post__content .wp-element-caption,
+.nz-single-post__content .gallery-caption{
+  font-size: .9rem;
+  font-style: italic;
+  color: var(--nz-gray);
+  line-height: 1.5;
+  margin-top: .6rem;
+  text-align: center;
+}
+.nz-single-post__content .wp-caption{ max-width: 100%; }
+
+/* Galeria: respeita as colunas configuradas (block novo e shortcode clássico) */
+.nz-single-post__content .wp-block-gallery{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 0 0 1.5em;
+  list-style: none;
+  padding: 0;
+}
+.nz-single-post__content .wp-block-gallery.columns-1{ grid-template-columns: 1fr; }
+.nz-single-post__content .wp-block-gallery.columns-2{ grid-template-columns: repeat(2, 1fr); }
+.nz-single-post__content .wp-block-gallery.columns-3{ grid-template-columns: repeat(3, 1fr); }
+.nz-single-post__content .wp-block-gallery.columns-4{ grid-template-columns: repeat(4, 1fr); }
+.nz-single-post__content .wp-block-gallery.columns-5{ grid-template-columns: repeat(5, 1fr); }
+.nz-single-post__content .wp-block-gallery.columns-6{ grid-template-columns: repeat(6, 1fr); }
+.nz-single-post__content .wp-block-gallery > figure,
+.nz-single-post__content .wp-block-gallery > li{ margin: 0; height: 100%; }
+.nz-single-post__content .wp-block-gallery figure.wp-block-image{ margin: 0; height: 100%; display: flex; }
+.nz-single-post__content .wp-block-gallery img{
+  width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1 / 1;
+  border-radius: var(--nz-radius-sm);
+}
+
+.nz-single-post__content .gallery{
+  display: grid; gap: 10px; margin: 0 0 1.5em;
+  grid-template-columns: repeat(3, 1fr);
+}
+.nz-single-post__content .gallery.gallery-columns-1{ grid-template-columns: 1fr; }
+.nz-single-post__content .gallery.gallery-columns-2{ grid-template-columns: repeat(2, 1fr); }
+.nz-single-post__content .gallery.gallery-columns-4{ grid-template-columns: repeat(4, 1fr); }
+.nz-single-post__content .gallery.gallery-columns-5{ grid-template-columns: repeat(5, 1fr); }
+.nz-single-post__content .gallery.gallery-columns-6{ grid-template-columns: repeat(6, 1fr); }
+.nz-single-post__content .gallery .gallery-item{ width: auto !important; margin: 0 !important; }
+.nz-single-post__content .gallery .gallery-item img{
+  width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1 / 1;
+  border: 0 !important; border-radius: var(--nz-radius-sm);
+}
+
+/* Imagens da galeria abrem em tela cheia ao clicar */
+.nz-single-post__content .wp-block-gallery img,
+.nz-single-post__content .gallery img{ cursor: zoom-in; }
 .nz-author-box{ display:flex; gap:1.2rem; align-items:flex-start; background: var(--nz-offwhite); border-radius: var(--nz-radius); padding: 1.5rem; margin-top: 3rem; }
 .nz-author-box img{ width:64px; height:64px; border-radius:50%; object-fit:cover; }
 
-/* -- Cabeçalho da página do Blog (fundo claro) -- */
+/* -- Fundo cinza claro nas páginas do Blog -- */
+body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blog-bg); }
+
+/* -- Cabeçalho da página do Blog (faixa branca sobre o cinza) -- */
 .nz-blog-hero{
   position: relative; overflow: hidden;
-  background: var(--nz-offwhite);
+  background: #fff;
   border-bottom: 1px solid var(--nz-gray-light);
   padding-block: clamp(3rem, 7vw, 6rem);
 }
@@ -316,10 +376,11 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 /* -- Fim do artigo: card do autor (fundo claro) -- */
 .nz-author-card{
   margin-top: 3.5rem;
-  background: var(--nz-offwhite);
+  background: #fff;
   border: 1px solid var(--nz-gray-light);
   border-radius: var(--nz-radius);
   padding: clamp(1.5rem, 3vw, 2.2rem);
+  box-shadow: 0 12px 30px rgba(29,29,31,.05);
 }
 .nz-author-card__eyebrow{
   display:inline-block; font-size:.78rem; font-weight:700; letter-spacing:.14em;
@@ -350,23 +411,31 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-post-cta__text{ color:#c9c9cf; font-size: clamp(1.05rem, 1.6vw, 1.2rem); margin-bottom: 2rem; }
 .nz-post-cta__btn{ font-size: 1.05rem; padding: 1em 2em; }
 
-/* -- Fim do artigo: navegação entre artigos -- */
+/* -- Fim do artigo: navegação entre artigos (cards claros) -- */
 .nz-post-nav{
-  display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
-  margin-top: 3rem; padding-top: 2rem; border-top:1px solid var(--nz-gray-light);
+  display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin: 0;
 }
-.nz-post-nav__link{ max-width: 48%; }
-.nz-post-nav__link--next{ margin-left:auto; text-align:right; }
-.nz-post-nav__dir{ display:block; color: var(--nz-pink); font-weight:700; font-size:.85rem; margin-bottom:.25rem; }
-.nz-post-nav__title{ display:block; font-weight:600; color: var(--nz-black); }
+.nz-post-nav__link{
+  display:block; background:#fff; border:1px solid var(--nz-gray-light);
+  border-radius: var(--nz-radius); padding: 1.2rem 1.4rem;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.nz-post-nav__link:hover{ transform: translateY(-3px); box-shadow: 0 14px 32px rgba(29,29,31,.08); border-color: var(--nz-lime); }
+.nz-post-nav__link--next{ text-align:right; }
+.nz-post-nav__dir{ display:block; color: var(--nz-pink); font-weight:700; font-size:.82rem; letter-spacing:.02em; margin-bottom:.35rem; }
+.nz-post-nav__title{ display:block; font-weight:600; color: var(--nz-black); line-height:1.3; }
 .nz-post-nav__link:hover .nz-post-nav__title{ color: var(--nz-pink); }
 @media (max-width:560px){
-  .nz-post-nav{ flex-direction:column; }
-  .nz-post-nav__link, .nz-post-nav__link--next{ max-width:100%; text-align:left; margin-left:0; }
+  .nz-post-nav{ grid-template-columns: 1fr; }
+  .nz-post-nav__link--next{ text-align:left; }
 }
 
-/* -- Comentários (fundo claro) -- */
-.nz-post-comments{ margin-top: 3.5rem; padding-top: 2.5rem; border-top:1px solid var(--nz-gray-light); }
+/* -- Comentários (fundo claro, card branco) -- */
+.nz-post-comments{
+  margin: 0; background:#fff; border:1px solid var(--nz-gray-light);
+  border-radius: var(--nz-radius); padding: clamp(1.6rem, 4vw, 2.6rem);
+  box-shadow: 0 12px 30px rgba(29,29,31,.05);
+}
 .nz-comments h2, .nz-comments .comment-reply-title{ font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin-bottom: 1.2rem; }
 .nz-comments .comment-list{ margin: 0 0 2.5rem; }
 .nz-comments .comment-list li{ margin-bottom: 1.4rem; list-style:none; }
@@ -399,39 +468,10 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-comments .form-submit .submit:hover{ background: var(--nz-yellow-lime); transform: translateY(-2px); }
 .nz-comments a{ color: var(--nz-pink); }
 
-/* -- Fim do artigo em fundo escuro (autor, chamada, navegação e comentários) -- */
-.nz-post-outro{ background: #161618; color: #fff; }
-.nz-post-outro .nz-author-card{
-  margin-top: 0;
-  background: rgba(255,255,255,.04);
-  border-color: rgba(255,255,255,.08);
-}
-.nz-post-outro .nz-author-card__eyebrow{ color: var(--nz-lime); }
-.nz-post-outro .nz-author-card__name{ color: #fff; }
-.nz-post-outro .nz-author-card__bio{ color: #c9c9cf; }
-.nz-post-outro .nz-post-cta{ background: var(--nz-black); border: 1px solid rgba(255,255,255,.06); }
-.nz-post-outro .nz-post-nav{ border-top-color: rgba(255,255,255,.12); }
-.nz-post-outro .nz-post-nav__dir{ color: var(--nz-lime); }
-.nz-post-outro .nz-post-nav__title{ color: #fff; }
-.nz-post-outro .nz-post-nav__link:hover .nz-post-nav__title{ color: var(--nz-lime); }
-.nz-post-outro .nz-post-comments{ border-top-color: rgba(255,255,255,.12); }
-.nz-post-outro .nz-comments h2,
-.nz-post-outro .nz-comments .comment-reply-title{ color: #fff; }
-.nz-post-outro .nz-comments .comment-body{ background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.08); }
-.nz-post-outro .nz-comments .comment-author .fn{ color: #fff; }
-.nz-post-outro .nz-comments .comment-notes,
-.nz-post-outro .nz-comments .logged-in-as,
-.nz-post-outro .nz-comments .comment-meta a{ color: #9a9aa0; }
-.nz-post-outro .nz-comments .comment-form label{ color: #fff; }
-.nz-post-outro .nz-comments textarea,
-.nz-post-outro .nz-comments input[type="text"],
-.nz-post-outro .nz-comments input[type="email"],
-.nz-post-outro .nz-comments input[type="url"]{
-  background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.14); color: #fff;
-}
-.nz-post-outro .nz-comments textarea::placeholder,
-.nz-post-outro .nz-comments input::placeholder{ color: #8a8a90; }
-.nz-post-outro .nz-comments a{ color: var(--nz-lime); }
+/* -- Fim do artigo (autor, chamada, navegação e comentários) — fundo claro,
+      próximo ao último parágrafo e em harmonia com o fundo cinza do blog -- */
+.nz-post-outro{ margin-top: 2.75rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.nz-post-outro > *{ margin-top: 0; }
 
 /* ==========================================================================
    11. FAQ
@@ -454,7 +494,9 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
    13. FOOTER
    ========================================================================== */
 .nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
-.nz-footer__grid{ display:grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+.nz-footer__grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
+.nz-footer__grid > div{ min-width: 0; }
+.nz-footer__desc{ font-size: .85rem; line-height: 1.6; color: #9a9aa0; max-width: 32ch; margin-bottom: 1.4rem; }
 .nz-footer__contact{ margin-top: 1.4rem; display:flex; flex-direction:column; gap:.35rem; }
 .nz-footer__contact strong{ color:#fff; font-weight:700; }
 .nz-footer h4{ color:#fff; font-size: .95rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1.2rem; }
@@ -529,6 +571,49 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-404 .u-eyebrow{ justify-content:center; }
 .nz-search-form{ display:flex; gap:.6rem; max-width:480px; margin: 0 auto 3rem; }
 .nz-search-form input{ flex:1; padding:.9em 1.2em; border-radius:999px; border:1px solid var(--nz-gray-light); font-family:inherit; }
+
+/* ==========================================================================
+   18b. LIGHTBOX (galeria em tela cheia)
+   ========================================================================== */
+.nz-lightbox{
+  position: fixed; inset: 0; z-index: 100000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(15,15,16,.94);
+  padding: clamp(1rem, 4vw, 3rem);
+  opacity: 0; visibility: hidden; transition: opacity .22s ease;
+}
+.nz-lightbox.is-open{ opacity: 1; visibility: visible; }
+.nz-lightbox__figure{
+  margin: 0; max-width: min(1100px, 92vw); max-height: 88vh;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.nz-lightbox__img{
+  max-width: 100%; max-height: 82vh; width: auto; height: auto;
+  object-fit: contain; border-radius: 8px; box-shadow: 0 24px 60px rgba(0,0,0,.5);
+}
+.nz-lightbox__caption{ color: #e3e3e0; font-size: .92rem; font-style: italic; text-align: center; max-width: 60ch; }
+.nz-lightbox__count{ color: #9a9aa0; font-size: .8rem; letter-spacing: .05em; }
+.nz-lightbox__close,
+.nz-lightbox__nav{
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08); color: #fff; cursor: pointer;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.nz-lightbox__close:hover,
+.nz-lightbox__nav:hover{ background: var(--nz-lime); color: var(--nz-black); border-color: var(--nz-lime); }
+.nz-lightbox__close{ top: 18px; right: 22px; width: 46px; height: 46px; font-size: 1.7rem; line-height: 1; }
+.nz-lightbox__nav{ top: 50%; transform: translateY(-50%); width: 54px; height: 54px; font-size: 2rem; line-height: 1; }
+.nz-lightbox__nav--prev{ left: 22px; }
+.nz-lightbox__nav--next{ right: 22px; }
+.nz-lightbox__nav[hidden]{ display: none; }
+body.nz-lightbox-open{ overflow: hidden; }
+@media (max-width: 600px){
+  .nz-lightbox__nav{ width: 42px; height: 42px; font-size: 1.6rem; }
+  .nz-lightbox__nav--prev{ left: 8px; }
+  .nz-lightbox__nav--next{ right: 8px; }
+  .nz-lightbox__close{ top: 10px; right: 10px; }
+}
 
 /* ==========================================================================
    19. WordPress core / Elementor compat

@@ -65,7 +65,7 @@ function nozes_customize_register( $wp_customize ) {
 	$contact_fields = array(
 		'nozes_phone_display' => array( '(48) 3050-7538', __( 'Telefone (formato de exibição)', 'nozes' ) ),
 		'nozes_email'         => array( 'contato@somosnozes.com.br', __( 'E-mail de contato (usado no envio de e-mails e no SEO)', 'nozes' ) ),
-		'nozes_footer_email'  => array( 'olá@somosnozes.com.br', __( 'E-mail exibido no rodapé', 'nozes' ) ),
+		'nozes_footer_email'  => array( 'ola@somosnozes.com.br', __( 'E-mail exibido no rodapé', 'nozes' ) ),
 		'nozes_address'       => array( 'Florianópolis, Santa Catarina, Brasil', __( 'Cidade/Endereço', 'nozes' ) ),
 	);
 	foreach ( $contact_fields as $key => $data ) {
