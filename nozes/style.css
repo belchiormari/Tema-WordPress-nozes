@@ -398,7 +398,7 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   position: relative; overflow: hidden;
   background: linear-gradient(135deg, var(--nz-pink) 0%, var(--nz-black) 50%, var(--nz-lime) 100%);
   background-size: 400% 400%;
-  animation: nz-cta-gradient 15s ease infinite;
+  animation: nz-cta-gradient 9s ease infinite;
   color:#fff;
   padding-block: clamp(3.5rem, 8vw, 6rem);
   text-align: center;
