@@ -59,28 +59,6 @@ get_header();
 		</div>
 
 		<?php
-		$nz_cta_title = get_theme_mod( 'nozes_blog_cta_title', 'Esse assunto apareceu na sua empresa?' );
-		$nz_cta_text  = get_theme_mod( 'nozes_blog_cta_text', 'Se quiser destrinchar isso pro seu negócio, me escreve. A primeira conversa é sem compromisso.' );
-		?>
-		<?php if ( $nz_cta_title || $nz_cta_text ) : ?>
-			<aside class="nz-post-cta">
-				<div class="nz-post-cta__glow" aria-hidden="true"></div>
-				<div class="nz-post-cta__inner">
-					<?php if ( $nz_cta_title ) : ?>
-						<h2 class="nz-post-cta__title"><?php echo esc_html( $nz_cta_title ); ?></h2>
-					<?php endif; ?>
-					<?php if ( $nz_cta_text ) : ?>
-						<p class="nz-post-cta__text"><?php echo esc_html( $nz_cta_text ); ?></p>
-					<?php endif; ?>
-					<a class="nz-btn nz-btn--lime nz-post-cta__btn" href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer">
-						<?php echo nozes_icon( 'whatsapp' ); ?>
-						<span><?php esc_html_e( 'Chamar no WhatsApp', 'nozes' ); ?></span>
-					</a>
-				</div>
-			</aside>
-		<?php endif; ?>
-
-		<?php
 		$nz_prev = get_previous_post();
 		$nz_next = get_next_post();
 		?>
@@ -109,6 +87,30 @@ get_header();
 		</div>
 	</div>
 </article>
+
+<?php
+$nz_cta_title = get_theme_mod( 'nozes_blog_cta_title', 'Esse assunto apareceu na sua empresa?' );
+$nz_cta_text  = get_theme_mod( 'nozes_blog_cta_text', 'Se quiser destrinchar isso pro seu negócio, me escreve. A primeira conversa é sem compromisso.' );
+?>
+<?php if ( $nz_cta_title || $nz_cta_text ) : ?>
+	<section class="nz-cta-final">
+		<div class="nz-cta-final__glow" aria-hidden="true"></div>
+		<div class="nz-container">
+			<div class="nz-cta-final__inner">
+				<?php if ( $nz_cta_title ) : ?>
+					<h2 class="nz-cta-final__title"><?php echo esc_html( $nz_cta_title ); ?></h2>
+				<?php endif; ?>
+				<?php if ( $nz_cta_text ) : ?>
+					<p class="nz-cta-final__text"><?php echo esc_html( $nz_cta_text ); ?></p>
+				<?php endif; ?>
+				<a class="nz-btn nz-btn--lime nz-cta-final__btn" href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer">
+					<?php echo nozes_icon( 'whatsapp' ); ?>
+					<span><?php esc_html_e( 'Chamar no WhatsApp', 'nozes' ); ?></span>
+				</a>
+			</div>
+		</div>
+	</section>
+<?php endif; ?>
 <?php endwhile; ?>
 
 <?php get_footer(); ?>

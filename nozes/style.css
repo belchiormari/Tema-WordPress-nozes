@@ -272,7 +272,7 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
    10. BLOG
    ========================================================================== */
 .nz-post-card{ background:#fff; border-radius: var(--nz-radius); overflow:hidden; border:1px solid var(--nz-gray-light); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-.nz-post-card:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(29,29,31,.12); border-color: var(--nz-lime); }
+.nz-post-card:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(255,0,102,.14); border-color: var(--nz-pink); }
 .nz-post-card:hover h3{ color: var(--nz-pink); }
 .nz-post-card__media{ aspect-ratio: 16/10; overflow:hidden; background: var(--nz-gray-light); }
 .nz-post-card__media img{ width:100%; height:100%; object-fit:cover; }
@@ -392,24 +392,23 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-author-card__bio{ color: var(--nz-gray); margin:0; }
 @media (max-width:560px){ .nz-author-card__inner{ flex-direction:column; align-items:flex-start; } }
 
-/* -- Fim do artigo: chamada para o WhatsApp (card escuro sobre fundo claro) -- */
-.nz-post-cta{
+/* -- Chamada final do artigo: faixa full-width no fundo escuro do site,
+      depois dos comentários -- */
+.nz-cta-final{
   position: relative; overflow: hidden;
-  margin-top: 2rem;
   background: var(--nz-black); color:#fff;
-  border-radius: var(--nz-radius);
-  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(3.5rem, 8vw, 6rem);
   text-align: center;
 }
-.nz-post-cta__glow{
-  position:absolute; top:-40%; right:-10%; width:460px; height:460px; max-width:70vw;
-  background: radial-gradient(circle, rgba(171,247,5,.30), transparent 68%);
+.nz-cta-final__glow{
+  position:absolute; top:-45%; right:6%; width:520px; height:520px; max-width:72vw;
+  background: radial-gradient(circle, rgba(171,247,5,.28), transparent 68%);
   pointer-events:none;
 }
-.nz-post-cta__inner{ position: relative; z-index:1; max-width: 620px; margin-inline:auto; }
-.nz-post-cta__title{ color:#fff; font-size: clamp(1.9rem, 4vw, 3rem); margin-bottom: 1rem; }
-.nz-post-cta__text{ color:#c9c9cf; font-size: clamp(1.05rem, 1.6vw, 1.2rem); margin-bottom: 2rem; }
-.nz-post-cta__btn{ font-size: 1.05rem; padding: 1em 2em; }
+.nz-cta-final__inner{ position: relative; z-index:1; max-width: 640px; margin-inline:auto; }
+.nz-cta-final__title{ color:#fff; font-size: clamp(1.9rem, 4vw, 3rem); margin-bottom: 1rem; }
+.nz-cta-final__text{ color:#c9c9cf; font-size: clamp(1.05rem, 1.6vw, 1.2rem); margin-bottom: 2rem; }
+.nz-cta-final__btn{ font-size: 1.05rem; padding: 1em 2em; }
 
 /* -- Fim do artigo: navegação entre artigos (cards claros) -- */
 .nz-post-nav{
@@ -420,7 +419,7 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   border-radius: var(--nz-radius); padding: 1.2rem 1.4rem;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.nz-post-nav__link:hover{ transform: translateY(-3px); box-shadow: 0 14px 32px rgba(29,29,31,.08); border-color: var(--nz-lime); }
+.nz-post-nav__link:hover{ transform: translateY(-3px); box-shadow: 0 14px 32px rgba(255,0,102,.12); border-color: var(--nz-pink); }
 .nz-post-nav__link--next{ text-align:right; }
 .nz-post-nav__dir{ display:block; color: var(--nz-pink); font-weight:700; font-size:.82rem; letter-spacing:.02em; margin-bottom:.35rem; }
 .nz-post-nav__title{ display:block; font-weight:600; color: var(--nz-black); line-height:1.3; }
