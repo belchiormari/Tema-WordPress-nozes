@@ -248,15 +248,11 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   .nz-burger{ display: inline-flex; }
   .nz-header__actions .nz-btn span{ display: none; }
 
-  /* No celular os submenus aparecem recuados abaixo do item (sem dropdown) */
-  .nz-nav .menu-item-has-children{ position: static; }
+  /* No celular o dropdown é desativado: os submenus não aparecem e o item
+     principal (ex.: Cases) funciona como link normal. */
   .nz-nav .menu-item-has-children::after{ display: none; }
-  .nz-nav .sub-menu{
-    position: static; opacity: 1; visibility: visible; transform: none;
-    background: transparent; border: 0; box-shadow: none;
-    min-width: 0; padding: .5rem 0 .3rem 1rem; gap: .5rem;
-  }
-  .nz-nav .sub-menu a{ font-size: 1rem; }
+  .nz-nav .menu-item-has-children > a::before{ display: none; }
+  .nz-nav .sub-menu{ display: none; }
 }
 
 /* ==========================================================================
@@ -560,7 +556,7 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
    13. FOOTER
    ========================================================================== */
 .nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
-.nz-footer__grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
+.nz-footer__grid{ display:grid; grid-template-columns: 1.8fr 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
 .nz-footer__grid > div{ min-width: 0; }
 .nz-footer__desc{ font-size: .85rem; line-height: 1.6; color: #9a9aa0; max-width: 32ch; margin-bottom: 1.4rem; }
 .nz-footer__contact{ margin-top: 1.4rem; display:flex; flex-direction:column; gap:.35rem; }
@@ -653,8 +649,17 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 /* ==========================================================================
    16. PÁGINA HTML LIVRE
    ========================================================================== */
-.nz-html-livre{ width:100%; }
+.nz-html-livre{ width:100%; margin:0; }
 .nz-html-livre .nz-container{ padding:0; max-width:none; }
+
+/* Fundo escuro para páginas 100% HTML (evita "linha branca" antes do rodapé) */
+body.nz-dark-canvas{ background: var(--nz-black); }
+
+/* Rede de segurança: sem margem sobrando no fim do conteúdo, que apareceria
+   como uma faixa branca acima do rodapé. */
+.nz-html-livre > *:last-child,
+.nz-page-content > *:last-child{ margin-bottom: 0; }
+.nz-page-content > p:last-child:empty{ display: none; }
 
 /* ==========================================================================
    17. BREADCRUMBS / UTILS
