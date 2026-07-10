@@ -37,7 +37,7 @@ function nozes_register_relatorio_cpt() {
 		'show_in_menu'       => true,
 		'show_in_rest'       => true,
 		'menu_icon'          => 'dashicons-media-text',
-		'supports'           => array( 'title', 'editor', 'author', 'custom-fields' ),
+		'supports'           => array( 'title', 'editor', 'custom-fields' ),
 		'capability_type'    => 'post',
 		'map_meta_cap'       => true,
 	) );
@@ -57,23 +57,36 @@ function nozes_register_client_role() {
 add_action( 'init', 'nozes_register_client_role' );
 
 /**
+ * Verifica se um usuário tem o papel "Cliente" (checa o papel, não uma
+ * capability — usar current_user_can('cliente') não funciona, pois "cliente"
+ * é um papel, não uma permissão).
+ */
+function nozes_user_is_client( $user = null ) {
+	if ( null === $user ) {
+		$user = wp_get_current_user();
+	}
+	return ( $user instanceof WP_User ) && in_array( 'cliente', (array) $user->roles, true );
+}
+
+/**
  * Clientes nunca veem o wp-admin nem a barra de admin — são levados direto
  * para a Área do Cliente no site.
  */
 function nozes_redirect_clients_from_admin() {
-	if ( is_admin() && current_user_can( 'cliente' ) && ! wp_doing_ajax() ) {
+	if ( is_admin() && ! wp_doing_ajax() && nozes_user_is_client() ) {
 		wp_safe_redirect( nozes_get_client_area_url() );
 		exit;
 	}
 }
 add_action( 'admin_init', 'nozes_redirect_clients_from_admin' );
 
-function nozes_hide_admin_bar_for_clients() {
-	if ( current_user_can( 'cliente' ) ) {
-		show_admin_bar( false );
-	}
+/**
+ * Esconde a barra de administração do WordPress para clientes.
+ */
+function nozes_hide_admin_bar_for_clients( $show ) {
+	return nozes_user_is_client() ? false : $show;
 }
-add_action( 'after_setup_theme', 'nozes_hide_admin_bar_for_clients' );
+add_filter( 'show_admin_bar', 'nozes_hide_admin_bar_for_clients' );
 
 /**
  * URL da página que usa o modelo "Área do Cliente".
@@ -120,6 +133,81 @@ function nozes_process_client_login() {
 	wp_safe_redirect( nozes_get_client_area_url() );
 	exit;
 }
+
+/**
+ * Caixa "Cliente dono deste relatório" na tela de edição do relatório.
+ * Lista os usuários com o papel "Cliente" (que são só-leitura e por isso não
+ * aparecem no seletor de Autor padrão do WordPress). Ao salvar, define o
+ * "autor" do relatório como o cliente escolhido — assim o cliente continua
+ * travado como "Cliente", sem acesso a posts, mídias ou comentários.
+ */
+function nozes_relatorio_owner_metabox() {
+	add_meta_box(
+		'nozes_relatorio_owner',
+		__( 'Cliente dono deste relatório', 'nozes' ),
+		'nozes_relatorio_owner_metabox_cb',
+		'relatorio',
+		'side',
+		'high'
+	);
+}
+add_action( 'add_meta_boxes', 'nozes_relatorio_owner_metabox' );
+
+function nozes_relatorio_owner_metabox_cb( $post ) {
+	wp_nonce_field( 'nozes_relatorio_owner', 'nozes_relatorio_owner_nonce' );
+
+	$clients = get_users( array(
+		'role'    => 'cliente',
+		'orderby' => 'display_name',
+		'order'   => 'ASC',
+	) );
+
+	if ( empty( $clients ) ) {
+		echo '<p>' . esc_html__( 'Nenhum usuário com a função "Cliente" foi encontrado.', 'nozes' ) . '</p>';
+		echo '<p>' . wp_kses_post( __( 'Crie o cliente em <strong>Usuários → Adicionar novo</strong> e escolha a função <strong>Cliente</strong>. Depois volte aqui e selecione-o.', 'nozes' ) ) . '</p>';
+		return;
+	}
+
+	$current = (int) $post->post_author;
+	echo '<p>' . esc_html__( 'Escolha quem poderá ver este relatório na Área do Cliente:', 'nozes' ) . '</p>';
+	echo '<select name="nozes_relatorio_owner" style="width:100%;">';
+	echo '<option value="0">' . esc_html__( '— Selecione o cliente —', 'nozes' ) . '</option>';
+	foreach ( $clients as $client ) {
+		printf(
+			'<option value="%d"%s>%s</option>',
+			(int) $client->ID,
+			selected( $current, $client->ID, false ),
+			esc_html( $client->display_name . ' (' . $client->user_login . ')' )
+		);
+	}
+	echo '</select>';
+}
+
+function nozes_save_relatorio_owner( $post_id, $post ) {
+	if ( empty( $_POST['nozes_relatorio_owner_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nozes_relatorio_owner_nonce'] ) ), 'nozes_relatorio_owner' ) ) {
+		return;
+	}
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
+	if ( 'relatorio' !== $post->post_type || ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
+	if ( ! isset( $_POST['nozes_relatorio_owner'] ) ) {
+		return;
+	}
+
+	$owner = absint( $_POST['nozes_relatorio_owner'] );
+	if ( $owner && $owner !== (int) $post->post_author ) {
+		remove_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10 );
+		wp_update_post( array(
+			'ID'          => $post_id,
+			'post_author' => $owner,
+		) );
+		add_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10, 2 );
+	}
+}
+add_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10, 2 );
 
 /**
  * Verifica se um usuário pode ver um relatório específico.

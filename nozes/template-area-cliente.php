@@ -5,7 +5,8 @@
  * Página protegida por login: cada cliente só vê os próprios relatórios
  * mensais (cadastrados pela Nozes como o tipo de conteúdo "Relatório").
  *
- * Cada relatório é aberto em página própria (?relatorio=ID), sempre com
+ * Ao abrir um relatório (?relatorio=ID), ele é exibido em tela cheia, com o
+ * HTML renderizado como nas páginas HTML personalizadas — sempre com
  * verificação de permissão, então um cliente nunca acessa o de outro.
  */
 
@@ -17,17 +18,50 @@ if ( ! is_user_logged_in() && ! empty( $_POST['nozes_client_login_nonce'] ) ) {
 	}
 }
 
-get_header();
-
-// Qual relatório abrir em página própria (se houver).
+// Qual relatório abrir em página própria (se houver) e se o usuário pode vê-lo.
 $nozes_report_id     = isset( $_GET['relatorio'] ) ? absint( $_GET['relatorio'] ) : 0;
 $nozes_single_report = $nozes_report_id ? get_post( $nozes_report_id ) : null;
 $nozes_can_view      = is_user_logged_in() && $nozes_single_report && nozes_user_can_view_report( get_current_user_id(), $nozes_single_report );
-$nozes_wide_class    = ( $nozes_report_id && $nozes_can_view ) ? ' nz-client--wide' : '';
+
+/**
+ * Relatório aberto em página própria: viewer limpo em tela cheia (sem o menu do
+ * site), com o HTML do relatório renderizado como nas páginas HTML livres.
+ */
+if ( $nozes_report_id && $nozes_can_view ) :
+	?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php wp_head(); ?>
+</head>
+<body <?php body_class( 'nz-report-viewer' ); ?>>
+<?php wp_body_open(); ?>
+	<div class="nz-report-viewer__bar">
+		<a class="nz-report-viewer__logo" href="<?php echo esc_url( get_permalink() ); ?>">
+			<img src="<?php echo esc_url( NOZES_URI . '/assets/img/logo-wordmark.png' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+		</a>
+		<div class="nz-report-viewer__actions">
+			<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos relatórios', 'nozes' ); ?></a>
+			<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Sair', 'nozes' ); ?></a>
+		</div>
+	</div>
+	<main class="nz-html-livre nz-report-viewer__content">
+		<?php echo apply_filters( 'the_content', $nozes_single_report->post_content ); ?>
+	</main>
+<?php wp_footer(); ?>
+</body>
+</html>
+	<?php
+	return;
+endif;
+
+get_header();
 ?>
 
 <section class="nz-section">
-	<div class="nz-container nz-client<?php echo esc_attr( $nozes_wide_class ); ?>">
+	<div class="nz-container nz-client">
 
 		<?php if ( ! is_user_logged_in() ) : ?>
 
@@ -60,22 +94,6 @@ $nozes_wide_class    = ( $nozes_report_id && $nozes_can_view ) ? ' nz-client--wi
 					<a href="<?php echo esc_url( wp_lostpassword_url( get_permalink() ) ); ?>"><?php esc_html_e( 'Esqueci minha senha', 'nozes' ); ?></a>
 				</p>
 			</form>
-
-		<?php elseif ( $nozes_report_id && $nozes_can_view ) : ?>
-
-			<?php /* Página própria de um relatório */ ?>
-			<div class="nz-client-topbar">
-				<div>
-					<span class="u-eyebrow"><?php esc_html_e( 'Relatório', 'nozes' ); ?></span>
-					<h1 style="margin-bottom:.3rem;"><?php echo esc_html( get_the_title( $nozes_single_report ) ); ?></h1>
-					<span class="nz-report__date"><?php echo esc_html( get_the_date( '', $nozes_single_report ) ); ?></span>
-				</div>
-				<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos relatórios', 'nozes' ); ?></a>
-			</div>
-
-			<div class="nz-report-full">
-				<?php echo apply_filters( 'the_content', $nozes_single_report->post_content ); ?>
-			</div>
 
 		<?php elseif ( $nozes_report_id && ! $nozes_can_view ) : ?>
 
