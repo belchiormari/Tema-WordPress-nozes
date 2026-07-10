@@ -562,8 +562,9 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
 .nz-footer__grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
 .nz-footer__grid > div{ min-width: 0; }
-/* Navegação centralizada; Área do Cliente alinhada à direita — rodapé equilibrado */
-.nz-footer__col-nav{ text-align: center; }
+/* Navegação: bloco centralizado, mas com o texto alinhado à esquerda.
+   Área do Cliente alinhada à direita — rodapé equilibrado */
+.nz-footer__col-nav{ justify-self: center; text-align: left; }
 .nz-footer__col-client{ text-align: right; }
 .nz-footer__desc{ font-size: .85rem; line-height: 1.6; color: #9a9aa0; max-width: 32ch; margin-bottom: 1.4rem; }
 .nz-footer__contact{ margin-top: 1.4rem; display:flex; flex-direction:column; gap:.35rem; }
@@ -579,6 +580,7 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-social a:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
 @media (max-width: 900px){
   .nz-footer__grid{ grid-template-columns: 1fr 1fr; }
+  .nz-footer__col-nav{ justify-self: start; }
   .nz-footer__col-nav, .nz-footer__col-client{ text-align: left; }
   .nz-footer__col-client .nz-footer__contact{ align-items: flex-start; }
 }
