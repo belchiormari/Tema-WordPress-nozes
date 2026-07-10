@@ -108,19 +108,31 @@ add_action( 'template_redirect', 'nozes_client_area_no_cache' );
 
 /**
  * URL da página que usa o modelo "Área do Cliente".
+ *
+ * Para usuários logados, acrescenta um parâmetro que muda a cada acesso
+ * (cache-buster). Isso garante que a navegação dentro da Área do Cliente
+ * (ex.: "Voltar aos relatórios") nunca caia numa versão em cache da tela de
+ * login — mesmo em hospedagens com cache de página no servidor.
  */
 function nozes_get_client_area_url() {
 	$page = get_page_by_path( 'area-do-cliente' );
 	if ( $page ) {
-		return get_permalink( $page );
+		$url = get_permalink( $page );
+	} else {
+		$pages = get_posts( array(
+			'post_type'  => 'page',
+			'meta_key'   => '_wp_page_template',
+			'meta_value' => 'template-area-cliente.php',
+			'numberposts'=> 1,
+		) );
+		$url = $pages ? get_permalink( $pages[0] ) : home_url( '/' );
 	}
-	$pages = get_posts( array(
-		'post_type'  => 'page',
-		'meta_key'   => '_wp_page_template',
-		'meta_value' => 'template-area-cliente.php',
-		'numberposts'=> 1,
-	) );
-	return $pages ? get_permalink( $pages[0] ) : home_url( '/' );
+
+	if ( is_user_logged_in() ) {
+		$url = add_query_arg( 'nzc', time(), $url );
+	}
+
+	return $url;
 }
 
 /**

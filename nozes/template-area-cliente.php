@@ -39,11 +39,11 @@ if ( $nozes_report_id && $nozes_can_view ) :
 <body <?php body_class( 'nz-report-viewer' ); ?>>
 <?php wp_body_open(); ?>
 	<div class="nz-report-viewer__bar">
-		<a class="nz-report-viewer__logo" href="<?php echo esc_url( get_permalink() ); ?>">
+		<a class="nz-report-viewer__logo" href="<?php echo esc_url( nozes_get_client_area_url() ); ?>">
 			<img src="<?php echo esc_url( NOZES_URI . '/assets/img/logo-wordmark.png' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 		</a>
 		<div class="nz-report-viewer__actions">
-			<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos relatórios', 'nozes' ); ?></a>
+			<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( nozes_get_client_area_url() ); ?>">&larr; <?php esc_html_e( 'Voltar aos relatórios', 'nozes' ); ?></a>
 			<button type="button" class="nz-btn nz-btn--lime" data-nz-print>
 				<?php echo nozes_icon( 'print' ); ?>
 				<span><?php esc_html_e( 'Imprimir / PDF', 'nozes' ); ?></span>
@@ -110,7 +110,7 @@ get_header();
 				<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Sair', 'nozes' ); ?></a>
 			</div>
 			<div class="nz-client-error"><?php esc_html_e( 'Este relatório não foi encontrado ou não está disponível para o seu usuário.', 'nozes' ); ?></div>
-			<p><a href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos meus relatórios', 'nozes' ); ?></a></p>
+			<p><a href="<?php echo esc_url( nozes_get_client_area_url() ); ?>">&larr; <?php esc_html_e( 'Voltar aos meus relatórios', 'nozes' ); ?></a></p>
 
 		<?php else : ?>
 
@@ -140,7 +140,7 @@ get_header();
 				<p class="nz-client-hint"><?php esc_html_e( 'Clique em um relatório para abri-lo em uma nova aba.', 'nozes' ); ?></p>
 				<div class="nz-report-list">
 					<?php foreach ( $reports as $report ) : ?>
-						<a class="nz-report nz-report--link" href="<?php echo esc_url( add_query_arg( 'relatorio', $report->ID, get_permalink() ) ); ?>" target="_blank" rel="noopener">
+						<a class="nz-report nz-report--link" href="<?php echo esc_url( add_query_arg( 'relatorio', $report->ID, nozes_get_client_area_url() ) ); ?>" target="_blank" rel="noopener">
 							<div class="nz-report__head">
 								<h3><?php echo esc_html( get_the_title( $report ) ); ?></h3>
 								<span class="nz-report__date"><?php echo esc_html( get_the_date( '', $report ) ); ?></span>
