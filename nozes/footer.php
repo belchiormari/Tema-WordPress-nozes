@@ -23,19 +23,19 @@
 				</div>
 			</div>
 
-			<div>
+			<div class="nz-footer__col-nav">
 				<h4><?php esc_html_e( 'Navegação', 'nozes' ); ?></h4>
 				<?php
 				wp_nav_menu( array(
 					'theme_location' => 'footer',
 					'container'      => false,
 					'menu_class'     => '',
-					'fallback_cb'    => false,
+					'fallback_cb'    => 'nozes_footer_menu_fallback',
 				) );
 				?>
 			</div>
 
-			<div>
+			<div class="nz-footer__col-client">
 				<h4><?php esc_html_e( 'Área do Cliente', 'nozes' ); ?></h4>
 				<ul>
 					<li><a href="<?php echo esc_url( nozes_get_client_area_url() ); ?>"><?php esc_html_e( 'Acessar relatórios', 'nozes' ); ?></a></li>

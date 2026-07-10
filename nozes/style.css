@@ -416,9 +416,13 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   padding-block: clamp(3rem, 7vw, 6rem);
 }
 .nz-blog-hero::after{
-  content:""; position:absolute; top:-35%; right:-8%; width:520px; height:520px; max-width:60vw;
-  background: radial-gradient(circle, rgba(171,247,5,.22), transparent 70%);
+  content:""; position:absolute; top:-30%; right:-8%;
+  width: min(520px, 80vw); aspect-ratio: 1 / 1;
+  background: radial-gradient(circle, rgba(171,247,5,.22), transparent 65%);
   pointer-events:none;
+}
+@media (max-width: 600px){
+  .nz-blog-hero::after{ top:-8%; right:-18%; width: min(360px, 85vw); }
 }
 .nz-blog-hero .nz-container{ position: relative; z-index: 1; }
 .nz-blog-hero__title{ font-size: clamp(2.4rem, 6vw, 4.6rem); max-width: 18ch; margin-bottom: .4rem; }
@@ -556,10 +560,14 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
    13. FOOTER
    ========================================================================== */
 .nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
-.nz-footer__grid{ display:grid; grid-template-columns: 1.8fr 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
+.nz-footer__grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
 .nz-footer__grid > div{ min-width: 0; }
+/* Navegação centralizada; Área do Cliente alinhada à direita — rodapé equilibrado */
+.nz-footer__col-nav{ text-align: center; }
+.nz-footer__col-client{ text-align: right; }
 .nz-footer__desc{ font-size: .85rem; line-height: 1.6; color: #9a9aa0; max-width: 32ch; margin-bottom: 1.4rem; }
 .nz-footer__contact{ margin-top: 1.4rem; display:flex; flex-direction:column; gap:.35rem; }
+.nz-footer__col-client .nz-footer__contact{ align-items: flex-end; }
 .nz-footer__contact strong{ color:#fff; font-weight:700; }
 .nz-footer h4{ color:#fff; font-size: .95rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1.2rem; }
 .nz-footer ul li{ margin-bottom: .7rem; }
@@ -569,7 +577,11 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-social a{ width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; color:#d7d7dc; transition: background .18s ease, border-color .18s ease, color .18s ease; }
 .nz-social a svg{ width:18px; height:18px; }
 .nz-social a:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
-@media (max-width: 900px){ .nz-footer__grid{ grid-template-columns: 1fr 1fr; } }
+@media (max-width: 900px){
+  .nz-footer__grid{ grid-template-columns: 1fr 1fr; }
+  .nz-footer__col-nav, .nz-footer__col-client{ text-align: left; }
+  .nz-footer__col-client .nz-footer__contact{ align-items: flex-start; }
+}
 @media (max-width: 560px){ .nz-footer__grid{ grid-template-columns: 1fr; } }
 
 /* ==========================================================================

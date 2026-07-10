@@ -122,6 +122,32 @@ function nozes_is_built_with_elementor() {
 }
 
 /**
+ * Menu de rodapé de reserva: se nenhum menu foi atribuído ao local "Menu do
+ * Rodapé", mostra o menu principal (ou as páginas principais), para a coluna
+ * "Navegação" nunca ficar vazia.
+ */
+function nozes_footer_menu_fallback() {
+	if ( has_nav_menu( 'primary' ) ) {
+		wp_nav_menu( array(
+			'theme_location' => 'primary',
+			'container'      => false,
+			'menu_class'     => '',
+			'depth'          => 1,
+			'fallback_cb'    => false,
+		) );
+		return;
+	}
+	echo '<ul>';
+	wp_list_pages( array(
+		'title_li'    => '',
+		'depth'       => 1,
+		'sort_column' => 'menu_order,post_title',
+		'number'      => 6,
+	) );
+	echo '</ul>';
+}
+
+/**
  * Paginação padrão (arquivo do blog).
  */
 function nozes_pagination() {
