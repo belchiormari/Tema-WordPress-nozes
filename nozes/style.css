@@ -632,8 +632,10 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 }
 .nz-report-viewer__logo img{ height: 28px; width: auto; display: block; }
 .nz-report-viewer__actions{ display: flex; gap: .6rem; }
-.nz-report-viewer__bar .nz-btn{ padding: .5em 1.1em; font-size: .9rem; color: #fff; border-color: rgba(255,255,255,.4); }
-.nz-report-viewer__bar .nz-btn:hover{ background: #fff; color: var(--nz-black); border-color: #fff; }
+.nz-report-viewer__bar .nz-btn{ padding: .5em 1.1em; font-size: .9rem; }
+.nz-report-viewer__bar .nz-btn--outline{ color: #fff; border-color: rgba(255,255,255,.4); }
+.nz-report-viewer__bar .nz-btn--outline:hover{ background: #fff; color: var(--nz-black); border-color: #fff; }
+.nz-report-viewer__bar .nz-btn--lime{ color: var(--nz-black); }
 .nz-report-viewer__content{ display: block; }
 @media (max-width: 560px){
   .nz-report-viewer__actions .nz-btn{ padding: .5em .8em; font-size: .82rem; }

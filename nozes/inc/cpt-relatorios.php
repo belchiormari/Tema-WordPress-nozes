@@ -89,6 +89,24 @@ function nozes_hide_admin_bar_for_clients( $show ) {
 add_filter( 'show_admin_bar', 'nozes_hide_admin_bar_for_clients' );
 
 /**
+ * Impede que a Área do Cliente (e os relatórios abertos por ela) sejam
+ * guardados em cache — de página, do navegador ou de plugins/servidor.
+ * Sem isso, é comum o cache servir a versão "deslogada" (tela de login)
+ * e o cliente precisar digitar a senha de novo ao voltar.
+ */
+function nozes_client_area_no_cache() {
+	if ( ! is_page_template( 'template-area-cliente.php' ) ) {
+		return;
+	}
+	nocache_headers();
+	header( 'Cache-Control: no-cache, no-store, must-revalidate, max-age=0' );
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true );
+	}
+}
+add_action( 'template_redirect', 'nozes_client_area_no_cache' );
+
+/**
  * URL da página que usa o modelo "Área do Cliente".
  */
 function nozes_get_client_area_url() {
