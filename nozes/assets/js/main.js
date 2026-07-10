@@ -46,6 +46,13 @@
 		});
 	});
 
+	// Botão "Imprimir / PDF" (viewer de relatório)
+	document.querySelectorAll('[data-nz-print]').forEach(function (btn) {
+		btn.addEventListener('click', function () {
+			window.print();
+		});
+	});
+
 	// Lightbox das galerias do blog: clica na imagem, abre em tela cheia e navega
 	(function () {
 		var content = document.querySelector('.nz-single-post__content');

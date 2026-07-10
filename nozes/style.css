@@ -116,6 +116,23 @@ figure { margin: 0; }
   src: url('assets/fonts/poppins-800.woff2') format('woff2');
 }
 
+/* Mulish e Plus Jakarta Sans (fontes variáveis) — hospedadas localmente para
+   as páginas em HTML que as utilizam funcionarem sem depender do Google Fonts. */
+@font-face{
+  font-family: 'Mulish';
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url('assets/fonts/mulish.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('assets/fonts/plus-jakarta-sans.woff2') format('woff2');
+}
+
 h1{ font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 800; }
 h2{ font-size: clamp(1.9rem, 3.4vw, 2.8rem); font-weight: 700; }
 h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
@@ -620,6 +637,13 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-report-viewer__content{ display: block; }
 @media (max-width: 560px){
   .nz-report-viewer__actions .nz-btn{ padding: .5em .8em; font-size: .82rem; }
+}
+/* Impressão / salvar em PDF: só o relatório vai para o papel */
+@media print{
+  .nz-report-viewer__bar,
+  .nz-whatsapp-float{ display: none !important; }
+  body.nz-report-viewer{ background: #fff !important; }
+  .nz-report-viewer__content{ margin: 0 !important; }
 }
 .nz-client-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
 .nz-client-topbar .nz-btn{ font-size:.9rem; padding:.7em 1.4em; }

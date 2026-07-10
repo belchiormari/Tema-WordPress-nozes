@@ -44,6 +44,10 @@ if ( $nozes_report_id && $nozes_can_view ) :
 		</a>
 		<div class="nz-report-viewer__actions">
 			<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( get_permalink() ); ?>">&larr; <?php esc_html_e( 'Voltar aos relatórios', 'nozes' ); ?></a>
+			<button type="button" class="nz-btn nz-btn--lime" data-nz-print>
+				<?php echo nozes_icon( 'print' ); ?>
+				<span><?php esc_html_e( 'Imprimir / PDF', 'nozes' ); ?></span>
+			</button>
 			<a class="nz-btn nz-btn--outline" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Sair', 'nozes' ); ?></a>
 		</div>
 	</div>
