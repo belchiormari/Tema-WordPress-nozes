@@ -88,6 +88,7 @@ function nozes_icon( $name ) {
 		'menu'     => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
 		'close'    => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>',
 		'arrow'    => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+		'print'    => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
 		'compass'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
 		'target'   => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',
 		'trend'    => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 17 9 11 13 15 21 6"/><polyline points="14 6 21 6 21 13"/></svg>',
@@ -118,6 +119,32 @@ function nozes_is_built_with_elementor() {
 	}
 	$document = \Elementor\Plugin::$instance->documents->get( get_the_ID() );
 	return $document && $document->is_built_with_elementor();
+}
+
+/**
+ * Menu de rodapé de reserva: se nenhum menu foi atribuído ao local "Menu do
+ * Rodapé", mostra o menu principal (ou as páginas principais), para a coluna
+ * "Navegação" nunca ficar vazia.
+ */
+function nozes_footer_menu_fallback() {
+	if ( has_nav_menu( 'primary' ) ) {
+		wp_nav_menu( array(
+			'theme_location' => 'primary',
+			'container'      => false,
+			'menu_class'     => '',
+			'depth'          => 1,
+			'fallback_cb'    => false,
+		) );
+		return;
+	}
+	echo '<ul>';
+	wp_list_pages( array(
+		'title_li'    => '',
+		'depth'       => 1,
+		'sort_column' => 'menu_order,post_title',
+		'number'      => 6,
+	) );
+	echo '</ul>';
 }
 
 /**

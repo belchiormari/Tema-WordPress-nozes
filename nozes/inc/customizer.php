@@ -64,7 +64,8 @@ function nozes_customize_register( $wp_customize ) {
 
 	$contact_fields = array(
 		'nozes_phone_display' => array( '(48) 3050-7538', __( 'Telefone (formato de exibição)', 'nozes' ) ),
-		'nozes_email'         => array( 'contato@somosnozes.com.br', __( 'E-mail de contato', 'nozes' ) ),
+		'nozes_email'         => array( 'contato@somosnozes.com.br', __( 'E-mail de contato (usado no envio de e-mails e no SEO)', 'nozes' ) ),
+		'nozes_footer_email'  => array( 'ola@somosnozes.com.br', __( 'E-mail exibido no rodapé', 'nozes' ) ),
 		'nozes_address'       => array( 'Florianópolis, Santa Catarina, Brasil', __( 'Cidade/Endereço', 'nozes' ) ),
 	);
 	foreach ( $contact_fields as $key => $data ) {
@@ -134,7 +135,7 @@ function nozes_customize_register( $wp_customize ) {
 	) );
 
 	$wp_customize->add_setting( 'nozes_company_summary', array(
-		'default'           => 'A Nozes é uma assessoria de decisões de negócio e valorização de marca. Ajudamos empresas a decidir com mais segurança, trazendo a visão de marca que falta para melhorar reputação e percepção no mercado.',
+		'default'           => 'A Nozes é especialista em branding e gestão de marca. Ajudamos empresas a alinhar o que o mercado percebe com o que a operação já entrega.',
 		'sanitize_callback' => 'sanitize_textarea_field',
 	) );
 	$wp_customize->add_control( 'nozes_company_summary', array(
