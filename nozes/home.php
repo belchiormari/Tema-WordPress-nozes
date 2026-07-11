@@ -13,7 +13,7 @@ if ( $nz_posts_page_id ) {
 	$nz_blog_lede = trim( wp_strip_all_tags( get_post_field( 'post_content', $nz_posts_page_id ) ) );
 }
 if ( '' === $nz_blog_lede ) {
-	$nz_blog_lede = __( 'Artigos sobre como as pessoas percebem, decidem e escolhem, e o que isso muda na construção da sua marca.', 'nozes' );
+	$nz_blog_lede = __( 'Artigos sobre marca, neuromarketing e decisão de negócio.', 'nozes' );
 }
 ?>
 

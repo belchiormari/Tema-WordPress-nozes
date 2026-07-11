@@ -38,6 +38,15 @@
 		</nav>
 
 		<div class="nz-header__actions">
+			<?php
+			// Acesso à Área do Cliente como item destacado do site (fora do menu de navegação).
+			$nz_client_url   = function_exists( 'nozes_get_client_area_url' ) ? nozes_get_client_area_url() : home_url( '/area-do-cliente/' );
+			$nz_client_label = is_user_logged_in() ? __( 'Meus relatórios', 'nozes' ) : __( 'Área do Cliente', 'nozes' );
+			?>
+			<a class="nz-client-access" href="<?php echo esc_url( $nz_client_url ); ?>">
+				<?php echo nozes_icon( 'user' ); ?>
+				<span><?php echo esc_html( $nz_client_label ); ?></span>
+			</a>
 			<a class="nz-btn nz-btn--yellow-lime" href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer">
 				<?php echo nozes_icon( 'whatsapp' ); ?>
 				<span><?php esc_html_e( 'Falar no WhatsApp', 'nozes' ); ?></span>

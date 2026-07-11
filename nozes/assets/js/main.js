@@ -53,6 +53,57 @@
 		});
 	});
 
+	// Antes de imprimir, avisa bibliotecas de gráfico responsivas (Chart.js,
+	// ApexCharts, ECharts, etc.) para se redesenharem no tamanho da folha —
+	// sem isso é comum o gráfico sair em branco ou cortado no PDF.
+	window.addEventListener('beforeprint', function () {
+		window.dispatchEvent(new Event('resize'));
+	});
+
+	// Busca de relatórios na Área do Cliente (filtra por nome/data no cliente).
+	(function () {
+		var input = document.querySelector('[data-nz-report-search]');
+		var scope = document.querySelector('[data-nz-report-scope]');
+		if (!input || !scope) {
+			return;
+		}
+
+		var items = Array.prototype.slice.call(scope.querySelectorAll('[data-nz-report-item]'));
+		var groups = Array.prototype.slice.call(scope.querySelectorAll('[data-nz-report-group]'));
+		var emptyMsg = document.querySelector('[data-nz-report-empty]');
+
+		function normalize(str) {
+			return (str || '').toString().toLowerCase()
+				.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+		}
+
+		function filter() {
+			var query = normalize(input.value.trim());
+			var anyVisible = false;
+
+			items.forEach(function (item) {
+				var haystack = normalize(item.getAttribute('data-nz-report-search-text'));
+				var match = !query || haystack.indexOf(query) !== -1;
+				item.hidden = !match;
+				if (match) {
+					anyVisible = true;
+				}
+			});
+
+			// Esconde categorias/subcategorias que ficaram sem nenhum relatório visível.
+			groups.forEach(function (group) {
+				var hasVisible = group.querySelector('[data-nz-report-item]:not([hidden])');
+				group.hidden = !hasVisible;
+			});
+
+			if (emptyMsg) {
+				emptyMsg.hidden = anyVisible;
+			}
+		}
+
+		input.addEventListener('input', filter);
+	})();
+
 	// Lightbox das galerias do blog: clica na imagem, abre em tela cheia e navega
 	(function () {
 		var content = document.querySelector('.nz-single-post__content');

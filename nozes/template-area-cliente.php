@@ -91,6 +91,11 @@ get_header();
 					<?php esc_html_e( 'Mostrar senha', 'nozes' ); ?>
 				</label>
 
+				<label class="nz-remember-me">
+					<input type="checkbox" id="nozes_remember" name="nozes_remember" value="1" checked>
+					<?php esc_html_e( 'Manter conectado neste dispositivo', 'nozes' ); ?>
+				</label>
+
 				<?php wp_nonce_field( 'nozes_client_login', 'nozes_client_login_nonce' ); ?>
 				<button type="submit" class="nz-btn nz-btn--primary"><?php esc_html_e( 'Entrar', 'nozes' ); ?></button>
 
@@ -137,18 +142,73 @@ get_header();
 			<?php if ( empty( $reports ) ) : ?>
 				<p><?php esc_html_e( 'Ainda não há relatórios publicados para o seu usuário. Assim que a Nozes publicar, eles aparecem aqui.', 'nozes' ); ?></p>
 			<?php else : ?>
-				<p class="nz-client-hint"><?php esc_html_e( 'Clique em um relatório para abri-lo em uma nova aba.', 'nozes' ); ?></p>
-				<div class="nz-report-list">
-					<?php foreach ( $reports as $report ) : ?>
-						<a class="nz-report nz-report--link" href="<?php echo esc_url( add_query_arg( 'relatorio', $report->ID, nozes_get_client_area_url() ) ); ?>" target="_blank" rel="noopener">
-							<div class="nz-report__head">
-								<h3><?php echo esc_html( get_the_title( $report ) ); ?></h3>
-								<span class="nz-report__date"><?php echo esc_html( get_the_date( '', $report ) ); ?></span>
-							</div>
-							<span class="nz-report__open"><?php esc_html_e( 'Abrir relatório', 'nozes' ); ?> &rarr;</span>
-						</a>
-					<?php endforeach; ?>
+				<?php
+				$nz_groups     = nozes_group_reports_by_category( $reports );
+				$nz_area_url   = nozes_get_client_area_url();
+
+				/**
+				 * Renderiza a lista de cards de um conjunto de relatórios.
+				 */
+				$nz_render_report_list = function ( $list ) use ( $nz_area_url ) {
+					echo '<div class="nz-report-list">';
+					foreach ( $list as $report ) {
+						$title = get_the_title( $report );
+						$date  = get_the_date( '', $report );
+						printf(
+							'<a class="nz-report nz-report--link" href="%1$s" target="_blank" rel="noopener" data-nz-report-item data-nz-report-search-text="%2$s">'
+								. '<div class="nz-report__head"><h3>%3$s</h3><span class="nz-report__date">%4$s</span></div>'
+								. '<span class="nz-report__open">%5$s &rarr;</span>'
+							. '</a>',
+							esc_url( add_query_arg( 'relatorio', $report->ID, $nz_area_url ) ),
+							esc_attr( $title . ' ' . $date ),
+							esc_html( $title ),
+							esc_html( $date ),
+							esc_html__( 'Abrir relatório', 'nozes' )
+						);
+					}
+					echo '</div>';
+				};
+				?>
+
+				<div class="nz-client-toolbar">
+					<p class="nz-client-hint"><?php esc_html_e( 'Clique em um relatório para abri-lo em uma nova aba.', 'nozes' ); ?></p>
+					<div class="nz-report-search">
+						<label class="u-visually-hidden" for="nz-report-search"><?php esc_html_e( 'Buscar relatório', 'nozes' ); ?></label>
+						<input type="search" id="nz-report-search" placeholder="<?php esc_attr_e( 'Buscar relatório por nome ou data…', 'nozes' ); ?>" data-nz-report-search autocomplete="off">
+					</div>
 				</div>
+
+				<div class="nz-report-groups" data-nz-report-scope>
+					<?php if ( $nz_groups['has_categories'] ) : ?>
+						<?php foreach ( $nz_groups['tree'] as $group ) : ?>
+							<section class="nz-report-group" data-nz-report-group>
+								<h2 class="nz-report-group__title"><?php echo esc_html( $group['term']->name ); ?></h2>
+
+								<?php if ( ! empty( $group['reports'] ) ) : ?>
+									<?php $nz_render_report_list( $group['reports'] ); ?>
+								<?php endif; ?>
+
+								<?php foreach ( $group['subs'] as $sub ) : ?>
+									<div class="nz-report-subgroup" data-nz-report-group>
+										<h3 class="nz-report-subgroup__title"><?php echo esc_html( $sub['term']->name ); ?></h3>
+										<?php $nz_render_report_list( $sub['reports'] ); ?>
+									</div>
+								<?php endforeach; ?>
+							</section>
+						<?php endforeach; ?>
+
+						<?php if ( ! empty( $nz_groups['uncategorized'] ) ) : ?>
+							<section class="nz-report-group" data-nz-report-group>
+								<h2 class="nz-report-group__title"><?php esc_html_e( 'Outros relatórios', 'nozes' ); ?></h2>
+								<?php $nz_render_report_list( $nz_groups['uncategorized'] ); ?>
+							</section>
+						<?php endif; ?>
+					<?php else : ?>
+						<?php $nz_render_report_list( $reports ); ?>
+					<?php endif; ?>
+				</div>
+
+				<p class="nz-report-empty" data-nz-report-empty hidden><?php esc_html_e( 'Nenhum relatório encontrado para a sua busca.', 'nozes' ); ?></p>
 			<?php endif; ?>
 
 		<?php endif; ?>

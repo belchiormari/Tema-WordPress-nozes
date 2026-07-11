@@ -236,6 +236,17 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-burger{ display: none; background: none; border: 0; color: #fff; padding: .5rem; }
 .nz-burger svg{ width: 26px; height: 26px; }
 
+/* Acesso à Área do Cliente destacado no cabeçalho (fora do menu de navegação) */
+.nz-client-access{
+  display: inline-flex; align-items: center; gap: .45rem;
+  color: #fff; font-weight: 600; font-size: .92rem; white-space: nowrap;
+  padding: .55em .95em; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+.nz-client-access svg{ width: 18px; height: 18px; }
+.nz-client-access:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
+
 @media (max-width: 880px){
   .nz-nav{
     position: fixed; inset: 0 0 0 auto; width: min(80vw, 340px); height: 100vh;
@@ -247,6 +258,8 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   .nz-nav a{ font-size: 1.1rem; }
   .nz-burger{ display: inline-flex; }
   .nz-header__actions .nz-btn span{ display: none; }
+  .nz-client-access span{ display: none; }
+  .nz-client-access{ padding: .5em; }
 
   /* No celular o dropdown é desativado: os submenus não aparecem e o item
      principal (ex.: Cases) funciona como link normal. */
@@ -345,7 +358,8 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-single-post__content ol{ list-style: decimal; }
 .nz-single-post__content li{ margin-bottom: .5em; }
 .nz-single-post__content blockquote{ border-left: 4px solid var(--nz-lime); margin: 2em 0; padding: .5em 0 .5em 1.5em; font-size: 1.2rem; font-weight: 500; }
-.nz-single-post__content a{ color: var(--nz-pink); text-decoration: underline; text-underline-offset: 3px; }
+.nz-single-post__content a{ color: var(--nz-gray); text-decoration: underline; text-decoration-color: var(--nz-gray-light); text-underline-offset: 3px; }
+.nz-single-post__content a:hover{ color: var(--nz-black); text-decoration-color: var(--nz-gray); }
 
 /* Legendas de imagem: menores e em itálico */
 .nz-single-post__content figcaption,
@@ -357,7 +371,7 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   color: var(--nz-gray);
   line-height: 1.5;
   margin-top: .6rem;
-  text-align: center;
+  text-align: left;
 }
 .nz-single-post__content .wp-caption{ max-width: 100%; }
 
@@ -462,7 +476,9 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
    mesmo quando a animação passa pelas cores mais claras (verde limão). */
 .nz-cta-final__glow{
   position:absolute; inset:0; pointer-events:none;
-  background: radial-gradient(ellipse at center, rgba(15,15,16,.62) 0%, rgba(15,15,16,.38) 60%, rgba(15,15,16,.55) 100%);
+  background:
+    linear-gradient(135deg, rgba(15,15,16,.6) 0%, rgba(15,15,16,.34) 50%, rgba(15,15,16,.6) 100%),
+    linear-gradient(45deg,  rgba(15,15,16,.45) 0%, rgba(15,15,16,.28) 50%, rgba(15,15,16,.45) 100%);
 }
 @keyframes nz-cta-gradient{
   0%   { background-position: 0% 50%; }
@@ -614,8 +630,10 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   margin-bottom: 1.2rem; font-family: inherit; font-size: 1rem;
 }
 .nz-client-login button{ width:100%; }
-.nz-show-password{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:-.6rem 0 1.2rem; cursor:pointer; }
+.nz-show-password{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:-.6rem 0 1rem; cursor:pointer; }
 .nz-show-password input{ width:auto; margin:0; }
+.nz-remember-me{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:0 0 1.2rem; cursor:pointer; }
+.nz-remember-me input{ width:auto; margin:0; }
 .nz-client-error{ background:#fff0f5; border:1px solid var(--nz-pink); color:#b30050; padding: .9rem 1.1rem; border-radius: var(--nz-radius-sm); margin-bottom:1.2rem; font-size:.92rem; }
 .nz-report{ border:1px solid var(--nz-gray-light); border-radius: var(--nz-radius); margin-bottom: 1rem; overflow:hidden; }
 .nz-report__head{ display:flex; align-items:center; justify-content:space-between; padding: 1.3rem 1.6rem; cursor:pointer; background:#fff; }
@@ -623,8 +641,34 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-report__date{ color: var(--nz-gray); font-size:.85rem; font-weight:500; }
 .nz-report__body{ padding: 1.6rem; border-top:1px solid var(--nz-gray-light); background: var(--nz-offwhite); }
 
+/* Barra de topo da lista: dica + busca de relatórios */
+.nz-client-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1.6rem; }
+.nz-client-hint{ color: var(--nz-gray); font-size: .9rem; margin:0; }
+.nz-report-search{ flex:1; min-width:220px; max-width:360px; margin-left:auto; }
+.nz-report-search input{
+  width:100%; padding:.7em 1.1em; border-radius:999px; border:1px solid var(--nz-gray-light);
+  font-family:inherit; font-size:.95rem; background:#fff;
+}
+.nz-report-search input:focus{ outline:none; border-color:var(--nz-pink); box-shadow:0 0 0 3px rgba(255,0,102,.12); }
+
+/* Categorias e subcategorias de relatórios */
+.nz-report-groups{ display:flex; flex-direction:column; gap:2.2rem; }
+.nz-report-group__title{
+  font-size:1.35rem; margin:0 0 1rem; padding-bottom:.5rem;
+  border-bottom:2px solid var(--nz-gray-light);
+}
+.nz-report-subgroup{ margin-top:1.4rem; }
+.nz-report-subgroup__title{
+  font-size:1rem; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--nz-gray); margin:0 0 .8rem;
+}
+.nz-report-subgroup .nz-report-list{ padding-left:.2rem; }
+.nz-report-empty{ color:var(--nz-gray); background:var(--nz-offwhite); border:1px dashed var(--nz-gray-light); border-radius:var(--nz-radius); padding:1.4rem 1.6rem; text-align:center; }
+@media (max-width:560px){
+  .nz-report-search{ max-width:none; margin-left:0; }
+}
+
 /* Lista de relatórios como botões que abrem em página própria */
-.nz-client-hint{ color: var(--nz-gray); font-size: .9rem; margin-bottom: 1.2rem; }
 .nz-report-list{ display: flex; flex-direction: column; gap: 1rem; }
 .nz-report-list .nz-report{ margin-bottom: 0; }
 .nz-report--link{ display: block; background:#fff; text-decoration:none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
@@ -656,6 +700,29 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   .nz-whatsapp-float{ display: none !important; }
   body.nz-report-viewer{ background: #fff !important; }
   .nz-report-viewer__content{ margin: 0 !important; }
+
+  /* Preserva as cores dos gráficos, fundos e barras — sem isto o navegador
+     imprime "desconfigurado", sem preenchimentos nem cores. */
+  body.nz-report-viewer,
+  .nz-report-viewer__content,
+  .nz-report-viewer__content *{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Evita que gráficos, imagens e tabelas sejam cortados entre páginas e
+     garante que caibam na largura da folha. */
+  .nz-report-viewer__content canvas,
+  .nz-report-viewer__content svg,
+  .nz-report-viewer__content img,
+  .nz-report-viewer__content table,
+  .nz-report-viewer__content figure{
+    max-width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  @page{ margin: 1.5cm; }
 }
 .nz-client-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
 .nz-client-topbar .nz-btn{ font-size:.9rem; padding:.7em 1.4em; }

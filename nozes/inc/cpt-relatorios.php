@@ -40,9 +40,42 @@ function nozes_register_relatorio_cpt() {
 		'supports'           => array( 'title', 'editor', 'custom-fields' ),
 		'capability_type'    => 'post',
 		'map_meta_cap'       => true,
+			'taxonomies'         => array( 'categoria_relatorio' ),
 	) );
 }
 add_action( 'init', 'nozes_register_relatorio_cpt' );
+
+/**
+ * Taxonomia hierárquica "Categorias de relatório": permite organizar os
+ * relatórios em categorias e subcategorias (ex.: "2024 → Junho", ou
+ * "Marca → Pesquisas"). Na Área do Cliente os relatórios são agrupados por
+ * essas categorias, o que facilita encontrar e acessar cada um.
+ */
+function nozes_register_relatorio_taxonomy() {
+	register_taxonomy( 'categoria_relatorio', 'relatorio', array(
+		'labels' => array(
+			'name'              => __( 'Categorias de relatório', 'nozes' ),
+			'singular_name'     => __( 'Categoria', 'nozes' ),
+			'search_items'      => __( 'Buscar categorias', 'nozes' ),
+			'all_items'         => __( 'Todas as categorias', 'nozes' ),
+			'parent_item'       => __( 'Categoria mãe', 'nozes' ),
+			'parent_item_colon' => __( 'Categoria mãe:', 'nozes' ),
+			'edit_item'         => __( 'Editar categoria', 'nozes' ),
+			'update_item'       => __( 'Atualizar categoria', 'nozes' ),
+			'add_new_item'      => __( 'Adicionar nova categoria', 'nozes' ),
+			'new_item_name'     => __( 'Nome da nova categoria', 'nozes' ),
+			'menu_name'         => __( 'Categorias', 'nozes' ),
+		),
+		'hierarchical'       => true,
+		'public'             => false,
+		'publicly_queryable' => false,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'show_admin_column'  => true,
+		'show_in_rest'       => true,
+	) );
+}
+add_action( 'init', 'nozes_register_relatorio_taxonomy' );
 
 /**
  * Papel de usuário "Cliente": só pode ler o próprio conteúdo, nada de admin.
@@ -144,10 +177,15 @@ function nozes_process_client_login() {
 		return null;
 	}
 
+	// "Manter conectado / Lembrar de mim": marcado por padrão para o cliente não
+	// precisar logar de novo a cada visita. Se desmarcado, a sessão dura só
+	// enquanto o navegador estiver aberto.
+	$remember = ! empty( $_POST['nozes_remember'] );
+
 	$creds = array(
 		'user_login'    => isset( $_POST['nozes_username'] ) ? sanitize_user( wp_unslash( $_POST['nozes_username'] ) ) : '',
 		'user_password' => isset( $_POST['nozes_password'] ) ? (string) $_POST['nozes_password'] : '',
-		'remember'      => true,
+		'remember'      => $remember,
 	);
 
 	if ( empty( $creds['user_login'] ) || empty( $creds['user_password'] ) ) {
@@ -275,4 +313,102 @@ function nozes_get_client_reports( $user_id ) {
 	}
 
 	return get_posts( $args );
+}
+
+/**
+ * Mantém o cliente conectado por mais tempo quando ele marca "Manter conectado".
+ * Sem isso, o cookie de login padrão dura 14 dias; aqui estendemos para 30 dias,
+ * para reduzir a chance de o cliente precisar logar de novo (ex.: ao navegar
+ * pelo site e voltar à Área do Cliente).
+ */
+function nozes_client_cookie_expiration( $length, $user_id, $remember ) {
+	if ( $remember ) {
+		return 30 * DAY_IN_SECONDS;
+	}
+	return $length;
+}
+add_filter( 'auth_cookie_expiration', 'nozes_client_cookie_expiration', 10, 3 );
+
+/**
+ * Organiza os relatórios do cliente em categorias e subcategorias (taxonomia
+ * "categoria_relatorio"). Cada relatório é colocado no seu termo mais específico
+ * (a subcategoria, se houver; senão a categoria de topo). Retorna uma árvore
+ * ordenada por nome, além dos relatórios sem categoria.
+ *
+ * Estrutura devolvida:
+ *   array(
+ *     'tree' => array( top_id => array(
+ *         'term'    => WP_Term,           // categoria de topo
+ *         'reports' => WP_Post[],         // relatórios direto na categoria
+ *         'subs'    => array( sub_id => array( 'term' => WP_Term, 'reports' => WP_Post[] ) ),
+ *     ) ),
+ *     'uncategorized' => WP_Post[],       // relatórios sem nenhuma categoria
+ *     'has_categories' => bool,
+ *   )
+ */
+function nozes_group_reports_by_category( $reports ) {
+	$taxonomy      = 'categoria_relatorio';
+	$tree          = array();
+	$uncategorized = array();
+
+	foreach ( $reports as $report ) {
+		$terms = get_the_terms( $report->ID, $taxonomy );
+		if ( empty( $terms ) || is_wp_error( $terms ) ) {
+			$uncategorized[] = $report;
+			continue;
+		}
+
+		// Entre os termos atribuídos, prefere o mais específico (com "pai").
+		$chosen = $terms[0];
+		foreach ( $terms as $t ) {
+			if ( $t->parent && ! $chosen->parent ) {
+				$chosen = $t;
+			}
+		}
+
+		if ( $chosen->parent ) {
+			$parent = get_term( $chosen->parent, $taxonomy );
+			if ( $parent && ! is_wp_error( $parent ) ) {
+				$top_id   = $parent->term_id;
+				$top_term = $parent;
+			} else {
+				$top_id   = $chosen->term_id;
+				$top_term = $chosen;
+			}
+
+			if ( ! isset( $tree[ $top_id ] ) ) {
+				$tree[ $top_id ] = array( 'term' => $top_term, 'reports' => array(), 'subs' => array() );
+			}
+			if ( ! isset( $tree[ $top_id ]['subs'][ $chosen->term_id ] ) ) {
+				$tree[ $top_id ]['subs'][ $chosen->term_id ] = array( 'term' => $chosen, 'reports' => array() );
+			}
+			$tree[ $top_id ]['subs'][ $chosen->term_id ]['reports'][] = $report;
+		} else {
+			$top_id = $chosen->term_id;
+			if ( ! isset( $tree[ $top_id ] ) ) {
+				$tree[ $top_id ] = array( 'term' => $chosen, 'reports' => array(), 'subs' => array() );
+			}
+			$tree[ $top_id ]['reports'][] = $report;
+		}
+	}
+
+	// Ordena categorias e subcategorias por nome (mais previsível para o cliente).
+	uasort( $tree, 'nozes_sort_groups_by_term_name' );
+	foreach ( $tree as &$group ) {
+		uasort( $group['subs'], 'nozes_sort_groups_by_term_name' );
+	}
+	unset( $group );
+
+	return array(
+		'tree'           => $tree,
+		'uncategorized'  => $uncategorized,
+		'has_categories' => ! empty( $tree ),
+	);
+}
+
+/**
+ * Comparador auxiliar: ordena dois grupos pelo nome do termo.
+ */
+function nozes_sort_groups_by_term_name( $a, $b ) {
+	return strcasecmp( $a['term']->name, $b['term']->name );
 }
