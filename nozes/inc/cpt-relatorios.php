@@ -173,8 +173,11 @@ function nozes_get_client_area_url() {
  * Retorna WP_Error em caso de falha, ou true em caso de sucesso (com redirect).
  */
 function nozes_process_client_login() {
-	if ( empty( $_POST['nozes_client_login_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nozes_client_login_nonce'] ) ), 'nozes_client_login' ) ) {
+	if ( empty( $_POST['nozes_client_login_nonce'] ) ) {
 		return null;
+	}
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nozes_client_login_nonce'] ) ), 'nozes_client_login' ) ) {
+		return new WP_Error( 'nonce_invalido', __( 'A sessão expirou. Recarregue a página e tente entrar novamente.', 'nozes' ) );
 	}
 
 	// "Manter conectado / Lembrar de mim": marcado por padrão para o cliente não

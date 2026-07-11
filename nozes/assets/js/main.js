@@ -60,7 +60,10 @@
 		window.dispatchEvent(new Event('resize'));
 	});
 
-	// Busca de relatórios na Área do Cliente (filtra por nome/data no cliente).
+	// Busca de relatórios na Área do Cliente: filtra por palavra-chave (não
+	// precisa ser o nome/data exatos). Divide o texto em palavras e casa por
+	// substring ou prefixo em comum — assim "market", "junho" ou "trimestre"
+	// encontram "Marketing Digital", "jun." e "Trimestral".
 	(function () {
 		var input = document.querySelector('[data-nz-report-search]');
 		var scope = document.querySelector('[data-nz-report-scope]');
@@ -68,23 +71,50 @@
 			return;
 		}
 
-		var items = Array.prototype.slice.call(scope.querySelectorAll('[data-nz-report-item]'));
 		var groups = Array.prototype.slice.call(scope.querySelectorAll('[data-nz-report-group]'));
 		var emptyMsg = document.querySelector('[data-nz-report-empty]');
+		var queryOut = emptyMsg ? emptyMsg.querySelector('[data-nz-report-query]') : null;
 
 		function normalize(str) {
 			return (str || '').toString().toLowerCase()
 				.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 		}
 
+		function toWords(str) {
+			return normalize(str).split(/[^a-z0-9]+/).filter(Boolean);
+		}
+
+		function commonPrefix(a, b) {
+			var n = Math.min(a.length, b.length);
+			var i = 0;
+			while (i < n && a.charAt(i) === b.charAt(i)) {
+				i++;
+			}
+			return i;
+		}
+
+		function wordMatches(word, token) {
+			return word.indexOf(token) !== -1 || commonPrefix(word, token) >= 4;
+		}
+
+		// Pré-calcula as palavras de cada relatório uma única vez.
+		var items = Array.prototype.slice.call(scope.querySelectorAll('[data-nz-report-item]')).map(function (el) {
+			return { el: el, words: toWords(el.getAttribute('data-nz-report-search-text')) };
+		});
+
 		function filter() {
-			var query = normalize(input.value.trim());
+			var raw = input.value.trim();
+			var tokens = toWords(raw);
 			var anyVisible = false;
 
 			items.forEach(function (item) {
-				var haystack = normalize(item.getAttribute('data-nz-report-search-text'));
-				var match = !query || haystack.indexOf(query) !== -1;
-				item.hidden = !match;
+				// Casa quando TODAS as palavras digitadas aparecem no relatório.
+				var match = tokens.every(function (token) {
+					return item.words.some(function (word) {
+						return wordMatches(word, token);
+					});
+				});
+				item.el.hidden = !match;
 				if (match) {
 					anyVisible = true;
 				}
@@ -98,10 +128,20 @@
 
 			if (emptyMsg) {
 				emptyMsg.hidden = anyVisible;
+				if (queryOut) {
+					queryOut.textContent = raw;
+				}
 			}
 		}
 
 		input.addEventListener('input', filter);
+		// Enter não recarrega a página (filtro é instantâneo, não é formulário).
+		input.addEventListener('keydown', function (e) {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				filter();
+			}
+		});
 	})();
 
 	// Lightbox das galerias do blog: clica na imagem, abre em tela cheia e navega

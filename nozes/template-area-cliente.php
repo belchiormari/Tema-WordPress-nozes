@@ -77,7 +77,10 @@ get_header();
 
 			<form class="nz-client-login" method="post">
 				<?php if ( $nozes_login_error ) : ?>
-					<div class="nz-client-error"><?php echo esc_html( $nozes_login_error ); ?></div>
+					<div class="nz-client-error" role="alert">
+						<strong><?php esc_html_e( 'Não foi possível entrar.', 'nozes' ); ?></strong>
+						<span><?php echo esc_html( $nozes_login_error ); ?></span>
+					</div>
 				<?php endif; ?>
 
 				<label for="nozes_username"><?php esc_html_e( 'Usuário ou e-mail', 'nozes' ); ?></label>
@@ -171,12 +174,16 @@ get_header();
 				?>
 
 				<div class="nz-client-toolbar">
-					<p class="nz-client-hint"><?php esc_html_e( 'Clique em um relatório para abri-lo em uma nova aba.', 'nozes' ); ?></p>
 					<div class="nz-report-search">
 						<label class="u-visually-hidden" for="nz-report-search"><?php esc_html_e( 'Buscar relatório', 'nozes' ); ?></label>
-						<input type="search" id="nz-report-search" placeholder="<?php esc_attr_e( 'Buscar relatório por nome ou data…', 'nozes' ); ?>" data-nz-report-search autocomplete="off">
+						<span class="nz-report-search__icon" aria-hidden="true"><?php echo nozes_icon( 'search' ); ?></span>
+						<input type="search" id="nz-report-search" placeholder="<?php esc_attr_e( 'Buscar por palavra-chave, mês ou ano…', 'nozes' ); ?>" data-nz-report-search autocomplete="off">
 					</div>
 				</div>
+
+				<p class="nz-report-empty" data-nz-report-empty hidden>
+					<?php esc_html_e( 'Nenhum relatório encontrado para', 'nozes' ); ?> “<span data-nz-report-query></span>”.
+				</p>
 
 				<div class="nz-report-groups" data-nz-report-scope>
 					<?php if ( $nz_groups['has_categories'] ) : ?>
@@ -207,8 +214,6 @@ get_header();
 						<?php $nz_render_report_list( $reports ); ?>
 					<?php endif; ?>
 				</div>
-
-				<p class="nz-report-empty" data-nz-report-empty hidden><?php esc_html_e( 'Nenhum relatório encontrado para a sua busca.', 'nozes' ); ?></p>
 			<?php endif; ?>
 
 		<?php endif; ?>
