@@ -630,10 +630,20 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   margin-bottom: 1.2rem; font-family: inherit; font-size: 1rem;
 }
 .nz-client-login button{ width:100%; }
-.nz-show-password{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:-.6rem 0 1rem; cursor:pointer; }
-.nz-show-password input{ width:auto; margin:0; }
-.nz-remember-me{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:0 0 1.2rem; cursor:pointer; }
-.nz-remember-me input{ width:auto; margin:0; }
+/* Opções (checkboxes): rótulo leve e caixinha em tamanho fixo, para não
+   ficarem pesadas nem grandes demais no mobile. */
+.nz-client-login .nz-show-password,
+.nz-client-login .nz-remember-me{
+  display:flex; align-items:center; gap:.55em;
+  font-weight:400; font-size:.9rem; color:var(--nz-gray); cursor:pointer;
+}
+.nz-client-login .nz-show-password{ margin:-.4rem 0 .9rem; }
+.nz-client-login .nz-remember-me{ margin:0 0 1.4rem; }
+.nz-client-login .nz-show-password input,
+.nz-client-login .nz-remember-me input{
+  width:18px; height:18px; margin:0; flex-shrink:0;
+  accent-color:var(--nz-pink); cursor:pointer;
+}
 .nz-client-error{ background:#fff0f5; border:1px solid var(--nz-pink); border-left-width:4px; color:#b30050; padding: 1rem 1.2rem; border-radius: var(--nz-radius-sm); margin-bottom:1.4rem; font-size:.95rem; }
 .nz-client-error strong{ display:block; margin-bottom:.15rem; }
 .nz-client-error span{ color:#8a1f4d; }
@@ -743,6 +753,10 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   .nz-client-topbar{ margin-bottom:1.6rem; gap:.6rem; }
   .nz-client-topbar h1{ font-size: clamp(1.5rem, 7vw, 2rem); line-height:1.12; }
   .nz-client-topbar .u-eyebrow{ margin-bottom:.3rem; }
+  /* Login mais compacto no celular */
+  .nz-client-login{ padding:1.5rem 1.25rem; }
+  .nz-client-login input[type="text"], .nz-client-login input[type="password"]{ padding:.7em .9em; margin-bottom:1rem; }
+  .nz-client-login .nz-btn{ padding:.9em 1.4em; }
 }
 
 /* ==========================================================================
