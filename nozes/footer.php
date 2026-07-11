@@ -10,7 +10,7 @@
 		<div class="nz-footer__grid">
 			<div>
 				<img src="<?php echo esc_url( NOZES_URI . '/assets/img/logo-wordmark.png' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="height:34px;width:auto;margin-bottom:1.2rem;" />
-				<p><?php echo esc_html( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) ); ?></p>
+				<p class="nz-footer__desc"><?php echo esc_html( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) ); ?></p>
 				<div class="nz-social">
 					<?php $nz_instagram = get_theme_mod( 'nozes_social_instagram' ); ?>
 					<?php if ( $nz_instagram ) : ?>
@@ -23,34 +23,30 @@
 				</div>
 			</div>
 
-			<div>
+			<div class="nz-footer__col-nav">
 				<h4><?php esc_html_e( 'Navegação', 'nozes' ); ?></h4>
 				<?php
 				wp_nav_menu( array(
 					'theme_location' => 'footer',
 					'container'      => false,
 					'menu_class'     => '',
-					'fallback_cb'    => false,
+					'fallback_cb'    => 'nozes_footer_menu_fallback',
 				) );
 				?>
 			</div>
 
-			<div>
-				<h4><?php esc_html_e( 'Contato', 'nozes' ); ?></h4>
-				<ul>
-					<li><a href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( get_theme_mod( 'nozes_phone_display' ) ); ?></a></li>
-					<?php if ( get_theme_mod( 'nozes_email' ) ) : ?>
-						<li><a href="mailto:<?php echo esc_attr( get_theme_mod( 'nozes_email' ) ); ?>"><?php echo esc_html( get_theme_mod( 'nozes_email' ) ); ?></a></li>
-					<?php endif; ?>
-					<li><?php echo esc_html( get_theme_mod( 'nozes_address' ) ); ?></li>
-				</ul>
-			</div>
-
-			<div>
+			<div class="nz-footer__col-client">
 				<h4><?php esc_html_e( 'Área do Cliente', 'nozes' ); ?></h4>
 				<ul>
 					<li><a href="<?php echo esc_url( nozes_get_client_area_url() ); ?>"><?php esc_html_e( 'Acessar relatórios', 'nozes' ); ?></a></li>
 				</ul>
+				<div class="nz-footer__contact">
+					<strong><?php esc_html_e( 'Nozes Estratégia de Marca.', 'nozes' ); ?></strong>
+					<?php $nz_footer_email = get_theme_mod( 'nozes_footer_email', 'ola@somosnozes.com.br' ); ?>
+					<?php if ( $nz_footer_email ) : ?>
+						<a href="mailto:<?php echo esc_attr( $nz_footer_email ); ?>"><?php echo esc_html( $nz_footer_email ); ?></a>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 

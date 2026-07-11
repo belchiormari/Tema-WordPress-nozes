@@ -101,8 +101,23 @@ Cada cliente tem **login individual** e só vê os próprios relatórios.
 1. No menu lateral do admin, vá em **Relatórios (Clientes) → Adicionar novo**.
 2. Dê um título (ex: "Relatório — Julho 2026").
 3. Troque o editor para o modo **Código** e cole o HTML do relatório.
-4. No painel direito, em **Autor**, selecione o cliente dono deste relatório.
-5. Publique. Ele aparece automaticamente na Área do Cliente daquele usuário, mais recente primeiro — e nenhum outro cliente consegue ver, porque não existe um link público para o relatório: tudo é listado só depois do login.
+4. No painel direito, na caixa **"Cliente dono deste relatório"**, selecione o cliente.
+5. (Opcional) Na caixa **"Categorias de relatório"**, marque a categoria/subcategoria (veja abaixo).
+6. Publique. Ele aparece automaticamente na Área do Cliente daquele usuário, mais recente primeiro — e nenhum outro cliente consegue ver, porque não existe um link público para o relatório: tudo é listado só depois do login.
+
+### Organizar em categorias e subcategorias
+
+Para facilitar quando o cliente tem muitos relatórios, dá para agrupá-los:
+
+1. Vá em **Relatórios (Clientes) → Categorias**.
+2. Crie as categorias (ex.: "2026") e, se quiser, subcategorias escolhendo uma **Categoria mãe** (ex.: "1º semestre").
+3. Ao criar/editar um relatório, marque a categoria/subcategoria dele.
+
+Na Área do Cliente os relatórios aparecem **agrupados por categoria e subcategoria**. Relatórios sem categoria ficam em "Outros relatórios". O cliente também tem um **campo de busca** para encontrar um relatório pelo nome ou pela data.
+
+### Manter o cliente conectado
+
+Na tela de login há a opção **"Manter conectado neste dispositivo"** (já vem marcada). Com ela, o cliente continua logado por até 30 dias — inclusive se sair para navegar pelo blog/site e voltar depois. A Área do Cliente também é servida sem cache para evitar cair na tela de login por engano.
 
 ## 7. SEO e GEO (otimização para buscadores e para IA)
 

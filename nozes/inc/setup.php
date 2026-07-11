@@ -87,6 +87,35 @@ function nozes_assets() {
 add_action( 'wp_enqueue_scripts', 'nozes_assets' );
 
 /**
+ * Mostra 9 posts por página no Blog (home de posts e arquivos) — múltiplo de 3,
+ * para a grade de 3 colunas fechar sempre certinho, sem "sobrar" um card na
+ * última linha.
+ */
+function nozes_blog_posts_per_page( $query ) {
+	if ( is_admin() || ! $query->is_main_query() ) {
+		return;
+	}
+	if ( $query->is_home() || $query->is_category() || $query->is_tag() || $query->is_date() || $query->is_author() ) {
+		$query->set( 'posts_per_page', 9 );
+	}
+}
+add_action( 'pre_get_posts', 'nozes_blog_posts_per_page' );
+
+/**
+ * Nas páginas de HTML livre (páginas montadas 100% em HTML, geralmente com
+ * fundo escuro), pinta o fundo do site de escuro. Assim, se sobrar qualquer
+ * frestinha entre o conteúdo e o rodapé, ela fica invisível (em vez de virar
+ * uma linha branca), já que o rodapé também é escuro.
+ */
+function nozes_body_classes( $classes ) {
+	if ( is_page_template( 'template-html-livre.php' ) ) {
+		$classes[] = 'nz-dark-canvas';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'nozes_body_classes' );
+
+/**
  * Áreas de widget (usadas apenas se alguma página optar por sidebar).
  */
 function nozes_widgets_init() {
