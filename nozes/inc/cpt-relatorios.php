@@ -185,9 +185,15 @@ function nozes_process_client_login() {
 	// enquanto o navegador estiver aberto.
 	$remember = ! empty( $_POST['nozes_remember'] );
 
+	// Importante: NÃO usar sanitize_user() no login nem deixar a senha "escapada".
+	// sanitize_user() remove caracteres válidos de e-mail (ex.: o "+" de
+	// nome+cliente@gmail.com) e a senha chega com barras extras do WordPress
+	// (magic quotes). Nos dois casos o valor mudaria e o login correto seria
+	// recusado. Passamos o usuário/e-mail e a senha exatamente como digitados
+	// (só tirando as barras extras); o wp_signon faz a validação com segurança.
 	$creds = array(
-		'user_login'    => isset( $_POST['nozes_username'] ) ? sanitize_user( wp_unslash( $_POST['nozes_username'] ) ) : '',
-		'user_password' => isset( $_POST['nozes_password'] ) ? (string) $_POST['nozes_password'] : '',
+		'user_login'    => isset( $_POST['nozes_username'] ) ? trim( wp_unslash( $_POST['nozes_username'] ) ) : '',
+		'user_password' => isset( $_POST['nozes_password'] ) ? (string) wp_unslash( $_POST['nozes_password'] ) : '',
 		'remember'      => $remember,
 	);
 
