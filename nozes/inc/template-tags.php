@@ -96,7 +96,22 @@ function nozes_icon( $name ) {
 		'user'     => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
 		'search'   => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>',
 	);
-	return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
+
+	if ( ! isset( $icons[ $name ] ) ) {
+		return '';
+	}
+
+	// Garante um tamanho intrínseco no próprio SVG (16px). Sem isto, um SVG só
+	// com viewBox cai no padrão de ~300px do navegador quando o CSS ainda não
+	// carregou ou vem de um cache antigo — foi o que causava o "ícone gigante"
+	// intermitente no cabeçalho. O CSS do tema continua definindo o tamanho
+	// final onde precisa (regras de largura/altura vencem estes atributos).
+	return preg_replace_callback( '/^<svg\b([^>]*)>/', function ( $m ) {
+		if ( false !== strpos( $m[1], ' width=' ) ) {
+			return $m[0]; // já tem width no <svg>: não mexe
+		}
+		return '<svg width="16" height="16"' . $m[1] . '>';
+	}, $icons[ $name ], 1 );
 }
 
 /**
