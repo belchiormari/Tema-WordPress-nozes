@@ -214,16 +214,16 @@ function nozes_process_client_login() {
 }
 
 /**
- * Caixa "Cliente dono deste relatório" na tela de edição do relatório.
+ * Caixa "Clientes com acesso a este relatório" na tela de edição do relatório.
  * Lista os usuários com o papel "Cliente" (que são só-leitura e por isso não
- * aparecem no seletor de Autor padrão do WordPress). Ao salvar, define o
- * "autor" do relatório como o cliente escolhido — assim o cliente continua
- * travado como "Cliente", sem acesso a posts, mídias ou comentários.
+ * aparecem no seletor de Autor padrão do WordPress) e permite escolher um ou
+ * vários. Ao salvar, a lista fica em meta (_nozes_client) e o autor recebe o
+ * primeiro selecionado — assim o cliente continua travado como "Cliente".
  */
 function nozes_relatorio_owner_metabox() {
 	add_meta_box(
 		'nozes_relatorio_owner',
-		__( 'Cliente dono deste relatório', 'nozes' ),
+		__( 'Clientes com acesso a este relatório', 'nozes' ),
 		'nozes_relatorio_owner_metabox_cb',
 		'relatorio',
 		'side',
@@ -247,28 +247,30 @@ function nozes_relatorio_owner_metabox_cb( $post ) {
 		return;
 	}
 
-	$current = (int) $post->post_author;
-	echo '<p>' . esc_html__( 'Escolha quem poderá ver este relatório na Área do Cliente:', 'nozes' ) . '</p>';
-	echo '<select name="nozes_relatorio_owner" style="width:100%;">';
-	echo '<option value="0">' . esc_html__( '— Selecione o cliente —', 'nozes' ) . '</option>';
+	$selected = nozes_get_report_client_ids( $post );
+	echo '<p>' . esc_html__( 'Escolha um ou mais clientes que poderão ver este relatório na Área do Cliente:', 'nozes' ) . '</p>';
+	echo '<input type="hidden" name="nozes_clients_submitted" value="1">';
+	$size = min( max( count( $clients ), 3 ), 8 );
+	printf( '<select name="nozes_relatorio_clients[]" multiple size="%d" style="width:100%%;">', (int) $size );
 	foreach ( $clients as $client ) {
 		printf(
 			'<option value="%d"%s>%s</option>',
 			(int) $client->ID,
-			selected( $current, $client->ID, false ),
+			in_array( (int) $client->ID, $selected, true ) ? ' selected' : '',
 			esc_html( $client->display_name . ' (' . $client->user_login . ')' )
 		);
 	}
 	echo '</select>';
+	echo '<p class="description" style="margin-top:.4rem;">' . esc_html__( 'Segure Ctrl (Windows) ou Cmd (Mac) para marcar mais de um cliente. Todos os selecionados veem o relatório — e recebem o e-mail, se a opção abaixo estiver marcada.', 'nozes' ) . '</p>';
 
 	// Aviso por e-mail ao cliente (caixinha de opção).
 	$last = get_post_meta( $post->ID, '_nozes_last_notified', true );
 	echo '<hr style="margin:1rem 0;border:0;border-top:1px solid #dcdcde;">';
 	echo '<label style="display:flex;gap:.5em;align-items:flex-start;line-height:1.4;">';
 	echo '<input type="checkbox" name="nozes_notify_client" value="1" style="margin-top:2px;">';
-	echo '<span>' . esc_html__( 'Avisar o cliente por e-mail ao salvar', 'nozes' ) . '</span>';
+	echo '<span>' . esc_html__( 'Avisar os clientes por e-mail ao salvar', 'nozes' ) . '</span>';
 	echo '</label>';
-	echo '<p class="description" style="margin-top:.5rem;">' . esc_html__( 'Envia um e-mail avisando que há um novo relatório, com link para a Área do Cliente. Só é enviado se o relatório estiver publicado. O texto é editável em Personalizar → Configurações da Nozes.', 'nozes' ) . '</p>';
+	echo '<p class="description" style="margin-top:.5rem;">' . esc_html__( 'Envia a todos os clientes selecionados acima um e-mail avisando que há um novo relatório, com link para a Área do Cliente. Só é enviado se o relatório estiver publicado. O texto é editável em Personalizar → Configurações da Nozes.', 'nozes' ) . '</p>';
 	if ( $last ) {
 		echo '<p class="description" style="color:#2271b1;">' . sprintf(
 			/* translators: %s: data/hora do último aviso */
@@ -276,6 +278,25 @@ function nozes_relatorio_owner_metabox_cb( $post ) {
 			esc_html( date_i18n( 'd/m/Y H:i', (int) $last ) )
 		) . '</p>';
 	}
+}
+
+/**
+ * IDs de todos os clientes com acesso a um relatório: o autor (compatível com
+ * relatórios antigos de cliente único) mais os clientes salvos em meta.
+ */
+function nozes_get_report_client_ids( $post ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return array();
+	}
+	$ids = array();
+	if ( $post->post_author ) {
+		$ids[] = (int) $post->post_author;
+	}
+	foreach ( (array) get_post_meta( $post->ID, '_nozes_client', false ) as $m ) {
+		$ids[] = (int) $m;
+	}
+	return array_values( array_unique( array_filter( $ids ) ) );
 }
 
 /**
@@ -330,26 +351,42 @@ function nozes_save_relatorio_owner( $post_id, $post ) {
 	if ( 'relatorio' !== $post->post_type || ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	if ( ! isset( $_POST['nozes_relatorio_owner'] ) ) {
+	// Se a caixa do metabox não veio no POST (ex.: edição rápida), não mexe.
+	if ( ! isset( $_POST['nozes_clients_submitted'] ) ) {
 		return;
 	}
 
-	$owner = absint( $_POST['nozes_relatorio_owner'] );
-	if ( $owner && $owner !== (int) $post->post_author ) {
+	// Clientes selecionados (um ou vários), mantendo só usuários válidos "Cliente".
+	$ids = isset( $_POST['nozes_relatorio_clients'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['nozes_relatorio_clients'] ) ) : array();
+	$ids = array_values( array_unique( array_filter( $ids, function ( $id ) {
+		$u = get_userdata( $id );
+		return $u && nozes_user_is_client( $u );
+	} ) ) );
+
+	// Regrava a lista de clientes com acesso (uma linha de meta por cliente).
+	delete_post_meta( $post_id, '_nozes_client' );
+	foreach ( $ids as $id ) {
+		add_post_meta( $post_id, '_nozes_client', $id );
+	}
+
+	// Autor = primeiro cliente selecionado (mantém compatibilidade com o WP).
+	if ( ! empty( $ids ) && (int) $ids[0] !== (int) $post->post_author ) {
 		remove_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10 );
 		wp_update_post( array(
 			'ID'          => $post_id,
-			'post_author' => $owner,
+			'post_author' => (int) $ids[0],
 		) );
 		add_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10, 2 );
 	}
 
-	// Caixinha "Avisar o cliente por e-mail": só dispara se marcada e o
-	// relatório estiver publicado (o cliente só enxerga relatórios publicados).
+	// Caixinha "Avisar os clientes por e-mail": envia a todos os selecionados,
+	// e só se o relatório estiver publicado (o cliente só vê relatórios publicados).
 	if ( ! empty( $_POST['nozes_notify_client'] ) && 'publish' === $post->post_status ) {
-		$recipient_id = $owner > 0 ? $owner : (int) $post->post_author;
-		if ( $recipient_id ) {
-			nozes_send_report_notification( $post_id, $recipient_id );
+		$recipients = ! empty( $ids ) ? $ids : array( (int) $post->post_author );
+		foreach ( array_unique( $recipients ) as $rid ) {
+			if ( $rid ) {
+				nozes_send_report_notification( $post_id, $rid );
+			}
 		}
 	}
 }
@@ -357,7 +394,8 @@ add_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10, 2 );
 
 /**
  * Verifica se um usuário pode ver um relatório específico.
- * Administradores veem todos; o cliente só vê os relatórios em que é o "Autor".
+ * Administradores veem todos; o cliente vê os relatórios em que é o autor ou
+ * está na lista de clientes com acesso (relatórios com mais de um cliente).
  * Usado ao abrir um relatório em página própria (?relatorio=ID), para impedir
  * que um cliente troque o número no link e tente ver o relatório de outro.
  */
@@ -371,7 +409,11 @@ function nozes_user_can_view_report( $user_id, $report ) {
 	if ( user_can( $user_id, 'manage_options' ) ) {
 		return true;
 	}
-	return (int) $report->post_author === (int) $user_id;
+	if ( (int) $report->post_author === (int) $user_id ) {
+		return true;
+	}
+	$allowed = array_map( 'intval', (array) get_post_meta( $report->ID, '_nozes_client', false ) );
+	return in_array( (int) $user_id, $allowed, true );
 }
 
 /**
@@ -386,11 +428,26 @@ function nozes_get_client_reports( $user_id ) {
 		'order'          => 'DESC',
 	);
 
-	if ( ! user_can( $user_id, 'manage_options' ) ) {
-		$args['author'] = $user_id;
+	// Administrador vê todos.
+	if ( user_can( $user_id, 'manage_options' ) ) {
+		return get_posts( $args );
 	}
 
-	return get_posts( $args );
+	// Cliente vê os relatórios onde é o autor (compatível com o modelo antigo)
+	// OU está na lista de clientes com acesso (relatórios com vários clientes).
+	$by_author = get_posts( array_merge( $args, array( 'author' => $user_id, 'fields' => 'ids' ) ) );
+	$by_meta   = get_posts( array_merge( $args, array(
+		'fields'     => 'ids',
+		'meta_key'   => '_nozes_client',
+		'meta_value' => $user_id,
+	) ) );
+
+	$ids = array_unique( array_merge( (array) $by_author, (array) $by_meta ) );
+	if ( empty( $ids ) ) {
+		return array();
+	}
+
+	return get_posts( array_merge( $args, array( 'post__in' => $ids ) ) );
 }
 
 /**

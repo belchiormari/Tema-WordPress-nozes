@@ -103,16 +103,20 @@ Cada cliente tem **login individual** e só vê os próprios relatórios.
 1. No menu lateral do admin, vá em **Relatórios (Clientes) → Adicionar novo**.
 2. Dê um título (ex: "Relatório — Julho 2026").
 3. Troque o editor para o modo **Código** e cole o HTML do relatório.
-4. No painel direito, na caixa **"Cliente dono deste relatório"**, selecione o cliente.
+4. No painel direito, na caixa **"Clientes com acesso a este relatório"**, selecione **um ou mais** clientes (segure Ctrl/Cmd para marcar vários — todos os selecionados verão o relatório).
 5. (Opcional) Na caixa **"Categorias de relatório"**, marque a categoria/subcategoria (veja abaixo).
-6. (Opcional) Ainda na caixa do cliente, marque **"Avisar o cliente por e-mail ao salvar"** para notificar (veja abaixo).
+6. (Opcional) Ainda na caixa dos clientes, marque **"Avisar os clientes por e-mail ao salvar"** para notificar todos os selecionados (veja abaixo).
 7. Publique. Ele aparece automaticamente na Área do Cliente daquele usuário, mais recente primeiro — e nenhum outro cliente consegue ver, porque não existe um link público para o relatório: tudo é listado só depois do login.
 
-### Avisar o cliente por e-mail (novo relatório)
+### Vários clientes no mesmo relatório
 
-Na caixa **"Cliente dono deste relatório"** há a opção **"Avisar o cliente por e-mail ao salvar"**:
+Na caixa **"Clientes com acesso a este relatório"** você pode selecionar **mais de um cliente** (segure Ctrl no Windows ou Cmd no Mac para marcar vários). Todos os selecionados enxergam o mesmo relatório na Área do Cliente — útil quando há dois responsáveis. Cada um continua vendo **só os relatórios liberados para ele**.
 
-- Marque a caixinha e **publique/salve** — o cliente recebe um e-mail dizendo que há um novo relatório, com um **link para a Área do Cliente** (o conteúdo do relatório **não** vai no e-mail; continua protegido por login).
+### Avisar os clientes por e-mail (novo relatório)
+
+Na caixa **"Clientes com acesso a este relatório"** há a opção **"Avisar os clientes por e-mail ao salvar"**:
+
+- Marque a caixinha e **publique/salve** — **cada cliente selecionado** recebe um e-mail dizendo que há um novo relatório, com um **link para a Área do Cliente** (o conteúdo do relatório **não** vai no e-mail; continua protegido por login).
 - O e-mail **só é enviado se o relatório estiver publicado** (rascunho não dispara).
 - A caixinha volta desmarcada depois — assim você só notifica quando quiser (inclusive dá para reenviar marcando de novo). A data do último aviso fica registrada logo abaixo da caixinha.
 - **O texto é editável** em **Personalizar → Configurações da Nozes → "Área do Cliente — e-mail de novo relatório"**. Você pode usar os marcadores `{cliente}`, `{relatorio}`, `{link}` e `{site}`, que são preenchidos automaticamente.
