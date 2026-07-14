@@ -207,10 +207,11 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 /* Logo e botões nunca encolhem; só o espaçamento do menu se adapta quando aperta */
 .nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
 .nz-logo img{ height: 40px; width: auto; }
-.nz-nav{ display: flex; align-items: center; gap: clamp(1.1rem, 1.8vw, 2.1rem); }
+/* margin-left afasta o menu do logo */
+.nz-nav{ display: flex; align-items: center; gap: clamp(1.1rem, 1.8vw, 2.1rem); margin-left: clamp(1.5rem, 4vw, 4rem); }
 .nz-nav__list{ display: contents; }
 /* Cada item do menu numa única linha (ex.: "Quem Somos", "O que fazemos") */
-.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; white-space: nowrap; }
+.nz-nav a{ font-weight: 500; font-size: .9rem; position: relative; padding: .3rem 0; white-space: nowrap; }
 .nz-nav a::after{
   content:""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px;
   background: var(--nz-lime); transition: width .2s ease;
@@ -263,7 +264,7 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   .nz-nav{
     position: fixed; inset: 0 0 0 auto; width: min(80vw, 340px); height: 100vh;
     background: var(--nz-black); flex-direction: column; align-items: flex-start;
-    padding: 6rem 2rem 2rem; gap: 1.75rem; transform: translateX(100%);
+    padding: 6rem 2rem 2rem; gap: 1.75rem; transform: translateX(100%); margin-left: 0;
     transition: transform .3s ease; box-shadow: -10px 0 30px rgba(0,0,0,.35);
   }
   .nz-nav.is-open{ transform: translateX(0); }
