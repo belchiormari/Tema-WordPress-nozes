@@ -248,20 +248,19 @@ function nozes_relatorio_owner_metabox_cb( $post ) {
 	}
 
 	$selected = nozes_get_report_client_ids( $post );
-	echo '<p>' . esc_html__( 'Escolha um ou mais clientes que poderão ver este relatório na Área do Cliente:', 'nozes' ) . '</p>';
+	echo '<p>' . esc_html__( 'Marque um ou mais clientes que poderão ver este relatório na Área do Cliente:', 'nozes' ) . '</p>';
 	echo '<input type="hidden" name="nozes_clients_submitted" value="1">';
-	$size = min( max( count( $clients ), 3 ), 8 );
-	printf( '<select name="nozes_relatorio_clients[]" multiple size="%d" style="width:100%%;">', (int) $size );
+	echo '<div style="max-height:220px;overflow:auto;border:1px solid #dcdcde;border-radius:4px;padding:.5rem .7rem;">';
 	foreach ( $clients as $client ) {
 		printf(
-			'<option value="%d"%s>%s</option>',
+			'<label style="display:flex;gap:.5em;align-items:center;padding:.3rem 0;line-height:1.3;"><input type="checkbox" name="nozes_relatorio_clients[]" value="%d"%s style="margin:0;flex-shrink:0;"> <span>%s</span></label>',
 			(int) $client->ID,
-			in_array( (int) $client->ID, $selected, true ) ? ' selected' : '',
+			in_array( (int) $client->ID, $selected, true ) ? ' checked' : '',
 			esc_html( $client->display_name . ' (' . $client->user_login . ')' )
 		);
 	}
-	echo '</select>';
-	echo '<p class="description" style="margin-top:.4rem;">' . esc_html__( 'Segure Ctrl (Windows) ou Cmd (Mac) para marcar mais de um cliente. Todos os selecionados veem o relatório — e recebem o e-mail, se a opção abaixo estiver marcada.', 'nozes' ) . '</p>';
+	echo '</div>';
+	echo '<p class="description" style="margin-top:.4rem;">' . esc_html__( 'Marque quantos clientes quiser. Todos os marcados veem o relatório — e recebem o e-mail, se a opção abaixo estiver marcada.', 'nozes' ) . '</p>';
 
 	// Aviso por e-mail ao cliente (caixinha de opção).
 	$last = get_post_meta( $post->ID, '_nozes_last_notified', true );

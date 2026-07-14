@@ -103,14 +103,14 @@ Cada cliente tem **login individual** e só vê os próprios relatórios.
 1. No menu lateral do admin, vá em **Relatórios (Clientes) → Adicionar novo**.
 2. Dê um título (ex: "Relatório — Julho 2026").
 3. Troque o editor para o modo **Código** e cole o HTML do relatório.
-4. No painel direito, na caixa **"Clientes com acesso a este relatório"**, selecione **um ou mais** clientes (segure Ctrl/Cmd para marcar vários — todos os selecionados verão o relatório).
+4. No painel direito, na caixa **"Clientes com acesso a este relatório"**, **marque** um ou mais clientes (cada um tem uma caixinha; todos os marcados verão o relatório).
 5. (Opcional) Na caixa **"Categorias de relatório"**, marque a categoria/subcategoria (veja abaixo).
 6. (Opcional) Ainda na caixa dos clientes, marque **"Avisar os clientes por e-mail ao salvar"** para notificar todos os selecionados (veja abaixo).
 7. Publique. Ele aparece automaticamente na Área do Cliente daquele usuário, mais recente primeiro — e nenhum outro cliente consegue ver, porque não existe um link público para o relatório: tudo é listado só depois do login.
 
 ### Vários clientes no mesmo relatório
 
-Na caixa **"Clientes com acesso a este relatório"** você pode selecionar **mais de um cliente** (segure Ctrl no Windows ou Cmd no Mac para marcar vários). Todos os selecionados enxergam o mesmo relatório na Área do Cliente — útil quando há dois responsáveis. Cada um continua vendo **só os relatórios liberados para ele**.
+Na caixa **"Clientes com acesso a este relatório"** cada cliente tem uma **caixinha** — marque quantos quiser. Todos os marcados enxergam o mesmo relatório na Área do Cliente — útil quando há dois responsáveis. Cada um continua vendo **só os relatórios liberados para ele**.
 
 ### Avisar os clientes por e-mail (novo relatório)
 
