@@ -39,6 +39,8 @@ Duas coisas importantes:
 1. Use ali um e-mail real que existe no seu domínio (ex: `contato@somosnozes.com.br`), não um e-mail genérico — isso evita que a mensagem seja rejeitada ou marcada como spam.
 2. Trocar só o "remetente" ajuda, mas a forma mais confiável de garantir que os e-mails cheguem (e não caiam em spam) é instalar um plugin de SMTP gratuito, como o **WP Mail SMTP**, e configurá-lo com uma conta de e-mail do seu domínio na Hostinger (a própria Hostinger tem um guia de "SMTP" no painel de e-mails). Isso autentica o envio (SPF/DKIM) em vez de depender do envio padrão do servidor.
 
+**"Não deixe meu e-mail pessoal aparecer nos avisos":** o WordPress usa o *e-mail de administração do site* como contato de suporte em alguns avisos (ex.: "sua senha foi alterada"). O tema já substitui esse endereço pelo **e-mail do rodapé** (Personalizar → Contato e Endereço → "E-mail exibido no rodapé"), então o cliente vê o e-mail profissional, não o pessoal. Se quiser trocar o e-mail de administração de fato (para onde chegam avisos internos do WordPress), vá em **Configurações → Geral → E-mail de administração** — o WordPress pede uma confirmação no novo endereço.
+
 ## 4. Editando o conteúdo no dia a dia
 
 Você escolheu o **Elementor** como editor visual. Fluxo recomendado:
@@ -101,9 +103,24 @@ Cada cliente tem **login individual** e só vê os próprios relatórios.
 1. No menu lateral do admin, vá em **Relatórios (Clientes) → Adicionar novo**.
 2. Dê um título (ex: "Relatório — Julho 2026").
 3. Troque o editor para o modo **Código** e cole o HTML do relatório.
-4. No painel direito, na caixa **"Cliente dono deste relatório"**, selecione o cliente.
+4. No painel direito, na caixa **"Clientes com acesso a este relatório"**, **marque** um ou mais clientes (cada um tem uma caixinha; todos os marcados verão o relatório).
 5. (Opcional) Na caixa **"Categorias de relatório"**, marque a categoria/subcategoria (veja abaixo).
-6. Publique. Ele aparece automaticamente na Área do Cliente daquele usuário, mais recente primeiro — e nenhum outro cliente consegue ver, porque não existe um link público para o relatório: tudo é listado só depois do login.
+6. (Opcional) Ainda na caixa dos clientes, marque **"Avisar os clientes por e-mail ao salvar"** para notificar todos os selecionados (veja abaixo).
+7. Publique. Ele aparece automaticamente na Área do Cliente daquele usuário, mais recente primeiro — e nenhum outro cliente consegue ver, porque não existe um link público para o relatório: tudo é listado só depois do login.
+
+### Vários clientes no mesmo relatório
+
+Na caixa **"Clientes com acesso a este relatório"** cada cliente tem uma **caixinha** — marque quantos quiser. Todos os marcados enxergam o mesmo relatório na Área do Cliente — útil quando há dois responsáveis. Cada um continua vendo **só os relatórios liberados para ele**.
+
+### Avisar os clientes por e-mail (novo relatório)
+
+Na caixa **"Clientes com acesso a este relatório"** há a opção **"Avisar os clientes por e-mail ao salvar"**:
+
+- Marque a caixinha e **publique/salve** — **cada cliente selecionado** recebe um e-mail dizendo que há um novo relatório, com um **link para a Área do Cliente** (o conteúdo do relatório **não** vai no e-mail; continua protegido por login).
+- O e-mail **só é enviado se o relatório estiver publicado** (rascunho não dispara).
+- A caixinha volta desmarcada depois — assim você só notifica quando quiser (inclusive dá para reenviar marcando de novo). A data do último aviso fica registrada logo abaixo da caixinha.
+- **O texto é editável** em **Personalizar → Configurações da Nozes → "Área do Cliente — e-mail de novo relatório"**. Você pode usar os marcadores `{cliente}`, `{relatorio}`, `{link}` e `{site}`, que são preenchidos automaticamente.
+- Para o e-mail chegar bem (não cair em spam), use o **WP Mail SMTP** — veja a seção "E-mails automáticos" no início deste guia.
 
 ### Organizar em categorias e subcategorias
 

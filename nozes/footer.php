@@ -11,16 +11,6 @@
 			<div>
 				<img src="<?php echo esc_url( NOZES_URI . '/assets/img/logo-wordmark.png' ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="height:34px;width:auto;margin-bottom:1.2rem;" />
 				<p class="nz-footer__desc"><?php echo esc_html( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) ); ?></p>
-				<div class="nz-social">
-					<?php $nz_instagram = get_theme_mod( 'nozes_social_instagram' ); ?>
-					<?php if ( $nz_instagram ) : ?>
-						<a href="<?php echo esc_url( $nz_instagram ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><?php echo nozes_icon( 'instagram' ); ?></a>
-					<?php endif; ?>
-					<a href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><?php echo nozes_icon( 'whatsapp' ); ?></a>
-					<?php if ( get_theme_mod( 'nozes_social_linkedin' ) ) : ?>
-						<a href="<?php echo esc_url( get_theme_mod( 'nozes_social_linkedin' ) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><?php echo nozes_icon( 'linkedin' ); ?></a>
-					<?php endif; ?>
-				</div>
 			</div>
 
 			<div class="nz-footer__col-nav">
@@ -45,6 +35,20 @@
 					<?php $nz_footer_email = get_theme_mod( 'nozes_footer_email', 'ola@somosnozes.com.br' ); ?>
 					<?php if ( $nz_footer_email ) : ?>
 						<a href="mailto:<?php echo esc_attr( $nz_footer_email ); ?>"><?php echo esc_html( $nz_footer_email ); ?></a>
+					<?php endif; ?>
+				</div>
+			</div>
+
+			<div class="nz-footer__col-social">
+				<h4><?php esc_html_e( 'Nos siga nas redes', 'nozes' ); ?></h4>
+				<div class="nz-social">
+					<?php $nz_instagram = get_theme_mod( 'nozes_social_instagram' ); ?>
+					<?php if ( $nz_instagram ) : ?>
+						<a href="<?php echo esc_url( $nz_instagram ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><?php echo nozes_icon( 'instagram' ); ?></a>
+					<?php endif; ?>
+					<a href="<?php echo esc_url( nozes_get_whatsapp_link() ); ?>" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><?php echo nozes_icon( 'whatsapp' ); ?></a>
+					<?php if ( get_theme_mod( 'nozes_social_linkedin' ) ) : ?>
+						<a href="<?php echo esc_url( get_theme_mod( 'nozes_social_linkedin' ) ); ?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><?php echo nozes_icon( 'linkedin' ); ?></a>
 					<?php endif; ?>
 				</div>
 			</div>

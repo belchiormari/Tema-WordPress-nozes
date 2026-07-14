@@ -128,6 +128,34 @@ function nozes_customize_register( $wp_customize ) {
 		'type'        => 'textarea',
 	) );
 
+	/* -- Seção: Área do Cliente (e-mail de novo relatório) -- */
+	$wp_customize->add_section( 'nozes_client_email', array(
+		'title' => __( 'Área do Cliente — e-mail de novo relatório', 'nozes' ),
+		'panel' => 'nozes_options',
+	) );
+
+	$wp_customize->add_setting( 'nozes_report_email_subject', array(
+		'default'           => 'Seu novo relatório já está disponível',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'nozes_report_email_subject', array(
+		'label'       => __( 'Assunto do e-mail', 'nozes' ),
+		'description' => __( 'Você pode usar os marcadores {cliente}, {relatorio}, {link} e {site}.', 'nozes' ),
+		'section'     => 'nozes_client_email',
+		'type'        => 'text',
+	) );
+
+	$wp_customize->add_setting( 'nozes_report_email_body', array(
+		'default'           => function_exists( 'nozes_report_email_default_body' ) ? nozes_report_email_default_body() : '',
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'nozes_report_email_body', array(
+		'label'       => __( 'Texto do e-mail', 'nozes' ),
+		'description' => __( 'Marcadores: {cliente} (nome do cliente), {relatorio} (título), {link} (Área do Cliente), {site} (nome do site).', 'nozes' ),
+		'section'     => 'nozes_client_email',
+		'type'        => 'textarea',
+	) );
+
 	/* -- Seção: SEO / GEO -- */
 	$wp_customize->add_section( 'nozes_seo', array(
 		'title' => __( 'SEO e Dados Estruturados', 'nozes' ),

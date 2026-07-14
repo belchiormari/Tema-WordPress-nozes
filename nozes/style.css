@@ -29,7 +29,17 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   width: 100%;
+  /* Rodapé "grudado" no fim da tela: em páginas curtas (ex.: login/Área do
+     Cliente) evita a sobra em branco depois do rodapé, sem afetar páginas longas. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh; /* acompanha a barra do navegador no mobile (iOS/Android) */
 }
+/* O conteúdo cresce para ocupar o espaço; o rodapé fica logo abaixo dele. */
+#conteudo-principal,
+.nz-report-viewer__content { flex: 1 0 auto; }
+.nz-footer { flex-shrink: 0; }
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; margin: 0; padding: 0; }
@@ -194,11 +204,14 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .nz-header__bar{ display: flex; align-items: center; justify-content: space-between; padding-block: .9rem; gap: 1.5rem; }
-.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
+/* Logo e botões nunca encolhem; só o espaçamento do menu se adapta quando aperta */
+.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
 .nz-logo img{ height: 40px; width: auto; }
-.nz-nav{ display: flex; align-items: center; gap: 2.1rem; }
+/* margin-left afasta o menu do logo */
+.nz-nav{ display: flex; align-items: center; gap: clamp(1.1rem, 1.8vw, 2.1rem); margin-left: clamp(1.5rem, 4vw, 4rem); }
 .nz-nav__list{ display: contents; }
-.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; }
+/* Cada item do menu numa única linha (ex.: "Quem Somos", "O que fazemos") */
+.nz-nav a{ font-weight: 500; font-size: .9rem; position: relative; padding: .3rem 0; white-space: nowrap; }
 .nz-nav a::after{
   content:""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px;
   background: var(--nz-lime); transition: width .2s ease;
@@ -232,7 +245,7 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-nav .sub-menu a::after{ display: none; }
 .nz-nav .sub-menu a:hover{ background: rgba(255,255,255,.08); color: var(--nz-lime); }
 
-.nz-header__actions{ display: flex; align-items: center; gap: 1rem; }
+.nz-header__actions{ display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
 .nz-burger{ display: none; background: none; border: 0; color: #fff; padding: .5rem; }
 .nz-burger svg{ width: 26px; height: 26px; }
 
@@ -251,7 +264,7 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   .nz-nav{
     position: fixed; inset: 0 0 0 auto; width: min(80vw, 340px); height: 100vh;
     background: var(--nz-black); flex-direction: column; align-items: flex-start;
-    padding: 6rem 2rem 2rem; gap: 1.75rem; transform: translateX(100%);
+    padding: 6rem 2rem 2rem; gap: 1.75rem; transform: translateX(100%); margin-left: 0;
     transition: transform .3s ease; box-shadow: -10px 0 30px rgba(0,0,0,.35);
   }
   .nz-nav.is-open{ transform: translateX(0); }
@@ -576,15 +589,15 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
    13. FOOTER
    ========================================================================== */
 .nz-footer{ background: var(--nz-black); color: #d7d7dc; padding-block: 4rem 2rem; }
-.nz-footer__grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: clamp(2rem, 5vw, 4rem); padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
+.nz-footer__grid{ display:grid; grid-template-columns: 1.6fr 1fr 1.2fr 1fr; gap: clamp(2rem, 4vw, 3.5rem); padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.1); align-items: start; }
 .nz-footer__grid > div{ min-width: 0; }
-/* Navegação: bloco centralizado, mas com o texto alinhado à esquerda.
-   Área do Cliente alinhada à direita — rodapé equilibrado */
-.nz-footer__col-nav{ justify-self: center; text-align: left; }
-.nz-footer__col-client{ text-align: right; }
-.nz-footer__desc{ font-size: .85rem; line-height: 1.6; color: #9a9aa0; max-width: 32ch; margin-bottom: 1.4rem; }
+/* Rodapé de 4 colunas, todas alinhadas à esquerda:
+   Logo+descrição · Navegação · Área do Cliente · Nos siga nas redes */
+.nz-footer__col-nav{ text-align: left; }
+.nz-footer__col-client{ text-align: left; }
+.nz-footer__desc{ font-size: .85rem; line-height: 1.6; color: #9a9aa0; max-width: 34ch; margin-bottom: 0; }
 .nz-footer__contact{ margin-top: 1.4rem; display:flex; flex-direction:column; gap:.35rem; }
-.nz-footer__col-client .nz-footer__contact{ align-items: flex-end; }
+.nz-footer__col-client .nz-footer__contact{ align-items: flex-start; }
 .nz-footer__contact strong{ color:#fff; font-weight:700; }
 .nz-footer h4{ color:#fff; font-size: .95rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1.2rem; }
 .nz-footer ul li{ margin-bottom: .7rem; }
@@ -596,9 +609,6 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 .nz-social a:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
 @media (max-width: 900px){
   .nz-footer__grid{ grid-template-columns: 1fr 1fr; }
-  .nz-footer__col-nav{ justify-self: start; }
-  .nz-footer__col-nav, .nz-footer__col-client{ text-align: left; }
-  .nz-footer__col-client .nz-footer__contact{ align-items: flex-start; }
 }
 @media (max-width: 560px){ .nz-footer__grid{ grid-template-columns: 1fr; } }
 
@@ -630,26 +640,47 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   margin-bottom: 1.2rem; font-family: inherit; font-size: 1rem;
 }
 .nz-client-login button{ width:100%; }
-.nz-show-password{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:-.6rem 0 1rem; cursor:pointer; }
-.nz-show-password input{ width:auto; margin:0; }
-.nz-remember-me{ display:flex; align-items:center; gap:.5em; font-weight:500; font-size:.88rem; margin:0 0 1.2rem; cursor:pointer; }
-.nz-remember-me input{ width:auto; margin:0; }
-.nz-client-error{ background:#fff0f5; border:1px solid var(--nz-pink); color:#b30050; padding: .9rem 1.1rem; border-radius: var(--nz-radius-sm); margin-bottom:1.2rem; font-size:.92rem; }
+/* Opções (checkboxes): rótulo leve e caixinha em tamanho fixo, para não
+   ficarem pesadas nem grandes demais no mobile. */
+.nz-client-login .nz-show-password,
+.nz-client-login .nz-remember-me{
+  display:flex; align-items:center; gap:.55em;
+  font-weight:400; font-size:.9rem; color:var(--nz-gray); cursor:pointer;
+}
+.nz-client-login .nz-show-password{ margin:-.4rem 0 .9rem; }
+.nz-client-login .nz-remember-me{ margin:0 0 1.4rem; }
+.nz-client-login .nz-show-password input,
+.nz-client-login .nz-remember-me input{
+  width:18px; height:18px; margin:0; flex-shrink:0;
+  accent-color:var(--nz-pink); cursor:pointer;
+}
+.nz-client-error{ background:#fff0f5; border:1px solid var(--nz-pink); border-left-width:4px; color:#b30050; padding: 1rem 1.2rem; border-radius: var(--nz-radius-sm); margin-bottom:1.4rem; font-size:.95rem; }
+.nz-client-error strong{ display:block; margin-bottom:.15rem; }
+.nz-client-error span{ color:#8a1f4d; }
+.nz-client-login.has-error input[type="text"], .nz-client-login.has-error input[type="password"]{ /* realce sutil ao errar */ }
 .nz-report{ border:1px solid var(--nz-gray-light); border-radius: var(--nz-radius); margin-bottom: 1rem; overflow:hidden; }
 .nz-report__head{ display:flex; align-items:center; justify-content:space-between; padding: 1.3rem 1.6rem; cursor:pointer; background:#fff; }
 .nz-report__head h3{ margin:0; font-size:1.05rem; }
 .nz-report__date{ color: var(--nz-gray); font-size:.85rem; font-weight:500; }
 .nz-report__body{ padding: 1.6rem; border-top:1px solid var(--nz-gray-light); background: var(--nz-offwhite); }
 
-/* Barra de topo da lista: dica + busca de relatórios */
-.nz-client-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1.6rem; }
-.nz-client-hint{ color: var(--nz-gray); font-size: .9rem; margin:0; }
-.nz-report-search{ flex:1; min-width:220px; max-width:360px; margin-left:auto; }
+/* Barra de topo da lista: busca de relatórios */
+.nz-client-toolbar{ margin-bottom:1.4rem; }
+.nz-report-search{ position:relative; width:100%; }
+.nz-report-search__icon{ position:absolute; left:1.1rem; top:50%; transform:translateY(-50%); color:var(--nz-gray); pointer-events:none; display:flex; }
+.nz-report-search__icon svg{ width:19px; height:19px; }
 .nz-report-search input{
-  width:100%; padding:.7em 1.1em; border-radius:999px; border:1px solid var(--nz-gray-light);
-  font-family:inherit; font-size:.95rem; background:#fff;
+  width:100%; padding:.85em 1.1em .85em 2.9rem; border-radius:999px; border:1px solid var(--nz-gray-light);
+  font-family:inherit; font-size:1rem; background:#fff;
 }
 .nz-report-search input:focus{ outline:none; border-color:var(--nz-pink); box-shadow:0 0 0 3px rgba(255,0,102,.12); }
+
+/* Aviso de "nada encontrado": logo abaixo da busca e bem visível */
+.nz-report-empty{
+  margin:0 0 1.6rem; padding:1.1rem 1.3rem;
+  background:#fff0f5; border:1px solid var(--nz-pink); border-left-width:4px;
+  border-radius:var(--nz-radius-sm); color:#b30050; font-weight:500;
+}
 
 /* Categorias e subcategorias de relatórios */
 .nz-report-groups{ display:flex; flex-direction:column; gap:2.2rem; }
@@ -663,14 +694,13 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   color:var(--nz-gray); margin:0 0 .8rem;
 }
 .nz-report-subgroup .nz-report-list{ padding-left:.2rem; }
-.nz-report-empty{ color:var(--nz-gray); background:var(--nz-offwhite); border:1px dashed var(--nz-gray-light); border-radius:var(--nz-radius); padding:1.4rem 1.6rem; text-align:center; }
-@media (max-width:560px){
-  .nz-report-search{ max-width:none; margin-left:0; }
-}
 
 /* Lista de relatórios como botões que abrem em página própria */
 .nz-report-list{ display: flex; flex-direction: column; gap: 1rem; }
 .nz-report-list .nz-report{ margin-bottom: 0; }
+/* Garante que relatórios/grupos ocultos pela busca realmente sumam
+   (o [hidden] do HTML seria vencido pelo display:block abaixo). */
+.nz-report--link[hidden], .nz-report-group[hidden], .nz-report-subgroup[hidden]{ display:none !important; }
 .nz-report--link{ display: block; background:#fff; text-decoration:none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
 .nz-report--link:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(255,0,102,.12); border-color: var(--nz-pink); }
 .nz-report--link:hover .nz-report__head h3{ color: var(--nz-pink); }
@@ -726,6 +756,18 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 }
 .nz-client-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2.5rem; flex-wrap:wrap; gap:1rem; }
 .nz-client-topbar .nz-btn{ font-size:.9rem; padding:.7em 1.4em; }
+
+/* No celular a Área do Cliente ocupava espaço demais: reduz a saudação,
+   o respiro do topo e aproxima o botão "Sair". */
+@media (max-width:560px){
+  .nz-client-topbar{ margin-bottom:1.6rem; gap:.6rem; }
+  .nz-client-topbar h1{ font-size: clamp(1.5rem, 7vw, 2rem); line-height:1.12; }
+  .nz-client-topbar .u-eyebrow{ margin-bottom:.3rem; }
+  /* Login mais compacto no celular */
+  .nz-client-login{ padding:1.5rem 1.25rem; }
+  .nz-client-login input[type="text"], .nz-client-login input[type="password"]{ padding:.7em .9em; margin-bottom:1rem; }
+  .nz-client-login .nz-btn{ padding:.9em 1.4em; }
+}
 
 /* ==========================================================================
    16. PÁGINA HTML LIVRE
