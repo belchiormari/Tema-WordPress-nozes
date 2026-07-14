@@ -204,11 +204,13 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .nz-header__bar{ display: flex; align-items: center; justify-content: space-between; padding-block: .9rem; gap: 1.5rem; }
-.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
+/* Logo e botões nunca encolhem; só o espaçamento do menu se adapta quando aperta */
+.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
 .nz-logo img{ height: 40px; width: auto; }
-.nz-nav{ display: flex; align-items: center; gap: 2.1rem; }
+.nz-nav{ display: flex; align-items: center; gap: clamp(1.1rem, 1.8vw, 2.1rem); }
 .nz-nav__list{ display: contents; }
-.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; }
+/* Cada item do menu numa única linha (ex.: "Quem Somos", "O que fazemos") */
+.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; white-space: nowrap; }
 .nz-nav a::after{
   content:""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px;
   background: var(--nz-lime); transition: width .2s ease;
@@ -242,7 +244,7 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-nav .sub-menu a::after{ display: none; }
 .nz-nav .sub-menu a:hover{ background: rgba(255,255,255,.08); color: var(--nz-lime); }
 
-.nz-header__actions{ display: flex; align-items: center; gap: 1rem; }
+.nz-header__actions{ display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
 .nz-burger{ display: none; background: none; border: 0; color: #fff; padding: .5rem; }
 .nz-burger svg{ width: 26px; height: 26px; }
 
