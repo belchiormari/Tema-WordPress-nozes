@@ -194,8 +194,8 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .nz-header__bar{ display: flex; align-items: center; justify-content: space-between; padding-block: .9rem; gap: 1.5rem; }
-.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
-.nz-logo img{ height: 40px; width: auto; }
+.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
+.nz-logo img{ height: 40px; width: auto; flex-shrink: 0; }
 .nz-nav{ display: flex; align-items: center; gap: 2.1rem; }
 .nz-nav__list{ display: contents; }
 .nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; white-space: nowrap; }
@@ -232,7 +232,9 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-nav .sub-menu a::after{ display: none; }
 .nz-nav .sub-menu a:hover{ background: rgba(255,255,255,.08); color: var(--nz-lime); }
 
-.nz-header__actions{ display: flex; align-items: center; gap: 1rem; }
+.nz-header__actions{ display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+/* Botao do WhatsApp no cabecalho: versao mais compacta para caber tudo em uma linha */
+.nz-header__actions .nz-btn{ padding: .6em 1.15em; font-size: .9rem; }
 .nz-burger{ display: none; background: none; border: 0; color: #fff; padding: .5rem; }
 .nz-burger svg{ width: 26px; height: 26px; }
 
