@@ -176,3 +176,32 @@ function nozes_mail_from_name( $original_name ) {
 	return get_bloginfo( 'name' );
 }
 add_filter( 'wp_mail_from_name', 'nozes_mail_from_name' );
+
+/**
+ * E-mail de suporte mostrado aos clientes nos e-mails automáticos do WordPress.
+ * Usa o e-mail do rodapé (ou o de contato) do Personalizador, evitando expor o
+ * e-mail pessoal do administrador. Cai para o e-mail do admin só se nenhum
+ * estiver configurado.
+ */
+function nozes_support_email() {
+	$email = get_theme_mod( 'nozes_footer_email', '' );
+	if ( ! $email ) {
+		$email = get_theme_mod( 'nozes_email', '' );
+	}
+	return $email ? $email : get_option( 'admin_email' );
+}
+
+/**
+ * No aviso de "senha alterada" enviado ao usuário, o WordPress usa o e-mail do
+ * administrador como contato de suporte — que costuma ser um e-mail pessoal.
+ * Aqui trocamos por um e-mail profissional (o mesmo do rodapé/contato).
+ */
+function nozes_password_change_email( $email, $user = null, $userdata = null ) {
+	$support = nozes_support_email();
+	$admin   = get_option( 'admin_email' );
+	if ( $support && $support !== $admin && ! empty( $email['message'] ) ) {
+		$email['message'] = str_replace( $admin, $support, $email['message'] );
+	}
+	return $email;
+}
+add_filter( 'password_change_email', 'nozes_password_change_email', 10, 3 );

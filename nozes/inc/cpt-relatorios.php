@@ -147,7 +147,7 @@ add_action( 'template_redirect', 'nozes_client_area_no_cache' );
  * (ex.: "Voltar aos relatórios") nunca caia numa versão em cache da tela de
  * login — mesmo em hospedagens com cache de página no servidor.
  */
-function nozes_get_client_area_url() {
+function nozes_get_client_area_url( $bust_cache = true ) {
 	$page = get_page_by_path( 'area-do-cliente' );
 	if ( $page ) {
 		$url = get_permalink( $page );
@@ -161,7 +161,9 @@ function nozes_get_client_area_url() {
 		$url = $pages ? get_permalink( $pages[0] ) : home_url( '/' );
 	}
 
-	if ( is_user_logged_in() ) {
+	// O cache-buster só faz sentido para a navegação do próprio cliente logado.
+	// Em e-mails (enviados pelo admin), pedimos a URL "limpa" com $bust_cache = false.
+	if ( $bust_cache && is_user_logged_in() ) {
 		$url = add_query_arg( 'nzc', time(), $url );
 	}
 
@@ -258,6 +260,64 @@ function nozes_relatorio_owner_metabox_cb( $post ) {
 		);
 	}
 	echo '</select>';
+
+	// Aviso por e-mail ao cliente (caixinha de opção).
+	$last = get_post_meta( $post->ID, '_nozes_last_notified', true );
+	echo '<hr style="margin:1rem 0;border:0;border-top:1px solid #dcdcde;">';
+	echo '<label style="display:flex;gap:.5em;align-items:flex-start;line-height:1.4;">';
+	echo '<input type="checkbox" name="nozes_notify_client" value="1" style="margin-top:2px;">';
+	echo '<span>' . esc_html__( 'Avisar o cliente por e-mail ao salvar', 'nozes' ) . '</span>';
+	echo '</label>';
+	echo '<p class="description" style="margin-top:.5rem;">' . esc_html__( 'Envia um e-mail avisando que há um novo relatório, com link para a Área do Cliente. Só é enviado se o relatório estiver publicado. O texto é editável em Personalizar → Configurações da Nozes.', 'nozes' ) . '</p>';
+	if ( $last ) {
+		echo '<p class="description" style="color:#2271b1;">' . sprintf(
+			/* translators: %s: data/hora do último aviso */
+			esc_html__( 'Último aviso enviado em %s.', 'nozes' ),
+			esc_html( date_i18n( 'd/m/Y H:i', (int) $last ) )
+		) . '</p>';
+	}
+}
+
+/**
+ * Texto padrão do e-mail de novo relatório (usado no Personalizador e no envio).
+ * Marcadores disponíveis: {cliente}, {relatorio}, {link}, {site}.
+ */
+function nozes_report_email_default_body() {
+	return "Olá, {cliente}!\n\n"
+		. "Um novo relatório já está disponível na sua Área do Cliente: \"{relatorio}\".\n\n"
+		. "Acesse com seu login para visualizar:\n{link}\n\n"
+		. "Qualquer dúvida, é só responder este e-mail.\n\n"
+		. "Atenciosamente,\n{site}";
+}
+
+/**
+ * Envia ao cliente o aviso de novo relatório, usando o assunto/texto definidos
+ * no Personalizador (com os marcadores {cliente} {relatorio} {link} {site}).
+ * Retorna true se o e-mail foi disparado.
+ */
+function nozes_send_report_notification( $post_id, $user_id ) {
+	$user = get_userdata( $user_id );
+	if ( ! $user || ! is_email( $user->user_email ) ) {
+		return false;
+	}
+
+	$subject = get_theme_mod( 'nozes_report_email_subject', 'Seu novo relatório já está disponível' );
+	$body    = get_theme_mod( 'nozes_report_email_body', nozes_report_email_default_body() );
+
+	$replace = array(
+		'{cliente}'   => $user->display_name,
+		'{relatorio}' => get_the_title( $post_id ),
+		'{link}'      => nozes_get_client_area_url( false ),
+		'{site}'      => get_bloginfo( 'name' ),
+	);
+	$subject = strtr( $subject, $replace );
+	$body    = strtr( $body, $replace );
+
+	$sent = wp_mail( $user->user_email, $subject, $body );
+	if ( $sent ) {
+		update_post_meta( $post_id, '_nozes_last_notified', time() );
+	}
+	return $sent;
 }
 
 function nozes_save_relatorio_owner( $post_id, $post ) {
@@ -282,6 +342,15 @@ function nozes_save_relatorio_owner( $post_id, $post ) {
 			'post_author' => $owner,
 		) );
 		add_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10, 2 );
+	}
+
+	// Caixinha "Avisar o cliente por e-mail": só dispara se marcada e o
+	// relatório estiver publicado (o cliente só enxerga relatórios publicados).
+	if ( ! empty( $_POST['nozes_notify_client'] ) && 'publish' === $post->post_status ) {
+		$recipient_id = $owner > 0 ? $owner : (int) $post->post_author;
+		if ( $recipient_id ) {
+			nozes_send_report_notification( $post_id, $recipient_id );
+		}
 	}
 }
 add_action( 'save_post_relatorio', 'nozes_save_relatorio_owner', 10, 2 );
