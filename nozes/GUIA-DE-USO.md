@@ -148,6 +148,18 @@ A partir daí, o tema cuida do resto automaticamente:
 
 - Aparece um botão **PT/EN** no cabeçalho para trocar de idioma, só nas páginas que já têm a correspondente vinculada.
 - O menu do site troca os links e os títulos para a versão em inglês quando o visitante está numa página em inglês.
+
+### Menu próprio para a versão em inglês
+
+Por padrão o tema reaproveita o menu em português e troca cada item pela página em inglês correspondente. Itens que não são página (links personalizados, o Blog, submenus) continuam como estão.
+
+Se quiser controle total do menu em inglês (por exemplo, tirar o Blog e renomear "O que fazemos" para "What we do"), monte um menu separado:
+
+1. Vá em **Aparência → Menus → Criar novo menu**, dê o nome que quiser (ex.: "Main Menu EN").
+2. Adicione os itens apontando para as páginas em inglês e escreva os rótulos em inglês no campo **"Rótulo de navegação"** de cada item.
+3. Em **Configurações do menu**, marque o local **"Menu Principal (Inglês)"**. Existe também **"Menu do Rodapé (Inglês)"** para o rodapé.
+
+Nas páginas marcadas como inglês o tema passa a usar esse menu. Enquanto nenhum menu estiver atribuído a esse local, ele continua traduzindo o menu em português automaticamente.
 - Textos fixos do tema (menu, rodapé, botão de WhatsApp, trilha de navegação, página de erro 404) aparecem automaticamente em inglês nessas páginas.
 - O Google recebe os sinais corretos de idioma (tag `hreflang` e `og:locale`), para não tratar a versão em inglês como conteúdo duplicado.
 

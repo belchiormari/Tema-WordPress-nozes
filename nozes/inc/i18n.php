@@ -141,6 +141,18 @@ function nozes_language_switcher() {
 }
 
 /**
+ * Local de menu a usar na página atual. Numa página em inglês, usa o menu
+ * em inglês se houver um montado em Aparência → Menus; caso contrário cai no
+ * menu em português, que é traduzido item a item por nozes_i18n_nav_menu_items().
+ */
+function nozes_menu_location( $location ) {
+	if ( nozes_is_en() && has_nav_menu( $location . '_en' ) ) {
+		return $location . '_en';
+	}
+	return $location;
+}
+
+/**
  * Troca os itens do menu (principal e rodapé) para a versão em inglês quando
  * a página atual é em inglês — assim não é preciso manter um menu separado.
  */

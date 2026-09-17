@@ -137,9 +137,9 @@ function nozes_is_built_with_elementor() {
  * "Navegação" nunca ficar vazia.
  */
 function nozes_footer_menu_fallback() {
-	if ( has_nav_menu( 'primary' ) ) {
+	if ( has_nav_menu( nozes_menu_location( 'primary' ) ) ) {
 		wp_nav_menu( array(
-			'theme_location' => 'primary',
+			'theme_location' => nozes_menu_location( 'primary' ),
 			'container'      => false,
 			'menu_class'     => '',
 			'depth'          => 1,

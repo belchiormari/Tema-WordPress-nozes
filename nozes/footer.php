@@ -27,7 +27,7 @@
 				<h4><?php esc_html_e( 'Navegação', 'nozes' ); ?></h4>
 				<?php
 				wp_nav_menu( array(
-					'theme_location' => 'footer',
+					'theme_location' => nozes_menu_location( 'footer' ),
 					'container'      => false,
 					'menu_class'     => '',
 					'fallback_cb'    => 'nozes_footer_menu_fallback',

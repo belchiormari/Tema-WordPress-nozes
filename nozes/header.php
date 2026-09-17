@@ -29,7 +29,7 @@
 		<nav class="nz-nav" id="menu-principal" aria-label="<?php esc_attr_e( 'Menu principal', 'nozes' ); ?>">
 			<?php
 			wp_nav_menu( array(
-				'theme_location' => 'primary',
+				'theme_location' => nozes_menu_location( 'primary' ),
 				'container'      => false,
 				'fallback_cb'    => false,
 				'menu_class'     => 'nz-nav__list',

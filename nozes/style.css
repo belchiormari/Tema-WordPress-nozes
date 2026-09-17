@@ -194,11 +194,13 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .nz-header__bar{ display: flex; align-items: center; justify-content: space-between; padding-block: .9rem; gap: 1.5rem; }
-.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
-.nz-logo img{ height: 40px; width: auto; }
+.nz-logo{ display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.1rem; color: #fff; flex: 0 0 auto; }
+/* flex:0 0 auto + max-width:none impedem que o cabeçalho esprema a logo e
+   distorça a proporção quando o menu fica largo. */
+.nz-logo img{ height: 40px; width: auto; max-width: none; flex: 0 0 auto; object-fit: contain; }
 .nz-nav{ display: flex; align-items: center; gap: 2.1rem; }
 .nz-nav__list{ display: contents; }
-.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; }
+.nz-nav a{ font-weight: 500; font-size: .97rem; position: relative; padding: .3rem 0; white-space: nowrap; }
 .nz-nav a::after{
   content:""; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px;
   background: var(--nz-lime); transition: width .2s ease;
@@ -256,6 +258,21 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
   transition: background .18s ease, border-color .18s ease, color .18s ease;
 }
 .nz-lang-switch:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
+
+/* Telas intermediárias: com os itens do menu em linha única, o cabeçalho fica
+   apertado antes de virar menu hambúrguer. Vai reduzindo respiros e rótulos. */
+@media (max-width: 1240px){
+  .nz-header__bar{ gap: 1rem; }
+  .nz-nav{ gap: 1.35rem; }
+  .nz-nav a{ font-size: .92rem; }
+  .nz-header__actions{ gap: .6rem; }
+}
+@media (max-width: 1060px){
+  .nz-nav{ gap: 1rem; }
+  .nz-header__actions .nz-btn span{ display: none; }
+  .nz-client-access span{ display: none; }
+  .nz-client-access{ padding: .5em; }
+}
 
 @media (max-width: 880px){
   .nz-nav{
