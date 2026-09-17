@@ -29,7 +29,7 @@
 		<nav class="nz-nav" id="menu-principal" aria-label="<?php esc_attr_e( 'Menu principal', 'nozes' ); ?>">
 			<?php
 			wp_nav_menu( array(
-				'theme_location' => 'primary',
+				'theme_location' => nozes_menu_location( 'primary' ),
 				'container'      => false,
 				'fallback_cb'    => false,
 				'menu_class'     => 'nz-nav__list',
@@ -38,6 +38,7 @@
 		</nav>
 
 		<div class="nz-header__actions">
+			<?php nozes_language_switcher(); ?>
 			<?php
 			// Acesso à Área do Cliente como item destacado do site (fora do menu de navegação).
 			$nz_client_url   = function_exists( 'nozes_get_client_area_url' ) ? nozes_get_client_area_url() : home_url( '/area-do-cliente/' );
