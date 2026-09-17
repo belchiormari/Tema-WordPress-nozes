@@ -153,15 +153,20 @@ function nozes_menu_location( $location ) {
 }
 
 /**
- * Troca os itens do menu (principal e rodapé) para a versão em inglês quando
- * a página atual é em inglês — assim não é preciso manter um menu separado.
+ * Numa página em inglês, troca os itens do menu em português pela versão em
+ * inglês de cada página — é o que faz o menu funcionar sem montar um menu
+ * separado. Um menu montado à mão no local "(Inglês)" nunca é alterado, e
+ * itens que já apontam para uma página em inglês são deixados como estão.
  */
-function nozes_i18n_nav_menu_items( $items ) {
+function nozes_i18n_nav_menu_items( $items, $args = null ) {
 	if ( ! nozes_is_en() ) {
 		return $items;
 	}
+	if ( $args && ! empty( $args->theme_location ) && '_en' === substr( $args->theme_location, -3 ) ) {
+		return $items;
+	}
 	foreach ( $items as $item ) {
-		if ( 'page' !== $item->object ) {
+		if ( 'page' !== $item->object || 'pt' !== nozes_get_lang( $item->object_id ) ) {
 			continue;
 		}
 		$translation_id = nozes_get_translation_id( $item->object_id );
@@ -172,7 +177,7 @@ function nozes_i18n_nav_menu_items( $items ) {
 	}
 	return $items;
 }
-add_filter( 'wp_nav_menu_objects', 'nozes_i18n_nav_menu_items' );
+add_filter( 'wp_nav_menu_objects', 'nozes_i18n_nav_menu_items', 10, 2 );
 
 /**
  * Atributo lang do <html> e og:locale corretos numa página em inglês.

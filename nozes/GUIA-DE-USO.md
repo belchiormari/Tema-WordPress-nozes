@@ -149,6 +149,14 @@ A partir daí, o tema cuida do resto automaticamente:
 - Aparece um botão **PT/EN** no cabeçalho para trocar de idioma, só nas páginas que já têm a correspondente vinculada.
 - O menu do site troca os links e os títulos para a versão em inglês quando o visitante está numa página em inglês.
 
+### Deixar os endereços como /en/about-us/
+
+Por padrão o WordPress cria a página em inglês na raiz do site (`somosnozes.com.br/about-us/`). Para agrupar tudo em `/en/`, use a página Home em inglês como página mãe das outras:
+
+1. Edite a página **Home (inglês)** e, em **Link permanente**, troque o slug para `en`. O endereço dela vira `somosnozes.com.br/en/`.
+2. Em cada uma das outras páginas em inglês, abra **Atributos da página → Página mãe** e escolha a Home em inglês. O endereço vira `somosnozes.com.br/en/about-us/`.
+3. Depois de ajustar todas, vá em **Configurações → Links permanentes** e clique em **Salvar alterações** (sem mudar nada). Isso faz o WordPress regravar as regras de endereço.
+
 ### Menu próprio para a versão em inglês
 
 Por padrão o tema reaproveita o menu em português e troca cada item pela página em inglês correspondente. Itens que não são página (links personalizados, o Blog, submenus) continuam como estão.
