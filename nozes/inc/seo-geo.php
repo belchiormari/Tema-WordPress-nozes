@@ -66,7 +66,7 @@ function nozes_meta_tags() {
 	}
 	echo '<meta property="og:url" content="' . esc_url( nozes_current_url() ) . '">' . "\n";
 	echo '<meta property="og:site_name" content="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . "\n";
-	echo '<meta property="og:locale" content="pt_BR">' . "\n";
+	echo '<meta property="og:locale" content="' . ( nozes_is_en() ? 'en_US' : 'pt_BR' ) . '">' . "\n";
 	if ( $image ) {
 		echo '<meta property="og:image" content="' . esc_url( $image ) . '">' . "\n";
 	}

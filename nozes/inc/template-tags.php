@@ -12,8 +12,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reaproveitada tanto na exibição visual quanto no schema BreadcrumbList.
  */
 function nozes_get_breadcrumbs() {
+	$home_url = home_url( '/' );
+	if ( nozes_is_en() ) {
+		$home_id          = (int) get_option( 'page_on_front' );
+		$home_translation = $home_id ? nozes_get_translation_id( $home_id ) : 0;
+		if ( $home_translation ) {
+			$home_url = get_permalink( $home_translation );
+		}
+	}
+
 	$trail = array(
-		array( 'title' => __( 'Início', 'nozes' ), 'url' => home_url( '/' ) ),
+		array( 'title' => __( 'Início', 'nozes' ), 'url' => $home_url ),
 	);
 
 	if ( is_singular( 'post' ) || is_home() ) {

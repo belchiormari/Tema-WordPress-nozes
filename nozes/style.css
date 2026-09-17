@@ -247,6 +247,16 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-client-access svg{ width: 18px; height: 18px; }
 .nz-client-access:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
 
+/* Seletor de idioma PT/EN no cabeçalho (aparece só quando a página tem tradução vinculada) */
+.nz-lang-switch{
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: .82rem; letter-spacing: .03em;
+  padding: .5em .8em; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.28);
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
+}
+.nz-lang-switch:hover{ background: var(--nz-lime); border-color: var(--nz-lime); color: var(--nz-black); }
+
 @media (max-width: 880px){
   .nz-nav{
     position: fixed; inset: 0 0 0 auto; width: min(80vw, 340px); height: 100vh;

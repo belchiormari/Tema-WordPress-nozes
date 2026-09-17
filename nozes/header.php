@@ -38,6 +38,7 @@
 		</nav>
 
 		<div class="nz-header__actions">
+			<?php nozes_language_switcher(); ?>
 			<?php
 			// Acesso à Área do Cliente como item destacado do site (fora do menu de navegação).
 			$nz_client_url   = function_exists( 'nozes_get_client_area_url' ) ? nozes_get_client_area_url() : home_url( '/area-do-cliente/' );
