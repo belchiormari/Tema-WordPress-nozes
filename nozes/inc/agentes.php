@@ -61,8 +61,8 @@ function nozes_legal_links() {
 
 	$links = array();
 	foreach ( $pages as $path => $label ) {
-		$page = get_page_by_path( $path );
-		if ( ! $page || 'publish' !== $page->post_status ) {
+		$page = nozes_find_page( $path );
+		if ( ! $page ) {
 			continue;
 		}
 		$id = $page->ID;
@@ -78,6 +78,27 @@ function nozes_legal_links() {
 		);
 	}
 	return $links;
+}
+
+/**
+ * Acha uma página publicada pelo slug, mesmo quando ela é filha de outra
+ * (ex.: /home/quem-somos/).
+ */
+function nozes_find_page( $slug ) {
+	$page = get_page_by_path( $slug );
+	if ( $page && 'publish' === $page->post_status ) {
+		return $page;
+	}
+	$found = get_posts( array(
+		'post_type'        => 'page',
+		'name'             => $slug,
+		'post_status'      => 'publish',
+		'numberposts'      => 1,
+		'orderby'          => 'menu_order ID',
+		'order'            => 'ASC',
+		'suppress_filters' => false,
+	) );
+	return $found ? $found[0] : null;
 }
 
 function nozes_footer_legal_nav() {
@@ -255,9 +276,9 @@ function nozes_markdown_render() {
 	$out[] = '## ' . get_bloginfo( 'name' );
 	$out[] = wp_strip_all_tags( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) );
 	$out[] = '';
-	$out[] = '- Telefone/WhatsApp: ' . get_theme_mod( 'nozes_phone_display', '' ) . ' (' . nozes_get_whatsapp_link() . ')';
+	$out[] = '- Telefone/WhatsApp: ' . nozes_business_phone() . ' (' . nozes_get_whatsapp_link() . ')';
 	$out[] = '- E-mail: ' . get_theme_mod( 'nozes_footer_email', 'ola@somosnozes.com.br' );
-	$out[] = '- Endereço: ' . get_theme_mod( 'nozes_address', '' );
+	$out[] = '- Endereço: ' . implode( ', ', array_filter( array( isset( nozes_postal_address()['streetAddress'] ) ? nozes_postal_address()['streetAddress'] : '', 'Florianópolis', 'SC', 'Brasil' ) ) );
 	foreach ( nozes_legal_links() as $link ) {
 		$out[] = '- ' . $link['label'] . ': ' . $link['url'];
 	}
@@ -296,9 +317,9 @@ function nozes_webmcp_data() {
 	$data = array(
 		'name'      => get_bloginfo( 'name' ),
 		'summary'   => wp_strip_all_tags( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) ),
-		'phone'     => get_theme_mod( 'nozes_phone_display', '' ),
+		'phone'     => nozes_business_phone(),
 		'email'     => get_theme_mod( 'nozes_footer_email', 'ola@somosnozes.com.br' ),
-		'address'   => get_theme_mod( 'nozes_address', '' ),
+		'address'   => 'Florianópolis, SC, Brasil',
 		'whatsapp'  => preg_replace( '/\D/', '', get_theme_mod( 'nozes_whatsapp_number', '554830507538' ) ),
 		'siteUrl'   => home_url( '/' ),
 		'blogUrl'   => home_url( '/blog/' ),
@@ -308,3 +329,103 @@ function nozes_webmcp_data() {
 	wp_add_inline_script( 'nozes-main', 'window.nozesAgent = ' . wp_json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . ';', 'before' );
 }
 add_action( 'wp_enqueue_scripts', 'nozes_webmcp_data', 20 );
+
+/* -----------------------------------------------------------------
+ * 5. Rank Math: completa o schema da empresa
+ * -----------------------------------------------------------------
+ * O Rank Math gera o bloco LocalBusiness/Organization sem telefone e
+ * endereço quando o SEO Local dele não está preenchido. Aqui o tema
+ * completa só o que estiver faltando, com os dados do Personalizador.
+ */
+function nozes_rank_math_business( $data ) {
+	if ( ! is_array( $data ) ) {
+		return $data;
+	}
+	foreach ( $data as $key => $entity ) {
+		if ( ! is_array( $entity ) || empty( $entity['@type'] ) ) {
+			continue;
+		}
+		$types = (array) $entity['@type'];
+		if ( ! array_intersect( $types, array( 'Organization', 'LocalBusiness', 'ProfessionalService' ) ) ) {
+			continue;
+		}
+		if ( empty( $entity['telephone'] ) ) {
+			$entity['telephone'] = nozes_business_phone();
+		}
+		if ( empty( $entity['address'] ) ) {
+			$entity['address'] = nozes_postal_address();
+		}
+		if ( empty( $entity['email'] ) ) {
+			$entity['email'] = get_theme_mod( 'nozes_footer_email', 'ola@somosnozes.com.br' );
+		}
+		if ( empty( $entity['description'] ) ) {
+			$entity['description'] = wp_strip_all_tags( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) );
+		}
+		if ( empty( $entity['sameAs'] ) ) {
+			$same_as = array_values( array_filter( array(
+				get_theme_mod( 'nozes_social_instagram', '' ),
+				get_theme_mod( 'nozes_social_linkedin', '' ),
+			) ) );
+			if ( $same_as ) {
+				$entity['sameAs'] = $same_as;
+			}
+		}
+		$entity['areaServed'] = isset( $entity['areaServed'] ) ? $entity['areaServed'] : 'BR';
+		$data[ $key ]         = $entity;
+	}
+	return $data;
+}
+add_filter( 'rank_math/json_ld', 'nozes_rank_math_business', 99 );
+
+/* -----------------------------------------------------------------
+ * 6. LiteSpeed: deixa as ferramentas WebMCP rodarem no carregamento
+ * -----------------------------------------------------------------
+ * O LiteSpeed Cache atrasa os scripts até o visitante mexer na página.
+ * Agentes leem a página assim que ela carrega, então o script do tema
+ * (que é pequeno) fica fora desse atraso.
+ */
+function nozes_script_no_delay( $tag, $handle ) {
+	if ( 'nozes-main' !== $handle || false !== strpos( $tag, 'data-no-defer' ) ) {
+		return $tag;
+	}
+	return str_replace( '<script ', '<script data-no-optimize="1" data-no-defer="1" ', $tag );
+}
+add_filter( 'script_loader_tag', 'nozes_script_no_delay', 10, 2 );
+
+function nozes_inline_script_no_delay( $attributes ) {
+	if ( isset( $attributes['id'] ) && 0 === strpos( $attributes['id'], 'nozes-main-js' ) ) {
+		$attributes['data-no-optimize'] = '1';
+		$attributes['data-no-defer']    = '1';
+	}
+	return $attributes;
+}
+add_filter( 'wp_inline_script_attributes', 'nozes_inline_script_no_delay' );
+
+/* -----------------------------------------------------------------
+ * 7. LiteSpeed: pedidos em Markdown não usam o cache
+ * -----------------------------------------------------------------
+ * Sem isso, o cache entrega o HTML guardado mesmo quando o agente pede
+ * Markdown. A regra entra no .htaccess uma única vez, num bloco próprio.
+ */
+function nozes_htaccess_markdown_rule() {
+	if ( '1' === get_option( 'nozes_htaccess_markdown' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+	require_once ABSPATH . 'wp-admin/includes/misc.php';
+	$file = get_home_path() . '.htaccess';
+	if ( ! file_exists( $file ) || ! is_writable( $file ) ) {
+		return;
+	}
+	$rules = array(
+		'<IfModule LiteSpeed>',
+		'RewriteEngine On',
+		'RewriteCond %{HTTP:Accept} text/markdown [NC]',
+		'RewriteRule .* - [E=Cache-Control:no-cache]',
+		'</IfModule>',
+	);
+	if ( insert_with_markers( $file, 'Nozes Markdown', $rules ) ) {
+		update_option( 'nozes_htaccess_markdown', '1', false );
+	}
+}
+add_action( 'admin_init', 'nozes_htaccess_markdown_rule' );

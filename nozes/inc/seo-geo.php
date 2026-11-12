@@ -79,6 +79,48 @@ function nozes_meta_tags() {
 }
 add_action( 'wp_head', 'nozes_meta_tags', 1 );
 
+/**
+ * Identificador da empresa no schema. Com o Rank Math ativo, usa o mesmo
+ * @id dele, para tudo apontar para uma empresa só.
+ */
+function nozes_org_id() {
+	return defined( 'RANK_MATH_VERSION' ) ? home_url( '/#organization' ) : home_url( '/#organizacao' );
+}
+
+/**
+ * Telefone da empresa. Se o campo do Personalizador estiver vazio, monta o
+ * número a partir do WhatsApp (ex.: 554830507538 vira +55 48 3050-7538).
+ */
+function nozes_business_phone() {
+	$phone = trim( (string) get_theme_mod( 'nozes_phone_display', '' ) );
+	if ( '' !== $phone ) {
+		return $phone;
+	}
+	$digits = preg_replace( '/\D/', '', get_theme_mod( 'nozes_whatsapp_number', '554830507538' ) );
+	if ( preg_match( '/^55(\d{2})(\d{4,5})(\d{4})$/', $digits, $m ) ) {
+		return '+55 ' . $m[1] . ' ' . $m[2] . '-' . $m[3];
+	}
+	return $digits ? '+' . $digits : '';
+}
+
+/**
+ * Endereço em formato PostalAddress. Usa o campo "Cidade/Endereço" do
+ * Personalizador como rua quando ele não for só a cidade.
+ */
+function nozes_postal_address() {
+	$address = array(
+		'@type'           => 'PostalAddress',
+		'addressLocality' => 'Florianópolis',
+		'addressRegion'   => 'SC',
+		'addressCountry'  => 'BR',
+	);
+	$custom = trim( (string) get_theme_mod( 'nozes_address', '' ) );
+	if ( '' !== $custom && false === stripos( $custom, 'Santa Catarina, Brasil' ) ) {
+		$address['streetAddress'] = $custom;
+	}
+	return $address;
+}
+
 function nozes_current_url() {
 	global $wp;
 	return home_url( add_query_arg( array(), $wp->request ) );
@@ -104,25 +146,25 @@ function nozes_schema_json_ld() {
 
 	$organization = array(
 		'@type'       => array( 'Organization', 'ProfessionalService' ),
-		'@id'         => home_url( '/#organizacao' ),
+		'@id'         => nozes_org_id(),
 		'name'        => get_bloginfo( 'name' ),
 		'url'         => home_url( '/' ),
 		'logo'        => $logo,
 		'image'       => $logo,
 		'description' => wp_strip_all_tags( get_theme_mod( 'nozes_company_summary', get_bloginfo( 'description' ) ) ),
-		'telephone'   => get_theme_mod( 'nozes_phone_display', '' ),
+		'telephone'   => nozes_business_phone(),
 		'email'       => get_theme_mod( 'nozes_email', '' ),
-		'address'     => array(
-			'@type'           => 'PostalAddress',
-			'addressLocality' => get_theme_mod( 'nozes_address', 'Florianópolis, Santa Catarina, Brasil' ),
-			'addressCountry'  => 'BR',
-		),
+		'address'     => nozes_postal_address(),
 		'areaServed'  => 'BR',
 	);
 	if ( ! empty( $same_as ) ) {
 		$organization['sameAs'] = array_values( $same_as );
 	}
-	$graph[] = $organization;
+	// Com o Rank Math ativo, a empresa já aparece no schema dele (completado
+	// em inc/agentes.php). Aqui não repetimos, para não haver duas empresas.
+	if ( ! defined( 'RANK_MATH_VERSION' ) ) {
+		$graph[] = $organization;
+	}
 
 	// BreadcrumbList
 	if ( ! is_front_page() ) {
@@ -159,7 +201,7 @@ function nozes_schema_json_ld() {
 				'name'  => get_the_author(),
 			),
 			'publisher'        => array(
-				'@id' => home_url( '/#organizacao' ),
+				'@id' => nozes_org_id(),
 			),
 		);
 		if ( has_post_thumbnail() ) {
@@ -256,7 +298,7 @@ function nozes_service_schema_shortcode( $atts, $content = null ) {
 		'@type'       => 'Service',
 		'name'        => wp_strip_all_tags( $atts['nome'] ),
 		'description' => wp_strip_all_tags( $content ),
-		'provider'    => array( '@id' => home_url( '/#organizacao' ) ),
+		'provider'    => array( '@id' => nozes_org_id() ),
 		'areaServed'  => 'BR',
 	);
 
