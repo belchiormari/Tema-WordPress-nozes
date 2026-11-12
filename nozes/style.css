@@ -766,6 +766,22 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
 /* Fundo escuro para páginas 100% HTML (evita "linha branca" antes do rodapé) */
 body.nz-dark-canvas{ background: var(--nz-black); }
 
+/* Páginas de texto simples (Política, Termos etc.): parágrafos, títulos e
+   listas colocados direto na página ganham coluna de leitura com margens.
+   Seções em HTML próprio (div/section) continuam em largura total. */
+.nz-page-content > :is(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote, table, hr, .wp-block-list, .wp-block-quote, .wp-block-table, .wp-block-buttons){
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 4vw, 2.5rem);
+  padding-right: clamp(1.25rem, 4vw, 2.5rem);
+  box-sizing: content-box;
+}
+.nz-page-content > :is(ul, ol, .wp-block-list){ padding-left: calc(clamp(1.25rem, 4vw, 2.5rem) + 1.2em); }
+.nz-page-content > :is(h2, h3){ margin-top: 2.4rem; }
+.nz-page-content:has(> p:first-child, > h2:first-child){ padding-top: 1.5rem; padding-bottom: 4rem; }
+.nz-page-content:has(> p:first-child, > h2:first-child) > *:last-child{ margin-bottom: 0; }
+
 /* Rede de segurança: sem margem sobrando no fim do conteúdo, que apareceria
    como uma faixa branca acima do rodapé. */
 .nz-html-livre > *:last-child,
