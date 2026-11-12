@@ -165,6 +165,26 @@ function nozes_i18n_nav_menu_items( $items, $args = null ) {
 	if ( $args && ! empty( $args->theme_location ) && '_en' === substr( $args->theme_location, -3 ) ) {
 		return $items;
 	}
+
+	// O Blog atende só o público brasileiro: some do menu nas páginas em inglês.
+	$posts_page = (int) get_option( 'page_for_posts' );
+	$removed    = array();
+	foreach ( $items as $key => $item ) {
+		$is_blog = ( 'page' === $item->object && $posts_page && (int) $item->object_id === $posts_page )
+			|| in_array( $item->object, array( 'category', 'post_tag', 'post' ), true )
+			|| ( 'post_type_archive' === $item->type && 'post' === $item->object );
+		if ( $is_blog ) {
+			$removed[] = (int) $item->ID;
+			unset( $items[ $key ] );
+		}
+	}
+	// Remove também os subitens de um item retirado.
+	foreach ( $items as $key => $item ) {
+		if ( in_array( (int) $item->menu_item_parent, $removed, true ) ) {
+			unset( $items[ $key ] );
+		}
+	}
+
 	foreach ( $items as $item ) {
 		if ( 'page' !== $item->object || 'pt' !== nozes_get_lang( $item->object_id ) ) {
 			continue;

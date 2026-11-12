@@ -85,20 +85,26 @@ function nozes_legal_links() {
  * (ex.: /home/quem-somos/).
  */
 function nozes_find_page( $slug ) {
-	$page = get_page_by_path( $slug );
-	if ( $page && 'publish' === $page->post_status ) {
-		return $page;
-	}
 	$found = get_posts( array(
 		'post_type'        => 'page',
 		'name'             => $slug,
 		'post_status'      => 'publish',
-		'numberposts'      => 1,
+		'numberposts'      => 5,
 		'orderby'          => 'menu_order ID',
 		'order'            => 'ASC',
 		'suppress_filters' => false,
 	) );
-	return $found ? $found[0] : null;
+	if ( ! $found ) {
+		return null;
+	}
+	// Se houver mais de uma página com o mesmo endereço (ex.: /contato/ e
+	// /home/contato/), prefere a que tem versão em inglês vinculada.
+	foreach ( $found as $page ) {
+		if ( get_post_meta( $page->ID, '_nozes_translation_id', true ) ) {
+			return $page;
+		}
+	}
+	return $found[0];
 }
 
 function nozes_footer_legal_nav() {
