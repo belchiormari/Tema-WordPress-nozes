@@ -133,14 +133,54 @@ O tema já vem com, sem precisar instalar nada:
 - O tema detecta automaticamente o Rank Math/Yoast e para de gerar título/meta description por conta própria, para não conflitar.
 - Se ativar os "dados estruturados" (schema) dentro do próprio Rank Math, marque a opção **"Desativar dados estruturados do tema"** em Personalizar → SEO, para não duplicar informações para o Google.
 
-## 8. Plugins recomendados (gratuitos)
+## 8. Site em inglês, sem plugin (só páginas fixas)
+
+O tema tem um jeito nativo de manter uma versão em inglês das páginas fixas (Início, Sobre, Serviços, Contato), sem precisar de nenhum plugin de tradução. O Blog e a Área do Cliente ficam de fora — continuam só em português.
+
+Como usar:
+
+1. Crie a página em inglês normalmente (**Páginas → Adicionar nova**), com o conteúdo já traduzido — por exemplo "Home", "About", "Services" ou "Contact".
+2. No painel direito da edição, na caixa **"Idioma da página"**, marque **"English (en-US)"**.
+3. Logo abaixo, em **"Página correspondente no outro idioma"**, selecione a página em português equivalente (ex.: a página em inglês "About" aponta para "Sobre"). Ao salvar, o vínculo é feito nos dois sentidos sozinho — não precisa repetir o processo na página em português.
+4. Publique.
+
+A partir daí, o tema cuida do resto automaticamente:
+
+- Aparece um botão **PT/EN** no cabeçalho para trocar de idioma, só nas páginas que já têm a correspondente vinculada.
+- O menu do site troca os links e os títulos para a versão em inglês quando o visitante está numa página em inglês.
+
+### Deixar os endereços como /en/about-us/
+
+Por padrão o WordPress cria a página em inglês na raiz do site (`somosnozes.com.br/about-us/`). Para agrupar tudo em `/en/`, use a página Home em inglês como página mãe das outras:
+
+1. Edite a página **Home (inglês)** e, em **Link permanente**, troque o slug para `en`. O endereço dela vira `somosnozes.com.br/en/`.
+2. Em cada uma das outras páginas em inglês, abra **Atributos da página → Página mãe** e escolha a Home em inglês. O endereço vira `somosnozes.com.br/en/about-us/`.
+3. Depois de ajustar todas, vá em **Configurações → Links permanentes** e clique em **Salvar alterações** (sem mudar nada). Isso faz o WordPress regravar as regras de endereço.
+
+### Menu próprio para a versão em inglês
+
+Por padrão o tema reaproveita o menu em português e troca cada item pela página em inglês correspondente. Itens que não são página (links personalizados, o Blog, submenus) continuam como estão.
+
+Se quiser controle total do menu em inglês (por exemplo, tirar o Blog e renomear "O que fazemos" para "What we do"), monte um menu separado:
+
+1. Vá em **Aparência → Menus → Criar novo menu**, dê o nome que quiser (ex.: "Main Menu EN").
+2. Adicione os itens apontando para as páginas em inglês e escreva os rótulos em inglês no campo **"Rótulo de navegação"** de cada item.
+3. Em **Configurações do menu**, marque o local **"Menu Principal (Inglês)"**. Existe também **"Menu do Rodapé (Inglês)"** para o rodapé.
+
+Nas páginas marcadas como inglês o tema passa a usar esse menu. Enquanto nenhum menu estiver atribuído a esse local, ele continua traduzindo o menu em português automaticamente.
+- Textos fixos do tema (menu, rodapé, botão de WhatsApp, trilha de navegação, página de erro 404) aparecem automaticamente em inglês nessas páginas.
+- O Google recebe os sinais corretos de idioma (tag `hreflang` e `og:locale`), para não tratar a versão em inglês como conteúdo duplicado.
+
+Repita o processo para cada página fixa que quiser em inglês. Como não há tradução automática embutida, o texto em si (o que vai dentro da página) precisa ser escrito ou colado por você — o ideal é revisar com alguém fluente antes de publicar, já que o site vai ser visto por empresas americanas.
+
+## 9. Plugins recomendados (gratuitos)
 
 - **Elementor** — editor visual das páginas.
 - **Rank Math** ou **Yoast SEO** — sitemap.xml, redirecionamentos, painel de SEO por página.
 - **WPForms Lite** (ou similar) — caso queira um formulário de contato além do WhatsApp.
 - Um plugin de cache (ex: **WP Super Cache** ou o cache nativo da Hostinger) — a Hostinger já otimiza boa parte disso no servidor.
 
-## 9. Resumo do que foi construído
+## 10. Resumo do que foi construído
 
 - Tema WordPress completo e independente (não depende de nenhum outro tema).
 - Compatível com Elementor e com o editor nativo do WordPress ao mesmo tempo.
@@ -150,3 +190,4 @@ O tema já vem com, sem precisar instalar nada:
 - Área do Cliente com login individual e relatórios em HTML por cliente.
 - Modelo de "Página HTML Livre" para publicar páginas prontas feitas por aqui.
 - SEO técnico + dados estruturados + FAQ com schema + `/llms.txt` para otimização em buscadores de IA (GEO).
+- Páginas fixas em inglês sem plugin, com seletor de idioma, menu e textos do tema traduzidos automaticamente.
