@@ -241,6 +241,11 @@ function nozes_i18n_strings() {
 		'Essa página saiu de rota.' => 'This page seems to have wandered off.',
 		'O conteúdo que você procura não existe ou foi movido. Que tal voltar para o início ou falar com a gente no WhatsApp?' => 'The page you are looking for does not exist or has moved. Try heading back home or reaching out to us on WhatsApp.',
 		'Voltar ao início'       => 'Back to home',
+		'Institucional'          => 'Company',
+		'Quem somos'             => 'About us',
+		'Contato'                => 'Contact',
+		'Política de Privacidade' => 'Privacy Policy',
+		'Termos de Uso'          => 'Terms of Use',
 	);
 }
 

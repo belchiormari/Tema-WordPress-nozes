@@ -173,14 +173,29 @@ Nas páginas marcadas como inglês o tema passa a usar esse menu. Enquanto nenhu
 
 Repita o processo para cada página fixa que quiser em inglês. Como não há tradução automática embutida, o texto em si (o que vai dentro da página) precisa ser escrito ou colado por você — o ideal é revisar com alguém fluente antes de publicar, já que o site vai ser visto por empresas americanas.
 
-## 9. Plugins recomendados (gratuitos)
+## 9. Site pronto para agentes de IA
+
+O arquivo `inc/agentes.php` cuida do que assistentes e agentes de IA procuram ao visitar o site:
+
+- **robots.txt com Content-Signal:** declara `search=yes, ai-input=yes, ai-train=no`. Buscadores e assistentes podem ler e citar o site, e o uso para treinar modelos não está autorizado. Se existir um arquivo `robots.txt` físico na raiz do site, ou se o Rank Math/Yoast estiver controlando o robots, cole esta linha logo abaixo de `User-agent: *`:
+  `Content-Signal: search=yes, ai-input=yes, ai-train=no`
+- **Links institucionais no rodapé:** Quem somos (`/quem-somos`), Contato (`/contato`), Política de Privacidade (`/politica-de-privacidade`) e Termos de Uso (`/termos-de-uso`). Cada link só aparece quando a página existe e está publicada com esse endereço.
+- **Versão em Markdown:** quando um agente pede a página com o cabeçalho `Accept: text/markdown`, o tema entrega o conteúdo em texto limpo, sem menu e sem código. Visitantes comuns continuam vendo o site normal. A Área do Cliente fica de fora.
+- **Ferramentas WebMCP:** em navegadores com agente de IA, o site oferece três ferramentas: informações da Nozes, busca de conteúdos e link de WhatsApp. Ficam em `assets/js/main.js`.
+
+Para testar o Markdown, rode no terminal:
+`curl -H "Accept: text/markdown" https://somosnozes.com.br/`
+
+Se a resposta vier em HTML, o cache do LiteSpeed está entregando a página guardada. No painel do LiteSpeed Cache, limpe o cache e confira se a opção de cache para visitantes não ignora o cabeçalho `Vary`.
+
+## 10. Plugins recomendados (gratuitos)
 
 - **Elementor** — editor visual das páginas.
 - **Rank Math** ou **Yoast SEO** — sitemap.xml, redirecionamentos, painel de SEO por página.
 - **WPForms Lite** (ou similar) — caso queira um formulário de contato além do WhatsApp.
 - Um plugin de cache (ex: **WP Super Cache** ou o cache nativo da Hostinger) — a Hostinger já otimiza boa parte disso no servidor.
 
-## 10. Resumo do que foi construído
+## 11. Resumo do que foi construído
 
 - Tema WordPress completo e independente (não depende de nenhum outro tema).
 - Compatível com Elementor e com o editor nativo do WordPress ao mesmo tempo.
@@ -191,3 +206,4 @@ Repita o processo para cada página fixa que quiser em inglês. Como não há tr
 - Modelo de "Página HTML Livre" para publicar páginas prontas feitas por aqui.
 - SEO técnico + dados estruturados + FAQ com schema + `/llms.txt` para otimização em buscadores de IA (GEO).
 - Páginas fixas em inglês sem plugin, com seletor de idioma, menu e textos do tema traduzidos automaticamente.
+- Site pronto para agentes de IA: Content-Signal no robots.txt, links institucionais, versão em Markdown e ferramentas WebMCP.

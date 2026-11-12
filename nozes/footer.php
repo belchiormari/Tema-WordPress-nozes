@@ -52,6 +52,7 @@
 
 		<div class="nz-footer__bottom">
 			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'Todos os direitos reservados.', 'nozes' ); ?></span>
+			<?php nozes_footer_legal_nav(); ?>
 			<span><?php echo esc_html( get_theme_mod( 'nozes_address', '' ) ); ?></span>
 		</div>
 	</div>
