@@ -240,4 +240,95 @@
 			}
 		});
 	})();
+	// Ferramentas WebMCP: permitem que agentes de IA no navegador consultem
+	// informações da Nozes, busquem conteúdos e gerem o link de WhatsApp.
+	// Só roda em navegadores com suporte (navigator.modelContext).
+	(function () {
+		var mc = navigator.modelContext;
+		var info = window.nozesAgent;
+		if (!mc || typeof mc.registerTool !== 'function' || !info) {
+			return;
+		}
+
+		function text(value) {
+			return { content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value, null, 2) }] };
+		}
+
+		var tools = [
+			{
+				name: 'nozes_informacoes',
+				description: 'Retorna quem é a Nozes Estratégia de Marca, o que ela faz e como entrar em contato (telefone, WhatsApp, e-mail, cidade e páginas institucionais).',
+				inputSchema: { type: 'object', properties: {} },
+				annotations: { readOnlyHint: true },
+				execute: function () {
+					return text({
+						nome: info.name,
+						resumo: info.summary,
+						telefone: info.phone,
+						whatsapp: 'https://wa.me/' + info.whatsapp,
+						email: info.email,
+						endereco: info.address,
+						site: info.siteUrl,
+						blog: info.blogUrl,
+						paginas: info.pages
+					});
+				}
+			},
+			{
+				name: 'nozes_buscar_conteudo',
+				description: 'Busca artigos do blog e páginas do site da Nozes sobre gestão e estratégia de marca. Retorna título e link de cada resultado.',
+				inputSchema: {
+					type: 'object',
+					properties: {
+						termo: { type: 'string', description: 'Palavra ou assunto a buscar, por exemplo "naming" ou "gestão de marca".' }
+					},
+					required: ['termo']
+				},
+				annotations: { readOnlyHint: true },
+				execute: function (input) {
+					var termo = input && input.termo ? String(input.termo) : '';
+					var url = info.searchApi + (info.searchApi.indexOf('?') > -1 ? '&' : '?') + 'per_page=8&search=' + encodeURIComponent(termo);
+					return fetch(url, { headers: { Accept: 'application/json' } })
+						.then(function (r) { return r.json(); })
+						.then(function (items) {
+							if (!Array.isArray(items) || !items.length) {
+								return text('Nenhum conteúdo encontrado para "' + termo + '". O blog completo está em ' + info.blogUrl);
+							}
+							return text(items.map(function (item) {
+								return { titulo: item.title, link: item.url, tipo: item.subtype };
+							}));
+						})
+						.catch(function () {
+							return text('Não foi possível buscar agora. O blog completo está em ' + info.blogUrl);
+						});
+				}
+			},
+			{
+				name: 'nozes_contato_whatsapp',
+				description: 'Gera o link para conversar com a Nozes pelo WhatsApp, com uma mensagem inicial opcional. Não envia nada: a pessoa decide se abre o link.',
+				inputSchema: {
+					type: 'object',
+					properties: {
+						mensagem: { type: 'string', description: 'Mensagem inicial sugerida, por exemplo o assunto que a pessoa quer conversar.' }
+					}
+				},
+				annotations: { readOnlyHint: true },
+				execute: function (input) {
+					var link = 'https://wa.me/' + info.whatsapp;
+					if (input && input.mensagem) {
+						link += '?text=' + encodeURIComponent(String(input.mensagem));
+					}
+					return text({ whatsapp: link, email: info.email });
+				}
+			}
+		];
+
+		tools.forEach(function (tool) {
+			try {
+				mc.registerTool(tool);
+			} catch (e) {
+				// Ferramenta já registrada ou API diferente: ignora sem quebrar o site.
+			}
+		});
+	})();
 })();

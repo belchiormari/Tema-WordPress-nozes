@@ -46,8 +46,10 @@ function nozes_setup() {
 	) );
 
 	register_nav_menus( array(
-		'primary' => __( 'Menu Principal', 'nozes' ),
-		'footer'  => __( 'Menu do Rodapé', 'nozes' ),
+		'primary'    => __( 'Menu Principal', 'nozes' ),
+		'footer'     => __( 'Menu do Rodapé', 'nozes' ),
+		'primary_en' => __( 'Menu Principal (Inglês)', 'nozes' ),
+		'footer_en'  => __( 'Menu do Rodapé (Inglês)', 'nozes' ),
 	) );
 
 	add_image_size( 'nozes-card', 640, 400, true );

@@ -27,7 +27,7 @@
 				<h4><?php esc_html_e( 'Navegação', 'nozes' ); ?></h4>
 				<?php
 				wp_nav_menu( array(
-					'theme_location' => 'footer',
+					'theme_location' => nozes_menu_location( 'footer' ),
 					'container'      => false,
 					'menu_class'     => '',
 					'fallback_cb'    => 'nozes_footer_menu_fallback',
@@ -52,6 +52,7 @@
 
 		<div class="nz-footer__bottom">
 			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'Todos os direitos reservados.', 'nozes' ); ?></span>
+			<?php nozes_footer_legal_nav(); ?>
 			<span><?php echo esc_html( get_theme_mod( 'nozes_address', '' ) ); ?></span>
 		</div>
 	</div>

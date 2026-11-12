@@ -12,8 +12,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reaproveitada tanto na exibição visual quanto no schema BreadcrumbList.
  */
 function nozes_get_breadcrumbs() {
+	$home_url = home_url( '/' );
+	if ( nozes_is_en() ) {
+		$home_id          = (int) get_option( 'page_on_front' );
+		$home_translation = $home_id ? nozes_get_translation_id( $home_id ) : 0;
+		if ( $home_translation ) {
+			$home_url = get_permalink( $home_translation );
+		}
+	}
+
 	$trail = array(
-		array( 'title' => __( 'Início', 'nozes' ), 'url' => home_url( '/' ) ),
+		array( 'title' => __( 'Início', 'nozes' ), 'url' => $home_url ),
 	);
 
 	if ( is_singular( 'post' ) || is_home() ) {
@@ -128,9 +137,9 @@ function nozes_is_built_with_elementor() {
  * "Navegação" nunca ficar vazia.
  */
 function nozes_footer_menu_fallback() {
-	if ( has_nav_menu( 'primary' ) ) {
+	if ( has_nav_menu( nozes_menu_location( 'primary' ) ) ) {
 		wp_nav_menu( array(
-			'theme_location' => 'primary',
+			'theme_location' => nozes_menu_location( 'primary' ),
 			'container'      => false,
 			'menu_class'     => '',
 			'depth'          => 1,

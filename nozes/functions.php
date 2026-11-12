@@ -16,6 +16,8 @@ $nozes_includes = array(
 	'/inc/customizer.php',     // Personalizador (WhatsApp, redes sociais, textos)
 	'/inc/cpt-relatorios.php', // Área do cliente: papel "Cliente" + Relatórios
 	'/inc/seo-geo.php',        // SEO, dados estruturados e GEO (llms.txt, FAQ)
+	'/inc/i18n.php',           // Páginas fixas em inglês, sem plugin (idioma, seletor, hreflang)
+	'/inc/agentes.php',        // Site pronto para agentes de IA (robots, Markdown, WebMCP, links institucionais)
 	'/inc/starter-content.php',// Conteúdo inicial criado na ativação do tema
 	'/inc/template-tags.php',  // Funções auxiliares usadas nos templates
 );
