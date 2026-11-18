@@ -28,9 +28,13 @@ get_header();
 		</p>
 
 		<?php if ( has_post_thumbnail() ) : ?>
-			<div class="nz-post-thumb">
+			<figure class="nz-post-thumb">
 				<?php the_post_thumbnail( 'nozes-wide' ); ?>
-			</div>
+				<?php $nz_thumb_caption = get_the_post_thumbnail_caption(); ?>
+				<?php if ( $nz_thumb_caption ) : ?>
+					<figcaption class="nz-post-thumb__caption"><?php echo wp_kses_post( $nz_thumb_caption ); ?></figcaption>
+				<?php endif; ?>
+			</figure>
 		<?php endif; ?>
 
 		<div class="nz-single-post__content">
