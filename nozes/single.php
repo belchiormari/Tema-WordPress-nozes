@@ -56,7 +56,7 @@ get_header();
 				<div class="nz-author-card__body">
 					<strong class="nz-author-card__name"><?php the_author(); ?></strong>
 					<?php if ( get_the_author_meta( 'description' ) ) : ?>
-						<p class="nz-author-card__bio"><?php echo esc_html( get_the_author_meta( 'description' ) ); ?></p>
+						<p class="nz-author-card__bio"><?php echo nl2br( esc_html( get_the_author_meta( 'description' ) ) ); ?></p>
 					<?php endif; ?>
 				</div>
 			</div>
