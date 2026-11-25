@@ -50,10 +50,10 @@ get_header();
 
 		<div class="nz-post-outro">
 			<div class="nz-author-card">
-			<span class="nz-author-card__eyebrow"><?php esc_html_e( 'Escrito por', 'nozes' ); ?></span>
 			<div class="nz-author-card__inner">
-				<?php echo get_avatar( get_the_author_meta( 'ID' ), 128, '', '', array( 'class' => 'nz-author-card__avatar' ) ); ?>
+				<?php echo get_avatar( get_the_author_meta( 'ID' ), 160, '', '', array( 'class' => 'nz-author-card__avatar' ) ); ?>
 				<div class="nz-author-card__body">
+					<span class="nz-author-card__eyebrow"><?php esc_html_e( 'Escrito por', 'nozes' ); ?></span>
 					<strong class="nz-author-card__name"><?php the_author(); ?></strong>
 					<?php if ( get_the_author_meta( 'description' ) ) : ?>
 						<p class="nz-author-card__bio"><?php echo nl2br( esc_html( get_the_author_meta( 'description' ) ) ); ?></p>

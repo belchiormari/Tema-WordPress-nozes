@@ -497,7 +497,7 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   position: relative; overflow: hidden;
   background: #fff;
   border-bottom: 1px solid var(--nz-gray-light);
-  padding-block: clamp(3rem, 7vw, 6rem);
+  padding-block: clamp(1.8rem, 4vw, 3rem) clamp(1.8rem, 3.5vw, 2.6rem);
 }
 .nz-blog-hero::after{
   content:""; position:absolute; top:-30%; right:-8%;
@@ -509,8 +509,11 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   .nz-blog-hero::after{ top:-8%; right:-18%; width: min(360px, 85vw); }
 }
 .nz-blog-hero .nz-container{ position: relative; z-index: 1; }
-.nz-blog-hero__title{ font-size: clamp(2.4rem, 6vw, 4.6rem); max-width: 18ch; margin-bottom: .4rem; }
-.nz-blog-hero__lede{ margin-top: 1.2rem; }
+.nz-blog-hero__title{ font-size: clamp(2.2rem, 4.6vw, 3.6rem); max-width: 18ch; margin-bottom: 0; }
+.nz-blog-hero__lede{ margin-top: .6rem; margin-bottom: 0; }
+.nz-blog-hero .nz-breadcrumbs{ margin-bottom: 1rem; }
+.nz-blog-hero .u-eyebrow{ margin-bottom: .6rem; }
+.nz-blog-hero + .nz-section--tight{ padding-top: clamp(1.4rem, 3vw, 2.2rem); }
 
 /* -- Fim do artigo: card do autor (fundo claro) -- */
 .nz-author-card{
@@ -522,14 +525,14 @@ body.blog, body.archive, body.single-post, body.search{ background: var(--nz-blo
   box-shadow: 0 12px 30px rgba(29,29,31,.05);
 }
 .nz-author-card__eyebrow{
-  display:inline-block; font-size:.78rem; font-weight:700; letter-spacing:.14em;
-  text-transform:uppercase; color: var(--nz-pink); margin-bottom: 1.1rem;
+  display:block; font-size:.75rem; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color: var(--nz-pink); margin-bottom: .35rem;
 }
-.nz-author-card__inner{ display:flex; gap:1.4rem; align-items:center; }
-.nz-author-card__avatar{ width:84px; height:84px; border-radius:50%; object-fit:cover; flex-shrink:0; }
-.nz-author-card__name{ display:block; font-size:1.25rem; font-weight:700; margin-bottom:.25rem; }
+.nz-author-card__inner{ display:flex; gap: clamp(1.2rem, 2.5vw, 1.8rem); align-items:flex-start; }
+.nz-author-card__avatar{ width:80px; height:80px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+.nz-author-card__name{ display:block; font-size:1.25rem; font-weight:700; margin-bottom:.5rem; }
 .nz-author-card__bio{ color: var(--nz-gray); margin:0; }
-@media (max-width:560px){ .nz-author-card__inner{ flex-direction:column; align-items:flex-start; } }
+@media (max-width:560px){ .nz-author-card__inner{ gap:1rem; } .nz-author-card__avatar{ width:56px; height:56px; } }
 
 /* -- Chamada final do artigo: faixa full-width com gradiente animado da marca,
       depois dos comentários -- */

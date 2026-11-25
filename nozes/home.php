@@ -20,7 +20,6 @@ if ( '' === $nz_blog_lede ) {
 <header class="nz-blog-hero">
 	<div class="nz-container">
 		<?php nozes_breadcrumbs(); ?>
-		<span class="u-eyebrow"><?php esc_html_e( 'Blog', 'nozes' ); ?></span>
 		<h1 class="nz-blog-hero__title"><?php echo esc_html( $nz_blog_title ); ?></h1>
 		<p class="nz-blog-hero__lede u-lede"><?php echo esc_html( $nz_blog_lede ); ?></p>
 	</div>
