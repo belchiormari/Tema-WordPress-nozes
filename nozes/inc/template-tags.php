@@ -308,23 +308,37 @@ function nozes_blog_category_nav() {
 	$current   = is_category() ? (int) get_queried_object_id() : 0;
 	$posts_url = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/blog/' );
 
-	echo '<nav class="nz-cat-nav" aria-label="' . esc_attr__( 'Categorias do blog', 'nozes' ) . '"><ul>';
-	printf(
-		'<li><a href="%s"%s>%s</a></li>',
-		esc_url( $posts_url ),
-		$current ? '' : ' class="is-active" aria-current="page"',
-		esc_html__( 'Todos', 'nozes' )
-	);
+	$items = array( array( 'name' => __( 'Todos', 'nozes' ), 'url' => $posts_url, 'active' => ! $current ) );
 	foreach ( $cats as $cat ) {
-		$active = $current === (int) $cat->term_id;
-		printf(
-			'<li><a href="%s"%s>%s</a></li>',
-			esc_url( get_category_link( $cat->term_id ) ),
-			$active ? ' class="is-active" aria-current="page"' : '',
-			esc_html( $cat->name )
+		$items[] = array(
+			'name'   => $cat->name,
+			'url'    => get_category_link( $cat->term_id ),
+			'active' => $current === (int) $cat->term_id,
 		);
 	}
-	echo '</ul></nav>';
+
+	echo '<nav class="nz-cat-nav" aria-label="' . esc_attr__( 'Categorias do blog', 'nozes' ) . '">';
+	echo '<span class="nz-cat-nav__label">' . esc_html__( 'Temas:', 'nozes' ) . '</span>';
+	echo '<ul>';
+	foreach ( $items as $item ) {
+		printf(
+			'<li><a href="%s"%s>%s</a></li>',
+			esc_url( $item['url'] ),
+			$item['active'] ? ' class="is-active" aria-current="page"' : '',
+			esc_html( $item['name'] )
+		);
+	}
+	echo '</ul>';
+	echo '<select class="nz-cat-nav__select" aria-label="' . esc_attr__( 'Escolher tema', 'nozes' ) . '" data-nz-cat-select>';
+	foreach ( $items as $item ) {
+		printf(
+			'<option value="%s"%s>%s</option>',
+			esc_url( $item['url'] ),
+			selected( $item['active'], true, false ),
+			esc_html( $item['name'] )
+		);
+	}
+	echo '</select></nav>';
 }
 
 /**
