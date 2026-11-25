@@ -383,12 +383,33 @@ a.nz-post-card__cat:hover{ text-decoration: underline; text-underline-offset: 3p
 .nz-post-cats a:hover{ text-decoration: underline; text-underline-offset: 3px; }
 .nz-cat-sep{ margin-right: .1em; }
 
-/* Barra de categorias (Blog e páginas de categoria) */
-.nz-cat-nav{ margin-bottom: 2.5rem; }
-.nz-cat-nav ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.6rem; }
-.nz-cat-nav a{ display:inline-block; padding:.5em 1.1em; border:1px solid var(--nz-gray-light); border-radius:999px; background:#fff; color: var(--nz-black); font-size:.9rem; font-weight:600; text-decoration:none; transition: border-color .18s ease, background .18s ease, color .18s ease; }
-.nz-cat-nav a:hover{ border-color: var(--nz-pink); color: var(--nz-pink); }
-.nz-cat-nav a.is-active{ background: var(--nz-black); border-color: var(--nz-black); color:#fff; }
+/* Barra de categorias (Blog e páginas de categoria): abas em uma linha só,
+   com rolagem lateral quando não cabem (celular). */
+.nz-cat-nav{ position: relative; margin-bottom: 2.5rem; border-bottom: 1px solid var(--nz-gray-light); }
+.nz-cat-nav ul{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-wrap:nowrap; gap: clamp(1.1rem, 2vw, 1.6rem);
+  overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.nz-cat-nav ul::-webkit-scrollbar{ display:none; }
+.nz-cat-nav li{ flex: 0 0 auto; scroll-snap-align: start; }
+.nz-cat-nav a{
+  display:block; padding: .2rem 0 .9rem; margin-bottom: -1px;
+  background:none; border:0; border-radius:0; border-bottom: 2px solid transparent;
+  color: var(--nz-gray); font-size:.92rem; font-weight:600; white-space:nowrap; text-decoration:none;
+  transition: color .18s ease, border-color .18s ease;
+}
+.nz-cat-nav a:hover{ color: var(--nz-black); }
+.nz-cat-nav a.is-active{ background:none; color: var(--nz-black); border-bottom-color: var(--nz-pink); }
+/* Esmaecido na borda direita indicando que dá para arrastar */
+.nz-cat-nav::after{
+  content:""; position:absolute; top:0; right:0; bottom:1px; width:48px; pointer-events:none;
+  background: linear-gradient(to right, transparent, var(--nz-offwhite));
+  opacity:0; transition: opacity .2s ease;
+}
+.nz-cat-nav.is-scrollable::after{ opacity:1; }
+.nz-cat-nav.is-at-end::after{ opacity:0; }
 .nz-post-card__meta{ color: var(--nz-gray); font-size: .85rem; }
 
 .nz-single-post{ max-width: 860px; margin: 0 auto; }

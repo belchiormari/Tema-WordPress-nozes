@@ -240,6 +240,27 @@
 			}
 		});
 	})();
+	// Barra de categorias do blog: mostra o esmaecido quando há mais abas
+	// para arrastar e deixa a categoria atual visível no celular.
+	document.querySelectorAll('.nz-cat-nav').forEach(function (nav) {
+		var list = nav.querySelector('ul');
+		if (!list) {
+			return;
+		}
+		function update() {
+			var scrollable = list.scrollWidth > list.clientWidth + 2;
+			nav.classList.toggle('is-scrollable', scrollable);
+			nav.classList.toggle('is-at-end', !scrollable || list.scrollLeft + list.clientWidth >= list.scrollWidth - 2);
+		}
+		var active = list.querySelector('.is-active');
+		if (active && active.parentNode.offsetLeft > list.clientWidth / 2) {
+			list.scrollLeft = active.parentNode.offsetLeft - 16;
+		}
+		list.addEventListener('scroll', update, { passive: true });
+		window.addEventListener('resize', update);
+		update();
+	});
+
 	// Ferramentas WebMCP: permitem que agentes de IA no navegador consultem
 	// informações da Nozes, busquem conteúdos e gerem o link de WhatsApp.
 	// Só roda em navegadores com suporte (navigator.modelContext).
