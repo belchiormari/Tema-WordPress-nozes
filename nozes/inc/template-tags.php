@@ -28,6 +28,10 @@ function nozes_get_breadcrumbs() {
 	if ( is_singular( 'post' ) || is_home() ) {
 		$trail[] = array( 'title' => __( 'Blog', 'nozes' ), 'url' => get_permalink( get_option( 'page_for_posts' ) ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/blog/' ) );
 		if ( is_singular( 'post' ) ) {
+			$nz_cats = nozes_post_categories();
+			if ( ! empty( $nz_cats ) ) {
+				$trail[] = array( 'title' => $nz_cats[0]->name, 'url' => get_category_link( $nz_cats[0]->term_id ) );
+			}
 			$trail[] = array( 'title' => get_the_title(), 'url' => get_permalink() );
 		}
 	} elseif ( is_page() && ! is_front_page() ) {
@@ -40,6 +44,9 @@ function nozes_get_breadcrumbs() {
 		$trail[] = array( 'title' => __( 'Resultados da busca', 'nozes' ), 'url' => '' );
 	} elseif ( is_404() ) {
 		$trail[] = array( 'title' => __( 'Página não encontrada', 'nozes' ), 'url' => '' );
+	} elseif ( is_category() ) {
+		$trail[] = array( 'title' => __( 'Blog', 'nozes' ), 'url' => get_permalink( get_option( 'page_for_posts' ) ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/blog/' ) );
+		$trail[] = array( 'title' => single_cat_title( '', false ), 'url' => '' );
 	} elseif ( is_archive() ) {
 		$trail[] = array( 'title' => get_the_archive_title(), 'url' => '' );
 	}
@@ -215,25 +222,114 @@ add_shortcode( 'nozes_latest_posts', function( $atts ) {
 	echo '<div class="nz-grid nz-grid--3">';
 	while ( $query->have_posts() ) {
 		$query->the_post();
-		?>
-		<a class="nz-post-card" href="<?php the_permalink(); ?>">
-			<div class="nz-post-card__media">
-				<?php if ( has_post_thumbnail() ) : ?>
-					<?php the_post_thumbnail( 'nozes-card' ); ?>
-				<?php endif; ?>
-			</div>
-			<div class="nz-post-card__body">
-				<?php $cats = get_the_category(); ?>
-				<?php if ( ! empty( $cats ) ) : ?>
-					<span class="nz-post-card__cat"><?php echo esc_html( $cats[0]->name ); ?></span>
-				<?php endif; ?>
-				<h3><?php the_title(); ?></h3>
-				<div class="nz-post-card__meta"><?php echo esc_html( get_the_date() ); ?></div>
-			</div>
-		</a>
-		<?php
+		nozes_post_card();
 	}
 	echo '</div>';
 	wp_reset_postdata();
 	return ob_get_clean();
+} );
+
+/* ------------------------------------------------------------------
+ * Categorias do blog
+ * ------------------------------------------------------------------ */
+
+/**
+ * Categorias de um post que valem a pena mostrar (ignora "Sem categoria"
+ * quando o post também tem outra).
+ */
+function nozes_post_categories( $post_id = 0 ) {
+	$cats = get_the_category( $post_id );
+	if ( count( $cats ) > 1 ) {
+		$default = (int) get_option( 'default_category' );
+		$cats    = array_values( array_filter( $cats, function ( $cat ) use ( $default ) {
+			return (int) $cat->term_id !== $default;
+		} ) );
+	}
+	return $cats;
+}
+
+/**
+ * Links das categorias de um post, separados por vírgula.
+ */
+function nozes_category_links( $post_id = 0, $class = '' ) {
+	$links = array();
+	foreach ( nozes_post_categories( $post_id ) as $cat ) {
+		$links[] = sprintf(
+			'<a href="%s"%s>%s</a>',
+			esc_url( get_category_link( $cat->term_id ) ),
+			$class ? ' class="' . esc_attr( $class ) . '"' : '',
+			esc_html( $cat->name )
+		);
+	}
+	return implode( '<span class="nz-cat-sep" aria-hidden="true">, </span>', $links );
+}
+
+/**
+ * Card de artigo. O card inteiro continua clicável (o link do título cobre
+ * o card), e a categoria tem link próprio por cima dele.
+ */
+function nozes_post_card() {
+	$cat_links = nozes_category_links( 0, 'nz-post-card__cat' );
+	?>
+	<article class="nz-post-card">
+		<div class="nz-post-card__media">
+			<?php if ( has_post_thumbnail() ) : ?>
+				<?php the_post_thumbnail( 'nozes-card' ); ?>
+			<?php endif; ?>
+		</div>
+		<div class="nz-post-card__body">
+			<?php if ( $cat_links ) : ?>
+				<div class="nz-post-card__cats"><?php echo $cat_links; // phpcs:ignore WordPress.Security.EscapeOutput -- montado com esc_* acima. ?></div>
+			<?php endif; ?>
+			<h3><a class="nz-post-card__link" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+			<div class="nz-post-card__meta"><?php echo esc_html( get_the_date() ); ?></div>
+		</div>
+	</article>
+	<?php
+}
+
+/**
+ * Barra de categorias do blog: "Todos" + cada categoria com artigos.
+ * Aparece na página do Blog e nas páginas de categoria.
+ */
+function nozes_blog_category_nav() {
+	// A categoria padrão ("Blog") fica de fora: ela é a mãe das outras e
+	// já equivale ao botão "Todos".
+	$cats = get_categories( array(
+		'hide_empty'   => true,
+		'hierarchical' => false,
+		'exclude'      => array( (int) get_option( 'default_category' ) ),
+		'orderby'      => 'name',
+	) );
+	if ( count( $cats ) < 2 ) {
+		return;
+	}
+
+	$current   = is_category() ? (int) get_queried_object_id() : 0;
+	$posts_url = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/blog/' );
+
+	echo '<nav class="nz-cat-nav" aria-label="' . esc_attr__( 'Categorias do blog', 'nozes' ) . '"><ul>';
+	printf(
+		'<li><a href="%s"%s>%s</a></li>',
+		esc_url( $posts_url ),
+		$current ? '' : ' class="is-active" aria-current="page"',
+		esc_html__( 'Todos', 'nozes' )
+	);
+	foreach ( $cats as $cat ) {
+		$active = $current === (int) $cat->term_id;
+		printf(
+			'<li><a href="%s"%s>%s</a></li>',
+			esc_url( get_category_link( $cat->term_id ) ),
+			$active ? ' class="is-active" aria-current="page"' : '',
+			esc_html( $cat->name )
+		);
+	}
+	echo '</ul></nav>';
+}
+
+/**
+ * Título das páginas de categoria sem o prefixo "Categoria:".
+ */
+add_filter( 'get_the_archive_title_prefix', function ( $prefix ) {
+	return is_category() ? '' : $prefix;
 } );

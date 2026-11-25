@@ -368,8 +368,27 @@ h3{ font-size: clamp(1.3rem, 2vw, 1.6rem); font-weight: 600; }
 .nz-post-card__media{ aspect-ratio: 16/10; overflow:hidden; background: var(--nz-gray-light); }
 .nz-post-card__media img{ width:100%; height:100%; object-fit:cover; }
 .nz-post-card__body{ padding: 1.5rem; }
-.nz-post-card__cat{ color: var(--nz-pink); font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; }
+.nz-post-card{ position: relative; }
+.nz-post-card__cats{ position: relative; z-index: 2; color: var(--nz-pink); font-size:.78rem; }
+.nz-post-card__cat{ color: var(--nz-pink); font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; text-decoration: none; }
+a.nz-post-card__cat:hover{ text-decoration: underline; text-underline-offset: 3px; }
 .nz-post-card h3{ margin: .5rem 0; font-size: 1.15rem; }
+.nz-post-card__link{ color: inherit; text-decoration: none; }
+.nz-post-card__link::after{ content:""; position:absolute; inset:0; z-index: 1; border-radius: inherit; }
+.nz-post-card__link:focus-visible{ outline: none; }
+.nz-post-card:has(.nz-post-card__link:focus-visible){ outline: 3px solid var(--nz-pink); outline-offset: 3px; }
+
+/* Categorias no topo do artigo */
+.nz-post-cats a{ color: inherit; text-decoration: none; }
+.nz-post-cats a:hover{ text-decoration: underline; text-underline-offset: 3px; }
+.nz-cat-sep{ margin-right: .1em; }
+
+/* Barra de categorias (Blog e páginas de categoria) */
+.nz-cat-nav{ margin-bottom: 2.5rem; }
+.nz-cat-nav ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.6rem; }
+.nz-cat-nav a{ display:inline-block; padding:.5em 1.1em; border:1px solid var(--nz-gray-light); border-radius:999px; background:#fff; color: var(--nz-black); font-size:.9rem; font-weight:600; text-decoration:none; transition: border-color .18s ease, background .18s ease, color .18s ease; }
+.nz-cat-nav a:hover{ border-color: var(--nz-pink); color: var(--nz-pink); }
+.nz-cat-nav a.is-active{ background: var(--nz-black); border-color: var(--nz-black); color:#fff; }
 .nz-post-card__meta{ color: var(--nz-gray); font-size: .85rem; }
 
 .nz-single-post{ max-width: 860px; margin: 0 auto; }

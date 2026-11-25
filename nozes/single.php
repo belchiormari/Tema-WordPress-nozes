@@ -10,9 +10,9 @@ get_header();
 	<div class="nz-container nz-single-post">
 		<?php nozes_breadcrumbs(); ?>
 
-		<?php $cats = get_the_category(); ?>
-		<?php if ( ! empty( $cats ) ) : ?>
-			<span class="u-eyebrow"><?php echo esc_html( $cats[0]->name ); ?></span>
+		<?php $nz_cat_links = nozes_category_links(); ?>
+		<?php if ( $nz_cat_links ) : ?>
+			<span class="u-eyebrow nz-post-cats"><?php echo $nz_cat_links; // phpcs:ignore WordPress.Security.EscapeOutput -- montado com esc_*. ?></span>
 		<?php endif; ?>
 
 		<h1><?php the_title(); ?></h1>
